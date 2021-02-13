@@ -13,14 +13,14 @@ const newsapi = new NewsAPI(`${news_api_key}`);
 /* GET home page */
 router.get("/", async (req, res, next) => {
   try {
-    let responseUSA = await newsapi.v2.topHeadlines({
+    let responseBR = await newsapi.v2.topHeadlines({
       q: "mercado",
       category: "business",
       language: "pt",
       country: "br",
     });
 
-    var newsBR = responseUSA.articles;
+    var newsBR = responseBR.articles;
 
     if (newsBR.length > 6) {
       newsBR.splice(6, newsBR.length - 6);
@@ -36,14 +36,14 @@ router.get("/", async (req, res, next) => {
       noticia.country = "br";
     });
 
-    let responseBR = await newsapi.v2.topHeadlines({
+    let responseUSA = await newsapi.v2.topHeadlines({
       q: "",
       category: "business",
       language: "en",
       country: "us",
     });
 
-    var newsUSA = responseBR.articles;
+    var newsUSA = responseUSA.articles;
     newsUSA.country = "us";
 
     if (newsUSA.length > 7) {
@@ -113,7 +113,7 @@ router.post("/ticker-search", async (req, res) => {
     });
     
 
-    //console.log(data);
+    console.log(data);
 
     let date = new Date().toISOString().slice(0, 10);
 
@@ -161,7 +161,7 @@ router.get("/noticias/pagina-noticia/:noticiaId", (req, res) => {
 
   News.findById(noticiaId)
     .then((noticia) => {
-      console.log(noticia);
+      //console.log(noticia);
       res.render("main/pagina-noticia.hbs", noticia);
     })
     .catch((err) => console.log(err));

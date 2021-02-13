@@ -4,26 +4,11 @@ const router = express.Router();
 const Article = require("../models/Article.model");
 
 router.get("/", (req, res) => {
-  Article.find()
-    .populate("author")
-    .then((allArticles) => {
-      res.render("main/article-list.hbs", { articles: allArticles });
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  //Implementar busca de todos artigos e display
 });
 
 router.get("/:articleId", (req, res) => {
-  const { articleId } = req.params;
-
-  Article.findOne({ _id: { $eq: articleId } })
-    .then((article) => {
-      res.render("main/article-page.hbs", { article });
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  //implementar pagina e rota de detalhes de cada artigo
 });
 
 module.exports = router;

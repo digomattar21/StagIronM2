@@ -15,6 +15,7 @@ router.get("/private/createArticle", (req, res) => {
 
 router.post("/private/createArticle", async (req, res, nxt) => {
   //implementar post de createarticle (postar no feed?)
+  
 });
 
 router.get("/private/minha-carteira", (req, res) => {
