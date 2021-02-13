@@ -1,0 +1,12 @@
+.lista-company-infos > li {
+  color: black;
+  margin-top: 10px;
+  height: 10%;
+  font-size: 1.2rem;
+}
+
+.lista-company-infos>li>span{
+    font-weight: 600;
+
+}
+
