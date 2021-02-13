@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="/assets/ionicons.min.css">
   <link rel="stylesheet" href="/assets/css/member-area.css">
   <link rel="stylesheet" href="/assets/css/Header-Blue.css">
+  <link rel="stylesheet" href="/assets/css/company-info.css">
 
 </head>
 
@@ -33,69 +34,141 @@
     </div>
   </nav>
 
-  <section>
+  <section style='border-bottom: 1px solid lightgray'>
 
     <div class="row">
-      <div class="col-lg-5 d-flex flex-column">
-        <div class='d-flex justify-content-center'>
-          <h3 style='font-weight: 800;margin-left: 10px;font-size: 2.1rem; color: black;'>{{price.regularMarketPrice}}
+      <div class="col-lg-7 d-flex flex-column">
+        <div class='d-flex justify-content-start'>
+          <h3 style='font-weight: 800;margin-left: 25%;font-size: 2.1rem; color: black;'>{{price.regularMarketPrice}}
           </h3>
           {{#if posChange}}
-          <span style='margin-left: 5px;color: rgb(22, 158, 22); font-weight: bold; font-size:1.6rem'>(+{{posChange}}%)</span>
+          <span
+            style='margin-left: 5px;color: rgb(22, 158, 22); font-weight: bold; font-size:1.6rem'>(+{{posChange}}%)</span>
           {{/if}}
           {{#if negChange}}
-          <span style='margin-left: 5px;color: rgb(238, 27, 27); font-weight: bold; font-size:1.6rem'>({{negChange}}%)</span>
+          <span
+            style='margin-left: 5px;color: rgb(238, 27, 27); font-weight: bold; font-size:1.6rem'>({{negChange}}%)</span>
           {{/if}}
         </div>
         <canvas id='myCanvas'></canvas>
       </div>
-      <div class="col-lg-6 d-flex flex-column justify-content-start">
-        <h5 style='font-weight:700; color: #017bcd; font-size: 1.2rem'>Perfil Empresarial</h5>
+      <div class="col-lg-4 d-flex flex-column justify-content-start">
+        <h5 style='font-weight:700; color: #017bcd; font-size: 1.2rem; font-weight: bold'>Perfil Empresarial</h5>
         <ul class="list-unstyled" style='font-size:1.5rem; color: black'>
           {{!-- COLOAR INFORMACOES DE PERFIL EMPRESARIAL --}}
+          <li><span>{{price.longName}}</span></li>
+          {{#if sumProf.sector}}
+          <li><span>Setor: {{sumProf.sector}}</span></li>
+          {{#if sumProf.industry}}
+          <li><span>Industria: {{sumProf.industry}}</span></li>
+          {{/if}}
+          {{else}}
+          <li><span>{{sumProf.address1}}, {{sumProf.address2}}, {{sumProf.city}}</span></li>
+          {{/if}}
+
+          <li><span style=''>Website: <a href="{{sumProf.website}}" target="blank"
+                style='color: black; text-decoration:none'>{{sumProf.website}}</a></span></li>
+          {{#if sumProf.fullTimeEmployees}}
+          <li>Nº de empregados: {{sumProf.fullTimeEmployees}}</li>
+          {{else}}
+          {{/if}}
 
         </ul>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-2">
-        <h6>Artigos Relacionados</h6>
+      <div class="col-lg-5" style=' border-bottom: 1px solid lightgray;'>
+        <h4 style='color: #017bcd; text-align: center; margin-top:3px; margin-left: 5%; font-size:1.3rem;font-weight: bold'>Estatísticas</h4>
       </div>
-      <div class="col-lg-3" style=' border-bottom: 1px solid lightgray;'>
-        <h4 style='color: #017bcd; text-align: center; margin-top:3px; font-size:1.3rem'>Estatísticas</h4>
-      </div>
-      <div class="col-lg-7 text-center justify-content-center align-items-center">
-        <h6>Indicadores Financeiros</h6>
+      <div class="col-lg-7 text-center justify-content-center align-items-center"
+        style=' border-bottom: 1px solid lightgray;'>
+        <h4 style='color: #017bcd; text-align: center; margin-top:3px; font-size:1.3rem; font-weight: bold'>Indicadores Financeiros</h4>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-2">
-        <ul class="list-group">
-          <li class="list-group-item"><span>List Group Item 1</span></li>
-          <li class="list-group-item"><span>List Group Item 2</span></li>
-          <li class="list-group-item"><span>List Group Item 3</span></li>
-        </ul>
-      </div>
-      <div class="col-lg-3">
-        <ul class="list-unstyled text-start">
-          <li><span>Shares Outstanding: {{defKey.sharesOutstanding}}</span></li>
+      
+      <div class="col-lg-4" style='border-right: 1px solid lightgray; margin-left: 5%'>
+        <ul class="list-unstyled text-start lista-company-infos">
+          <li><span>Shares Outstanding:</span> {{defKey.sharesOutstanding}}</li>
           {{!-- COLOCAR INDICADORES DE DEFKEY STATISTICS --}}
+          {{#if price.marketCap}}
+          <li><span>Market Cap: </span>{{price.marketCap}}</li>
+          {{/if}}
+          {{#if price.regularMarketDayLow}}
+          <li><span>Day Range: </span>{{price.regularMarketDayLow}}-{{price.regularMarketDayHigh}}</li>
+          {{/if}}
+          {{#if defKey.52WeekChange}}
+          <li><span>Variação 52 sem: </span>{{defKey.52WeekChange}}</li>
+          {{/if}}
+          {{#if defKey.beta}}
+          <li><span>Beta: </span>{{defKey.beta}}</li>
+          {{/if}}
+          {{#if defKey.trailingEps}}
+          <li><span>EPS Passado: </span>{{defKey.trailingEps}}</li>
+          {{/if}}
+          {{#if defKey.forwardEps}}
+          <li><span>EPS Futuro: </span>{{defKey.forwardEps}}</li>
+          {{/if}}
 
 
         </ul>
       </div>
-      <div class="col">
-        <div class="d-flex justify-content-around" style="height: 15%;">
-          <h6 class="text-left" style="width: 150px;height: 30px;">Operacional </h6>
-          <h6 class="text-left" style="width: 150px;height: 30px;">Balanço</h6>
-        </div>
+      <div class="col" >
+        {{!-- <div class="d-flex justify-content-around" style="height: 15%;margin-top:10px;">
+          <h6 class="text-left" style="height: 30px; font-size:1.3rem; color: #017bcd;">Operacional </h6>
+          <h6 class="text-left" style="height: 30px; font-size:1.3rem; color: #017bcd;">Balanço</h6>
+        </div> --}}
         <div class="d-flex justify-content-around" style="height: 80%;">
-          <ul class="list-unstyled text-left" style="width: 250px;">
+          <ul class="list-unstyled text-left lista-company-infos" style="padding-right: 5%;border-right: 1px solid lightgray;">
             {{!-- LISTAR DADOS OPERACIONAIS --}}
+            {{#if finData.targetMeanPrice}}
+            <li><span>Preco alvo médio: </span>{{finData.targetMeanPrice}}</li>
+            {{/if}}
+            {{#if finData.numberOfAnalystOpinions}}
+            <li><span>Númeo de opiniões de analistas: </span>{{finData.numberOfAnalystOpinions}}</li>
+            {{/if}}
+            {{#if finData.operatingCashflow}}
+            <li><span>FC Operacional: </span>{{finData.operatingCashflow}}</li>
+            {{/if}}
+            {{#if finData.totalRevenue}}
+            <li><span>Receita: </span>{{finData.totalRevenue}}</li>
+            {{/if}}
+            {{#if finData.grossProfits}}
+            <li><span>Lucro Bruto: </span>{{finData.grossProfits}}</li>
+            {{/if}}
+            {{#if finData.totalCash}}
+            <li><span>Caixa Total: </span>{{finData.totalCash}}</li>
+            {{/if}}
+            {{#if finData.totalDebt}}
+            <li><span>Dívida Bruta: </span>{{finData.totalDebt}}</li>
+            {{/if}}
 
           </ul>
-          <ul class="list-unstyled" style="width: 250px;">
+          <ul class="list-unstyled lista-company-infos" style="">
             {{!-- LISTAR DADOS DO BALANCO --}}
+            {{#if finData.returnOnAssets}}
+            <li><span>ROA: </span>{{finData.returnOnAssets}}</li>
+            {{/if}}
+            {{#if finData.returnOnEquity}}
+            <li><span>ROE: </span>{{finData.returnOnEquity}}</li>
+            {{/if}}
+            {{#if finData.grossMargins}}
+            <li><span>Margem Bruta: </span>{{finData.grossMargins}}</li>
+            {{/if}}
+            {{#if finData.operatingMargins}}
+            <li><span>Margem Operacional: </span>{{finData.operatingMargins}}</li>
+            {{/if}}
+            {{#if finData.profitMargins}}
+            <li><span>Margem de Lucro: </span>{{finData.profitMargins}}</li>
+            {{/if}}
+            {{#if finData.earningsGrowth}}
+            <li><span>Cresc Lucro: </span>{{finData.earningsGrowth}}</li>
+            {{/if}}
+            {{#if finData.revenueGrowth}}
+            <li><span>Cresc Receita: </span>{{finData.revenueGrowth}}</li>
+            {{/if}}
+
+            
           </ul>
         </div>
       </div>
@@ -108,8 +181,6 @@
     <canvas id='myChart' sytle='width:450px; height: 300px'></canvas>
 
   </section>
-
-
 
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
