@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const router = express.Router();
+const session = require("express-session");
 const Article = require('../models/Article.model');
 // const User = require("../models/User.model");
 // const yf = require("yahoo-finance");
@@ -14,8 +15,19 @@ router.get("/private/createArticle", (req, res) => {
 });
 
 router.post("/private/createArticle", async (req, res, nxt) => {
-  //implementar post de createarticle (postar no feed?)
-  
+
+  try {
+    console.log(req.body);
+    const { title, category, imgPath, message } = req.body;
+    const id = req.session.currentUser.id;
+
+    // let userPost = await Article.create({ title, category, imgPath, message });
+    // console.log(req.session.currentUser)
+    // return User.findByIdAndUpdate(id, { $push: { articles: userPost._id}})
+  }
+  catch (e) {
+    console.log(e);
+  }
 });
 
 router.get("/private/minha-carteira", (req, res) => {
