@@ -39,8 +39,13 @@
       <div class="col-lg-5 d-flex flex-column">
         <div class='d-flex justify-content-center'>
           <h3 style='font-weight: 800;margin-left: 10px;font-size: 2.1rem; color: black;'>{{price.regularMarketPrice}}
-          </h3><span style='margin-left: 5px;color: rgb(22, 158, 22); font-weight: bold; font-size:1.6rem'>{{#if
-            this.posChange}}(+{{this.posChange}}%){{/if}}</span>
+          </h3>
+          {{#if posChange}}
+          <span style='margin-left: 5px;color: rgb(22, 158, 22); font-weight: bold; font-size:1.6rem'>(+{{posChange}}%)</span>
+          {{/if}}
+          {{#if negChange}}
+          <span style='margin-left: 5px;color: rgb(238, 27, 27); font-weight: bold; font-size:1.6rem'>({{negChange}}%)</span>
+          {{/if}}
         </div>
         <canvas id='myCanvas'></canvas>
       </div>
