@@ -33,14 +33,14 @@ router.post("/auth/sign-up", async (req, res) => {
         `Sua senha deve conter no mínimo: 8 caracteres, 1 letra maiúscula, 1 letra minúscula, 1 símbolo e 1 número (Levamos sua segurança a sério)`
       );
     } else {
-
+      await sendConfirmationMail(email);
+      
+      startTimer()
+      
       password = await bcrypt.hash(password, salt);
       let createUser = await User.create({ username, email, password });
-      let user = await User.findOne({ email: email });
-      req.session.currentUser = user;
-      res.render("private/main.hbs", {
-        userInSession: req.session.currentUser,
-      });
+
+      res.render("auth/confirmEmail.hbs", { email: email , username: username});
     }
   } catch (e) {
     console.log(e);
@@ -89,5 +89,88 @@ router.post("/auth/logout", async (req, res) => {
   res.redirect("/");
 });
 
+router.post("/auth/confirm", async (req, res) => {
+  try {
+    var { inputNum, email ,username} = req.body;
+
+    if (inputNum === crypt.toString()) {
+      let user = await User.findOne({ email: email });
+      req.session.currentUser = user;
+      res.render("private/main.hbs", {
+        userInSession: req.session.currentUser,
+      });
+    } else {
+
+      let deletedUser = await User.findOneAndDelete({email: email});
+      var msg = "Código Incorreto, favor preencher novamente";
+      res.render("auth/sign-up", { msg: msg , email: email, username: username});
+
+    }
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+var crypt;
+function storeRandNum(randNum) {
+  crypt = randNum;
+}
+
+var timer;
+
+function resetTimer(){
+  timer=0;
+}
+
+
+function startTimer() {
+  setInterval(()=>timer++,1000)
+}
+
+
+
+function sendConfirmationMail(email) {
+  var randNum = Math.floor(100000 + Math.random() * 900000);
+  storeRandNum(randNum);
+
+  var mailToHtml = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+      <div style='width: 100%; height: 100%; background-color: #fff'>
+          <h4>Seu código: <span>${randNum}</h4></span>
+        </div>      
+    </body>
+    </html>
+    `;
+
+  let transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "stag.talk.mailer@gmail.com",
+      pass: `${process.env.ARTICLE_MAILER_PASS}`,
+    },
+  });
+
+  const mail = {
+    from: "Stag Article Mailer",
+    to: `${email}`,
+    subject: "Confirme Sua Conta",
+    html: `${mailToHtml}`,
+  };
+
+  transporter.sendMail(mail, function (err, info) {
+    if (err) {
+      console.log(err);
+    } else {
+      return info;
+    }
+  });
+}
 
 module.exports = router;
+
