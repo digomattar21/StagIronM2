@@ -6,23 +6,14 @@
 <head>
 
   <meta charset="UTF-8">
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <link rel="stylesheet" href="/code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
   <link rel="stylesheet" href="/assets/css/Navigation-with-Search.css">
-
   <link rel="stylesheet" href="/assets/css/Navigation-Clean.css">
-
   <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
-
   <link rel="stylesheet" href="/assets/fonts/ionicons.css">
-
   <link rel="stylesheet" href="/assets/ionicons.min.css">
-
   <link rel="stylesheet" href="/assets/css/member-area.scss">
-
   <link rel="stylesheet" href="/assets/css/Header-Blue.css">
 
 </head>
@@ -37,8 +28,18 @@
       <h2 class="text-center">Poste Um Artigo</h2>
       <div class="form-group"><input type="text" class="form-control" name="title" placeholder="Titulo"
           style="width: 30vw;min-width: 30vw;" required /></div>
-      <div class="form-group"><input type="text" class="form-control" name="category" placeholder="Categoria"
-          style="width: 30vw;min-width: 30vw;" /></div>
+      <div class="form-group">
+        <select name="category" id="category">
+          <option value="Geral">--Favor Selecionar Categoria--</option>
+          <option value="Ações EUA">Ações EUA</option>
+          <option value="Ações BR">Ações BR</option>
+          <option value="Renda Fixa">Renda Fixa</option>
+          <option value="Fundos Imobiliários">Fundos Imobiliários</option>
+          <option value="Criptomoedas">Criptomoedas</option>
+          <option value="Política">Política</option>
+          <option value="Mercado de Trabalho">Mercado de Trabalho</option>
+        </select>
+      </div>
       <div class="form-group"><input type="text" class="form-control" name="imgPath"
           placeholder="https://rotadaimagem.com" style="width: 30vw;min-width: 30vw;" required /></div>
       <div class="form-group"><textarea class="form-control" name="message" placeholder="Conteúdo" rows="800"
