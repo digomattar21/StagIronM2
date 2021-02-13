@@ -3,20 +3,27 @@
 <div class="login-dark">
   <form action='/auth/confirm' method="post">
     <h3 class="" style='text-align: center; margin-bottom: 50px'>Confirme Seu Email</h3>
-    {{!-- <div class="illustration"><svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' class='ionicon'
-        viewBox='0 0 512 512'>
-        <title>Lock Closed</title>
-        <path d='M336 208v-95a80 80 0 00-160 0v95' fill='none' stroke='currentColor' stroke-linecap='round'
-          stroke-linejoin='round' stroke-width='32' />
-        <rect x='96' y='208' width='320' height='272' rx='48' ry='48' fill='none' stroke='currentColor'
-          stroke-linecap='round' stroke-linejoin='round' stroke-width='32' />
-      </svg></div> --}}
-    <div class="form-group"><input class="form-control" type="text" name="inputNum" placeholder="Código 6 digitos" required /></div>
-    <div class="form-group" style='display: none'><input class="form-control" type='email' name="email" value='{{email}}'  /></div>
-    <div class="form-group" style='display: none'><input class="form-control" type='text' name="name" value='{{name}}'  /></div>
-    
-    <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Confirmar</button></div><a
-      class="forgot" href="#" id='enviarNovamente'>Enviar Novamente?</a>
+    <div class="illustration">
+      <svg xmlns="http://www.w3.org/2000/svg" height='150' class="ionicon" viewBox="0 0 512 512">
+        <title>Mail</title>
+        <rect x="48" y="96" width="416" height="320" rx="40" ry="40" fill="none" stroke="currentColor"
+          stroke-linecap="round" stroke-linejoin="round" stroke-width="32" />
+        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"
+          d="M112 160l144 112 144-112" />
+      </svg>
+    </div>
+
+    <p style='text-align: center;'>Enviamos um Código de 6 digitos para seu email. Não esqueça de checar a caixa de spam
+    </p>
+    <div class="form-group"><input style='text-align: center' class="form-control" type="text" name="inputNum"
+        placeholder="Código 6 digitos" required /></div>
+    <div class="form-group" style='display: none'><input class="form-control" type='email' name="email"
+        value='{{email}}' /></div>
+    <div class="form-group" style='display: none'><input class="form-control" type='text' name="username"
+        value='{{username}}' /></div>
+
+    <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Confirmar</button></div>
+    {{!-- <a class="forgot" href="#" id='enviarNovamente'>Enviar Novamente?</a> --}}
     {{#if msg}}
     <h6 style='color:red; text-align: center;'>{{this.msg}}</h6>
     {{/if}}
