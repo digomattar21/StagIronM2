@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    
+    <title>Stag Talk</title>
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,500;1,300;1,400&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/Navigation-with-Search.css">
+    <link rel="icon" href="/assets/img/logo_white.ico">
+    <link rel="stylesheet" href="/assets/css/Header-Blue.css">
+    <link rel="stylesheet" href="/assets/css/Footer-Dark.css">
+    <link rel="stylesheet" href="/assets/fonts/ionicons.css">
+    <link rel="stylesheet" href="/assets/fonts/ionicons.min.css">
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="stylesheet" href="/assets/css/index.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+
+</head>
+
+<body>
+    <nav class="navbar navbar-light navbar-expand-md fixed-top text-light navigation-clean-search"
+        style='height: 50px; max-height: 50px'>
+        <div class="container-fluid"><a class="navbar-brand text-light" href="/" style='margin-bottom: 5px'><img
+                    width='150' height='30' src="/assets/img/logo-white-on-transparent.png" alt=""> </a><button
+                data-toggle="collapse" data-target="#navcol-1" class="navbar-toggler"><span class="sr-only">Toggle
+                    navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse text-center" id="navcol-1">
+                <ul class="nav navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a data-toggle="dropdown" aria-expanded="false" class="dropdown-toggle nav-link text-light"
+                            href="#">Investimentos</a>
+                        <div class="dropdown-menu text-center text-light">
+                            <div class='dropright'>
+                                <button class="btn btn-light dropdown-toggle text-light dropright-artigos"
+                                    data-toggle="dropdown">Artigos</button>
+                                <div class='dropdown-menu'>
+                                    <a class="dropdown-item text-light" href="#">Ações BR</a>
+                                    <a class="dropdown-item text-light" href="#">Ações EUA</a>
+                                    <a class="dropdown-item text-light" href="#">Renda Fixa</a>
+                                    <a class="dropdown-item text-light" href="#">Criptomoedas</a>
+                                    <a class="dropdown-item text-light" href="#">Fundos Imobiliários</a>
+                                </div>
+                            </div>
+                            <div class='dropright'>
+                                <button class="btn btn-light dropdown-toggle text-light dropright-noticias"
+                                    data-toggle="dropdown">Notícias</button>
+                                <div class='dropdown-menu'>
+                                    <a class="dropdown-item text-light" href="#">Brasil</a>
+                                    <a class="dropdown-item text-light" href="#">Exterior</a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a data-toggle="dropdown" aria-expanded="false" class="dropdown-toggle nav-link text-light"
+                            href="#">Economia</a>
+                        <div class="dropdown-menu text-center text-light">
+                            <div class='dropright'>
+                                <button class="btn btn-light dropdown-toggle text-light dropright-artigos"
+                                    data-toggle="dropdown">Artigos</button>
+                                <div class='dropdown-menu'>
+                                    <a class="dropdown-item text-light" href="#">Política</a>
+                                    <a class="dropdown-item text-light" href="#">Mercado de trabalho</a>
+                                </div>
+                            </div>
+                            <div class='dropright'>
+                                <button class="btn btn-light dropdown-toggle text-light dropright-noticias"
+                                    data-toggle="dropdown">Notícias</button>
+                                <div class='dropdown-menu'>
+                                    <a class="dropdown-item text-light" href="#">Brasil</a>
+                                    <a class="dropdown-item text-light" href="#">Exterior</a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown"><a data-toggle="dropdown" aria-expanded="false"
+                            class="dropdown-toggle nav-link text-light" href="#">Sobre</a>
+                        <div class="dropdown-menu text-center text-light"><a class="dropdown-item text-light"
+                                href="/missa-sobre">Missão</a><a class="dropdown-item text-light"
+                                href="/contato">Contato</a><a class="dropdown-item text-light"
+                                href="/colunistas">Colunistas</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <form class="form-inline mr-auto searchbar-form" method="post" action="/ticker-search">
+                                    
+                            <div class="form-group"><label for="search-field">
+
+                                <button type='submit' id='search-btn'><svg id='search-icon' xmlns="http://www.w3.org/2000/svg" class="ionicon" width='16'height='16' viewBox="0 0 512 512"><title>Search</title><path d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="32"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32" d="M338.29 338.29L448 448"/></svg>
+                            </label></button>
+                            <input type="search"
+                                    class="border rounded-pill border-light form-control search-field"
+                                    id="yfinance-search" name="query" placeholder="Buscar Empresas" />
+                            
+                                    </div>
+                        </form>
+                    </li>
+                    {{#if message}}
+                    <li class='nav-item'>
+                        <div class='container error-message-container'>
+                            <h6 style='color: rgb(247, 18, 18); margin-top:8px; margin-left: -3px'>{{message}}</h6>
+                        </div>
+                    </li>
+
+                    {{/if}}
+
+                </ul><a class="btn btn-light border-light ml-auto action-button" role="button"
+                    href="/auth/login">Entrar</a>
+                <a href="/auth/signup"><button class="btn btn-outline-primary text-light border-light shadow-sm"
+                        type="button">Cadastre-se</button></a>
+            </div>
+        </div>
+    </nav>
+    {{{body}}}
+
+    <div class="footer-dark">
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 col-md-3 item">
+                        <h3>Outros</h3>
+                        <ul>
+                            <li><a href="#">Envie seu curriculo</a></li>
+                            <li><a href="#">Escreva para nós</a></li>
+                            <li><a href="#"></a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-6 col-md-3 item">
+                        <h3>Sobre</h3>
+                        <ul>
+                            <li><a href="#">Empresa</a></li>
+                            <li><a href="#">Equipe</a></li>
+                            <li><a href="#">Seja um colunista</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6 item text">
+                        <h3>Stag Talk</h3>
+                        <p>Praesent sed lobortis mi. Suspendisse vel placerat ligula. Vivamus ac sem lacus. Ut vehicula
+                            rhoncus elementum. Etiam quis tristique lectus. Aliquam in arcu eget velit pulvinar dictum
+                            vel in justo.</p>
+                    </div>
+                    <div class="col item social"><a href="#"><i class="icon ion-social-facebook"></i></a><a href="#"><i
+                                class="icon ion-social-twitter"></i></a><a href="#"><i
+                                class="icon ion-social-snapchat"></i></a><a href="#"><i
+                                class="icon ion-social-instagram"></i></a></div>
+                </div>
+                <p class="copyright">Stag Talk© 2021</p>
+            </div>
+        </footer>
+    </div>
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src='/assets/js/main.js'> </script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src='/assets/js/autocomplete.js'></script>
+
+</body>
+
+</html>

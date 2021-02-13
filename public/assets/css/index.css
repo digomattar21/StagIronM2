@@ -1,0 +1,268 @@
+.lista-noticias > li {
+  border-bottom: 1px solid lightgray;
+}
+
+.noticia-container {
+  padding: 5px 10px;
+  display: flex;
+  flex-direction: row;
+  /* align-items: center; */
+  justify-content: flex-start;
+}
+
+.noticia-container > img {
+  margin-right: 5px;
+  width: 70px;
+  height: 50px;
+  border: 1px solid white;
+  border-radius: 5px;
+}
+
+.headline {
+  color: #017bcd;
+  margin-left: 5%;
+  font-size: 1rem;
+  font-family: "Roboto", "NeueHaasGroteskBold", "sans-serif";
+  letter-spacing: 1px;
+  font-style: italic;
+  font-weight: bold;
+  margin-top: 2%;
+}
+
+.em-alta-container {
+  width: 100px;
+  height: 10px;
+  margin-left: 10px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.tradingview-widget-container {
+  margin-bottom: 20px;
+}
+
+.separator {
+  height: 1px;
+  width: 80vw;
+  background-color: darkgray;
+  border: none;
+}
+
+.noticia-container > h6 {
+  font-family: "Calibre-Semibold";
+  font-size: 18px;
+  font-weight: bold;
+  color: black;
+}
+
+.lista-noticias {
+  border: none;
+  list-style: none;
+  padding-inline-start: 0px;
+
+  text-align: start;
+}
+
+.link-noticia {
+  text-decoration: none;
+  outline: none;
+  color: rgb(0, 0, 0);
+}
+
+.link-noticia:hover {
+  text-decoration: none;
+  outline: none;
+  color: rgba(49, 49, 49, 0.95);
+  font-weight: bold;
+}
+
+.second-section {
+  margin-top: 0;
+}
+
+.trading-view-market-container {
+  max-height: 4250px;
+  height: 400px;
+  min-height: 400px;
+  width: auto;
+  margin-right: 2%;
+  border-radius: 5px;
+  text-align: center;
+  resize: vertical;
+}
+
+.trading-view-calendar-container {
+  height: 400px;
+  width: auto;
+  text-align: center;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+@media (max-width: 600px) {
+  .trading-view-market-container {
+    margin-top: 50px;
+    text-align: center;
+  }
+  .headline {
+    text-align: center;
+    margin-bottom: 5px;
+  }
+
+  .em-alta-container {
+    margin: 0;
+    text-align: start;
+    align-items: flex-start;
+  }
+}
+
+#car1-img {
+  height: 300px;
+  width: auto;
+  transition: transform 0.5s;
+  border: 1px solid white;
+  border-radius: 3px;
+}
+
+#car2-img {
+  height: 300px;
+  width: auto;
+  transition: transform 0.5s;
+  border: 1px solid white;
+  border-radius: 3px;
+}
+
+#car3-img {
+  height: 300px;
+  width: auto;
+  transition: transform 0.5s;
+  border: 1px solid white;
+  border-radius: 3px;
+}
+
+#car1-img:hover {
+  transform: scale(1.3);
+  cursor: pointer;
+}
+
+#car2-img:hover {
+  transform: scale(1.3);
+  cursor: pointer;
+}
+
+#car3-img:hover {
+  transform: scale(1.3);
+  cursor: pointer;
+}
+
+#car1-text-container:hover {
+  cursor: pointer;
+}
+
+#car2-text-container:hover {
+  cursor: pointer;
+}
+
+#car3-text-container:hover {
+  cursor: pointer;
+}
+
+.article-card {
+  height: 400px;
+  width: auto;
+  max-height: 400px;
+  margin-top: 3%;
+}
+
+.lista-embaixo-carousel {
+  margin-left: -14px;
+  white-space: nowrap;
+}
+
+.noticia-embaixo-carousel {
+  height: 30px;
+}
+.noticia-embaixo-carousel > span {
+  font-size: 1rem;
+  font-weight: bold;
+  color: black;
+}
+
+.noticia-embaixo-carousel > span:hover {
+  color: #017bcd;
+  cursor: pointer;
+}
+
+::placeholder {
+  color: white !important;
+  opacity: 0.9;
+  text-align: center;
+}
+.dropright {
+  position: relative;
+}
+
+.dropright .dropdown-menu {
+  top: 0;
+  left: 99%;
+  margin-top: -1px;
+}
+
+.dropright > button {
+  background-color: transparent;
+  color: white;
+  border: none;
+}
+
+.dropright > button:hover {
+  background-color: transparent;
+  color: lightgray;
+}
+
+.dropright > button:after {
+  background-color: transparent;
+  color: lightgray;
+}
+
+.dropright > button:active,
+.dropright > button:focus {
+  background-color: transparent;
+  color: lightgray;
+  outline: none !important;
+  border: none;
+  box-shadow: none;
+}
+
+.main-section {
+  width: 100%;
+  margin-top: 50px !important;
+  height: auto;
+}
+
+.main-section > div {
+  width: 100%;
+  height: auto;
+}
+
+#search-icon{
+  color: darkgray
+}
+
+#search-icon:hover{
+  transform: scale(1.1);
+  color: white;
+  cursor: pointer;
+}
+
+#search-btn{
+  background: transparent;
+  border: none;
+}
+
+#search-btn:active{
+  outline: none;
+  
+}

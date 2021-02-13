@@ -1,0 +1,17 @@
+.btn-create-article {
+  background: linear-gradient(135deg, #172a74, #21a9af);
+  border-radius: 20px;
+  font-size: inherit;
+  color: #fff !important;
+  box-shadow: none;
+  border: none;
+  text-shadow: none;
+  padding: 8px 20px;
+  transition: background-color 0.25s;
+}
+
+@media (max-width: 576px) {
+  .searchbar-form {
+    margin-top: 13px;
+  }
+}

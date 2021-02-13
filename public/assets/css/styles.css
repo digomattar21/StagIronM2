@@ -1,0 +1,22 @@
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+@font-face {
+  font-family: "Calibre-Semibold";
+  src: url("/assets/font/Calibre-Semibold.ttf") format("truetype"); /* Safari, Android, iOS */
+}
+
+@font-face {
+  font-family: "Aileron-Light";
+  src: url("/assets/font/Aileron-Light.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "NeueHaasGroteskBold";
+  src: url("/assets/font/NeueHaasGroteskBold.ttf") format("truetype");
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,300;1,400&display=swap");
