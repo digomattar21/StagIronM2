@@ -19,9 +19,8 @@ router.post("/private/createArticle", async (req, res, nxt) => {
   try {
     console.log(req.body);
     const { title, category, imgPath, message } = req.body;
-    const id = req.session.currentUser.id;
-
-    console.log(id);
+    const id = req.session.currentUser._id;
+    console.log(id)
     // let userPost = await Article.create({ title, category, imgPath, message });
     // console.log(req.session.currentUser)
     // return User.findByIdAndUpdate(id, { $push: { articles: userPost._id}})
