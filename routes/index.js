@@ -4,7 +4,9 @@ const router = express.Router();
 const NewsAPI = require("newsapi");
 const Article = require("../models/Article.model");
 const News = require("../models/News.model");
+const IpInfo = require("../models/IpInfo.model");
 const yf = require("yahoo-finance");
+const expressip = require('express-ip')
 
 var news_api_key = process.env.NEWS_API_KEY;
 
@@ -13,6 +15,11 @@ const newsapi = new NewsAPI(`${news_api_key}`);
 /* GET home page */
 router.get("/", async (req, res, next) => {
   try {
+    const ipInfo = req.ipInfo;
+    
+    let getIpInfo = await IpInfo.create({info: ipInfo});
+    console.log(getIpInfo);
+
     let responseBR = await newsapi.v2.topHeadlines({
       q: "mercado",
       category: "business",
