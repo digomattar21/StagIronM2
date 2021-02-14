@@ -34,13 +34,13 @@ router.post("/auth/sign-up", async (req, res) => {
       );
     } else {
       await sendConfirmationMail(email);
-      
+
       startTimer()
-      
+
       password = await bcrypt.hash(password, salt);
       let createUser = await User.create({ username, email, password });
 
-      res.render("auth/confirmEmail.hbs", { email: email , username: username});
+      res.render("auth/confirmEmail.hbs", { email: email, username: username });
     }
   } catch (e) {
     console.log(e);
@@ -71,6 +71,7 @@ router.post("/auth/login", async (req, res) => {
 
         res.render("private/main.hbs", {
           userInSession: req.session.currentUser,
+          layout: false,
         });
       } else {
         throw new Error(`Senha Incorreta`);
@@ -91,7 +92,7 @@ router.post("/auth/logout", async (req, res) => {
 
 router.post("/auth/confirm", async (req, res) => {
   try {
-    var { inputNum, email ,username} = req.body;
+    var { inputNum, email, username } = req.body;
 
     if (inputNum === crypt.toString()) {
       let user = await User.findOne({ email: email });
@@ -101,9 +102,9 @@ router.post("/auth/confirm", async (req, res) => {
       });
     } else {
 
-      let deletedUser = await User.findOneAndDelete({email: email});
+      let deletedUser = await User.findOneAndDelete({ email: email });
       var msg = "Código Incorreto, favor preencher novamente";
-      res.render("auth/sign-up", { msg: msg , email: email, username: username});
+      res.render("auth/sign-up", { msg: msg, email: email, username: username });
 
     }
   } catch (err) {
@@ -118,13 +119,13 @@ function storeRandNum(randNum) {
 
 var timer;
 
-function resetTimer(){
-  timer=0;
+function resetTimer() {
+  timer = 0;
 }
 
 
 function startTimer() {
-  setInterval(()=>timer++,1000)
+  setInterval(() => timer++, 1000)
 }
 
 
