@@ -6,7 +6,8 @@ const Article = require("../models/Article.model");
 const News = require("../models/News.model");
 const IpInfo = require("../models/IpInfo.model");
 const yf = require("yahoo-finance");
-const expressip = require('express-ip')
+const expressip = require("express-ip");
+const https=require("https");
 
 var news_api_key = process.env.NEWS_API_KEY;
 
@@ -15,57 +16,60 @@ const newsapi = new NewsAPI(`${news_api_key}`);
 /* GET home page */
 router.get("/", async (req, res, next) => {
   try {
-    const ipInfo = req.ipInfo;
-    
-    let getIpInfo = await IpInfo.create({info: ipInfo});
-    console.log(getIpInfo);
+    var ipInfo = req.headers["x-forwarded-for"] || req.ipInfo;
 
-    let responseBR = await newsapi.v2.topHeadlines({
-      q: "mercado",
-      category: "business",
-      language: "pt",
-      country: "br",
-    });
+    var url = `https://ipgeolocation.abstractapi.com/v1/?api_key=fb7a690a904a478c9e33a432c9548628&ip_address=${ipInfo}`
+    getIpInfo(url);
 
-    var newsBR = responseBR.articles;
+    let getIpInfoo = await IpInfo.create({ info: ipInfo });
+    console.log(getIpInfoo);
 
-    if (newsBR.length > 6) {
-      newsBR.splice(6, newsBR.length - 6);
-    }
+    // let responseBR = await newsapi.v2.topHeadlines({
+    //   q: "mercado",
+    //   category: "business",
+    //   language: "pt",
+    //   country: "br",
+    // });
 
-    newsBR.forEach((noticia, index) => {
-      if (noticia.title.includes("-")) {
-        var indice = noticia.title.indexOf("-");
-        if (indice > 30) {
-          noticia.title = noticia.title.slice(0, indice);
-        }
-      }
-      noticia.country = "br";
-    });
+    // var newsBR = responseBR.articles;
 
-    let responseUSA = await newsapi.v2.topHeadlines({
-      q: "",
-      category: "business",
-      language: "en",
-      country: "us",
-    });
+    // if (newsBR.length > 6) {
+    //   newsBR.splice(6, newsBR.length - 6);
+    // }
 
-    var newsUSA = responseUSA.articles;
-    newsUSA.country = "us";
+    // newsBR.forEach((noticia, index) => {
+    //   if (noticia.title.includes("-")) {
+    //     var indice = noticia.title.indexOf("-");
+    //     if (indice > 30) {
+    //       noticia.title = noticia.title.slice(0, indice);
+    //     }
+    //   }
+    //   noticia.country = "br";
+    // });
 
-    if (newsUSA.length > 7) {
-      newsUSA.splice(7, newsUSA.length - 7);
-    }
+    // let responseUSA = await newsapi.v2.topHeadlines({
+    //   q: "",
+    //   category: "business",
+    //   language: "en",
+    //   country: "us",
+    // });
 
-    newsUSA.forEach((noticia, index) => {
-      if (noticia.title.includes("-")) {
-        var indice = noticia.title.indexOf("-");
-        if (indice > 30) {
-          noticia.title = noticia.title.slice(0, indice);
-        }
-      }
-      noticia.country = "us";
-    });
+    // var newsUSA = responseUSA.articles;
+    // newsUSA.country = "us";
+
+    // if (newsUSA.length > 7) {
+    //   newsUSA.splice(7, newsUSA.length - 7);
+    // }
+
+    // newsUSA.forEach((noticia, index) => {
+    //   if (noticia.title.includes("-")) {
+    //     var indice = noticia.title.indexOf("-");
+    //     if (indice > 30) {
+    //       noticia.title = noticia.title.slice(0, indice);
+    //     }
+    //   }
+    //   noticia.country = "us";
+    // });
 
     //importing articles from DB
     let mainArticlesFromDB = await Article.find({ category: { $eq: "main" } })
@@ -77,14 +81,14 @@ router.get("/", async (req, res, next) => {
       .sort({ _id: -1 })
       .limit(4);
 
-    await News.deleteMany();
-    console.log(`Sucessfully Cleared DB`);
+    // await News.deleteMany();
+    // console.log(`Sucessfully Cleared DB`);
 
-    await News.create(newsUSA);
-    console.log(`SucessFully added newsUSA to DB`);
+    // await News.create(newsUSA);
+    // console.log(`SucessFully added newsUSA to DB`);
 
-    await News.create(newsBR);
-    console.log(`Sucessfully added NewsBR to DB`);
+    // await News.create(newsBR);
+    // console.log(`Sucessfully added NewsBR to DB`);
 
     allNewsUSA = await News.find({ country: { $eq: "us" } });
 
@@ -101,8 +105,6 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-
-
 router.post("/ticker-search", async (req, res) => {
   try {
     const { query } = req.body;
@@ -118,13 +120,11 @@ router.post("/ticker-search", async (req, res) => {
         "recommendationTrend",
       ],
     });
-    
 
     console.log(data);
 
     let date = new Date().toISOString().slice(0, 10);
 
-    
     var dailyChange = data.price.regularMarketChangePercent;
 
     if (dailyChange < 0) {
@@ -173,5 +173,32 @@ router.get("/noticias/pagina-noticia/:noticiaId", (req, res) => {
     })
     .catch((err) => console.log(err));
 });
+
+function getIpInfo(url) {
+  https
+    .get(
+      url,
+      (resp) => {
+        let data = "";
+
+        // A chunk of data has been received.
+        resp.on("data", (chunk) => {
+          data += chunk;
+        });
+
+        // The whole response has been received. Print out the result.
+        resp.on("end", () => {
+          console.log(JSON.parse(data));
+          IpInfo.create({ info: JSON.parse(data) }).then(()=>{
+            return (JSON.parse(data));
+          }).catch(err =>console.log(err))
+          
+        });
+      }
+    )
+    .on("error", (err) => {
+      console.log("Error: " + err.message);
+    });
+}
 
 module.exports = router;

@@ -6,6 +6,7 @@ const User = require("../models/User.model");
 const bcrypt = require("bcryptjs");
 var saltRounds = 12;
 const nodemailer = require("nodemailer");
+const Article = require("../models/Article.model");
 
 router.get("/auth/signup", (req, res) => {
   res.render("auth/sign-up.hbs");
@@ -69,9 +70,12 @@ router.post("/auth/login", async (req, res) => {
       if (validate) {
         req.session.currentUser = user;
 
+        let articlesFromDB = await Article.find()
+
         res.render("private/main.hbs", {
           userInSession: req.session.currentUser,
           layout: false,
+          articles: articlesFromDB
         });
       } else {
         throw new Error(`Senha Incorreta`);
@@ -97,8 +101,11 @@ router.post("/auth/confirm", async (req, res) => {
     if (inputNum === crypt.toString()) {
       let user = await User.findOne({ email: email });
       req.session.currentUser = user;
+      let articlesFromDB = await Article.find();
+
       res.render("private/main.hbs", {
         userInSession: req.session.currentUser,
+        articles: articlesFromDB
       });
     } else {
 
