@@ -18,9 +18,7 @@ router.get("/", async (req, res, next) => {
     if (ip!=undefined && ip!=null) {
       let ipsList = await IpInfo.find();
       console.log('length:', ipsList.length)
-      if (ipsList.length>10){
-        await IpInfo.deleteMany()
-      }
+      await IpInfo.deleteMany();
       await getIpInfo(ip);
     }
 
