@@ -28,6 +28,8 @@
       <h2 class="text-center">Poste Um Artigo</h2>
       <div class="form-group"><input type="text" class="form-control" name="title" placeholder="Titulo"
           style="width: 30vw;min-width: 30vw;" required /></div>
+      <div style='display: none' class="form-group"><input type="text" class="form-control" name="id" value="{{userInSession._id}}"
+          style="width: 30vw;min-width: 30vw;" /></div>
       <div class="form-group">
         <select name="category" id="category">
           <option value="Geral">--Favor Selecionar Categoria--</option>

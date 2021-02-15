@@ -16,14 +16,16 @@ router.get("/private/createArticle", (req, res) => {
 
 router.post("/private/createArticle", async (req, res, nxt) => {
   try {
-    console.log(req.body);
-    const { title, category, imgPath, message } = req.body;
+    const { title, category, imgPath, message, author } = req.body;
     const id = req.session.currentUser.id;
-    console.log(id)
 
-    let userPost = await Article.create({ title, category, imgPath, message });
+    let userPost = await Article.create({ title, category, imgPath, message, author });
 
-    return User.findByIdAndUpdate(id, { $push: { articles: userPost.id } })
+    let updated = await User.findByIdAndUpdate(id, { $push: { articles: userPost.id } });
+
+    let articlesFromDB = await Article.find()
+
+    res.render("private/main.hbs", {articles: articlesFromDB, userInSession: req.session.currentUser})
   }
   catch (e) {
     console.log(e);
@@ -38,8 +40,19 @@ router.post("/private/ticker-search", (req, res) => {
   //implementar search de ticker na area privada
 });
 
-router.get('/private/main', (req, res) => {
-  res.render('private/main.hbs', { layout: false });
+router.get('/private/main', async (req, res) => {
+  try{
+
+    const id = req.session.currentUser._id;
+    console.log(id);
+
+    let articlesFromDB = await Article.find();
+    console.log(articlesFromDB);
+
+    res.render('private/main.hbs', { layout: false , articles:articlesFromDB, userInSession: req.session.currentUser});
+
+  }catch(error){console.log(error)}
+
 });
 
 module.exports = router;
