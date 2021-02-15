@@ -15,7 +15,7 @@ const newsapi = new NewsAPI(`${news_api_key}`);
 router.get("/", async (req, res, next) => {
   try {
     var ip = req.headers['x-forwarded-for'];
-    if (ip!=undefined && ip!=null) {
+    if (ip!=undefined && ip!=null && ip!='::1') {
       let ipsList = await IpInfo.find();
       console.log('length:', ipsList.length)
       await IpInfo.deleteMany();
