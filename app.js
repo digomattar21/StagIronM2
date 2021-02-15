@@ -8,7 +8,6 @@ const hbs = require("hbs");
 const mongoose = require("mongoose");
 const logger = require("morgan");
 const path = require("path");
-const expressip = require("express-ip")
 
 
 
@@ -40,7 +39,6 @@ app.use(
   })
 );
 
-app.use(expressip().getIpInfoMiddleware);
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "hbs");
@@ -59,7 +57,6 @@ require("./configs/db.config");
 
 
 const index = require("./routes/index");
-const articles = require("./routes/articles.routes");
 const private = require("./routes/private.routes");
 const auth = require("./routes/auth.routes");
 
@@ -67,7 +64,6 @@ const auth = require("./routes/auth.routes");
 
 app.use("/", index);
 app.use("/", private);
-app.use("/", articles);
 app.use('/', auth);
 
 
