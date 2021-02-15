@@ -14,21 +14,29 @@ router.get("/private/createArticle", (req, res) => {
   });
 });
 
-router.post("/private/createArticle", async (req, res, nxt) => {
-  try {
-    console.log(req.body);
-    const { title, category, imgPath, message } = req.body;
-    const id = req.session.currentUser.id;
-    console.log(id)
+router.post("/private/createArticle", (req, res, nxt) => {
 
-    let userPost = await Article.create({ title, category, imgPath, message });
+  const { title, category, imgPath, message } = req.body;
+  const id = req.session.currentUser._id;
 
-    return User.findByIdAndUpdate(id, { $push: { articles: userPost.id } })
-  }
-  catch (e) {
-    console.log(e);
-  }
+  Article.create({ title, category, imgPath, message })
+    .then(dbArticle => {
+      return User.findByIdAndUpdate(id, { $push: { articles: dbArticle._id } })
+    })
+    .then(() => res.redirect('/private/main.hbs'))
+    .catch(e => console.log(`Error while creating the article in the DB: ${e}`));
 });
+
+router.get('/private/main', (req, res) => {
+  const id = req.session.currentUser._id;
+  Article.find()
+    .populate(id)
+    .then(dbArticle => res.render('private/main.hbs', {
+      articles: dbArticle,
+      layout: false,
+    }))
+    .catch(e => console.log(`Error while getting articles from DB: ${e}`));
+})
 
 router.get("/private/minha-carteira", (req, res) => {
   res.render("private/minha-carteira.hbs", { layout: false });
@@ -39,7 +47,10 @@ router.post("/private/ticker-search", (req, res) => {
 });
 
 router.get('/private/main', (req, res) => {
-  res.render('private/main.hbs', { layout: false });
+  res.render('private/main.hbs', {
+    userInSession: req.session.currentUser,
+    layout: false,
+  });
 });
 
 module.exports = router;
