@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const router = express.Router();
-// const session = require("express-session");
+const session = require("express-session");
 const User = require("../models/User.model");
 const bcrypt = require("bcryptjs");
 var saltRounds = 12;
@@ -68,11 +68,12 @@ router.post("/auth/login", async (req, res) => {
 
       if (validate) {
         req.session.currentUser = user;
-
-        res.render("private/main.hbs", {
-          userInSession: req.session.currentUser,
-          layout: false,
-        });
+        res.redirect('/private/main')
+        // 
+        // res.render("private/main.hbs", {
+        // userInSession: req.session.currentUser,
+        // layout: false,
+        // });
       } else {
         throw new Error(`Senha Incorreta`);
       }

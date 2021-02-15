@@ -23,16 +23,19 @@ router.post("/private/createArticle", (req, res, nxt) => {
     .then(dbArticle => {
       return User.findByIdAndUpdate(id, { $push: { articles: dbArticle._id } })
     })
-    .then(() => res.redirect('/private/main.hbs'))
+    .then(() => res.redirect('/private/main'))
     .catch(e => console.log(`Error while creating the article in the DB: ${e}`));
 });
 
 router.get('/private/main', (req, res) => {
+  console.log(req.session.currentUser);
   const id = req.session.currentUser._id;
+
   Article.find()
     .populate(id)
     .then(dbArticle => res.render('private/main.hbs', {
       articles: dbArticle,
+      userInSession: req.session.currentUser,
       layout: false,
     }))
     .catch(e => console.log(`Error while getting articles from DB: ${e}`));

@@ -16,8 +16,8 @@ const newsapi = new NewsAPI(`${news_api_key}`);
 router.get("/", async (req, res, next) => {
   try {
     const ipInfo = req.ipInfo;
-    
-    let getIpInfo = await IpInfo.create({info: ipInfo});
+
+    let getIpInfo = await IpInfo.create({ info: ipInfo });
     console.log(getIpInfo);
 
     let responseBR = await newsapi.v2.topHeadlines({
@@ -95,6 +95,7 @@ router.get("/", async (req, res, next) => {
       newsBR: allNewsBR,
       mainArticles: mainArticlesFromDB,
       cpvArticles: comprarOuVenderArticles,
+      userInSession: req.session.currentUser,
     });
   } catch (e) {
     res.render("api-error.hbs", { APImessage: e.message });
@@ -118,13 +119,13 @@ router.post("/ticker-search", async (req, res) => {
         "recommendationTrend",
       ],
     });
-    
+
 
     console.log(data);
 
     let date = new Date().toISOString().slice(0, 10);
 
-    
+
     var dailyChange = data.price.regularMarketChangePercent;
 
     if (dailyChange < 0) {

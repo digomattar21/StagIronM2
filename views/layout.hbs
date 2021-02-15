@@ -109,11 +109,7 @@
                                 <input type="search" class="border rounded-pill border-light form-control search-field"
                                     id="yfinance-search" name="query" placeholder="Buscar Empresas" />
                             </div>
-                            {{#if userInSession}}
-                    <li class="nav-item text-light"><a class="nav-link text-light" href="/private/main">Meu feed</a>
-                    </li>
-                    {{/if}}
-                    </form>
+                        </form>
                     </li>
                     {{#if message}}
                     <li class='nav-item'>
@@ -124,10 +120,14 @@
 
                     {{/if}}
 
-                </ul><a class="btn btn-light border-light ml-auto action-button" role="button"
-                    href="/auth/login">Entrar</a>
+                </ul>
+                {{#if userInSession}}
+                <a class="btn btn-light border-light ml-auto action-button" href="/private/main">Meu feed</a>
+
+                {{else}}
+                <a class="btn btn-light border-light ml-auto action-button" role="button" href="/auth/login">Entrar</a>
                 <a href="/auth/signup"><button class="btn btn-outline-primary text-light border-light shadow-sm"
-                        type="button">Cadastre-se</button></a>
+                        type="button">Cadastre-se</button></a>{{/if}}
             </div>
         </div>
     </nav>
