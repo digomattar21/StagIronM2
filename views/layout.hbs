@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    
+
     <title>Stag Talk</title>
     <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700">
@@ -91,16 +91,24 @@
                     </li>
                     <li class="nav-item">
                         <form class="form-inline mr-auto searchbar-form" method="post" action="/ticker-search">
-                                    
+
                             <div class="form-group"><label for="search-field">
 
-                                <button type='submit' id='search-btn'><svg id='search-icon' xmlns="http://www.w3.org/2000/svg" class="ionicon" width='16'height='16' viewBox="0 0 512 512"><title>Search</title><path d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="32"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32" d="M338.29 338.29L448 448"/></svg>
-                            </label></button>
-                            <input type="search"
-                                    class="border rounded-pill border-light form-control search-field"
+                                    <button type='submit' id='search-btn'><svg id='search-icon'
+                                            xmlns="http://www.w3.org/2000/svg" class="ionicon" width='16' height='16'
+                                            viewBox="0 0 512 512">
+                                            <title>Search</title>
+                                            <path
+                                                d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z"
+                                                fill="none" stroke="currentColor" stroke-miterlimit="10"
+                                                stroke-width="32" />
+                                            <path fill="none" stroke="currentColor" stroke-linecap="round"
+                                                stroke-miterlimit="10" stroke-width="32" d="M338.29 338.29L448 448" />
+                                        </svg>
+                                </label></button>
+                                <input type="search" class="border rounded-pill border-light form-control search-field"
                                     id="yfinance-search" name="query" placeholder="Buscar Empresas" />
-                            
-                                    </div>
+                            </div>
                         </form>
                     </li>
                     {{#if message}}
@@ -112,10 +120,14 @@
 
                     {{/if}}
 
-                </ul><a class="btn btn-light border-light ml-auto action-button" role="button"
-                    href="/auth/login">Entrar</a>
+                </ul>
+                {{#if userInSession}}
+                <a class="btn btn-light border-light ml-auto action-button" href="/private/main">Meu feed</a>
+
+                {{else}}
+                <a class="btn btn-light border-light ml-auto action-button" role="button" href="/auth/login">Entrar</a>
                 <a href="/auth/signup"><button class="btn btn-outline-primary text-light border-light shadow-sm"
-                        type="button">Cadastre-se</button></a>
+                        type="button">Cadastre-se</button></a>{{/if}}
             </div>
         </div>
     </nav>
