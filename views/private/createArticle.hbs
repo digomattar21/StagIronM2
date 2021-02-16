@@ -28,8 +28,8 @@
       <h2 class="text-center">Poste Um Artigo</h2>
       <div class="form-group"><input type="text" class="form-control" name="title" placeholder="Titulo"
           style="width: 30vw;min-width: 30vw;" required /></div>
-      <div style='display: none' class="form-group"><input type="text" class="form-control" name="id" value="{{userInSession._id}}"
-          style="width: 30vw;min-width: 30vw;" /></div>
+      <div style='display: none' class="form-group"><input type="text" class="form-control" name="id"
+          value="{{userInSession._id}}" style="width: 30vw;min-width: 30vw;" /></div>
       <div class="form-group">
         <select name="category" id="category">
           <option value="Geral">--Favor Selecionar Categoria--</option>
@@ -44,7 +44,7 @@
       </div>
       <div class="form-group"><input type="text" class="form-control" name="imgPath"
           placeholder="https://rotadaimagem.com" style="width: 30vw;min-width: 30vw;" required /></div>
-      <div class="form-group"><textarea class="form-control" name="message" placeholder="Conteúdo" rows="800"
+      <div class="form-group"><textarea class="form-control" name="content" placeholder="Conteúdo" rows="800"
           style="width: 30vw;min-width: 30vw;max-height: 60vh;height: 30vh;" required></textarea></div>
       <div class="form-group"><button class="btn btn-primary" type="submit">Postar</button></div>
     </form>

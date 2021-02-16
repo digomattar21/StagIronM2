@@ -19,7 +19,6 @@ router.post("/private/createArticle", async (req, res, nxt) => {
 
     const id = req.session.currentUser._id;
 
-
     let userPost = await Article.create({
       title,
       category,
@@ -39,6 +38,7 @@ router.post("/private/createArticle", async (req, res, nxt) => {
       articles: articlesFromDB,
       userInSession: req.session.currentUser
     })
+    
 
   } catch (e) {
     console.log(e);
