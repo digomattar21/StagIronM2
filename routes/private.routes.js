@@ -4,8 +4,6 @@ const router = express.Router();
 const session = require("express-session");
 const Article = require("../models/Article.model");
 const User = require("../models/User.model");
-// const yf = require("yahoo-finance");
-// const nodemailer = require("nodemailer");
 
 router.get("/private/createArticle", (req, res) => {
   res.render("private/createArticle.hbs", {
@@ -18,8 +16,8 @@ router.post("/private/createArticle", async (req, res, nxt) => {
   try {
 
     const { title, category, imgPath, content, author } = req.body;
-    // const id = req.session.currentUser._id;
-    // console.log(id)
+
+    const id = req.session.currentUser._id;
 
     let userPost = await Article.create({
       title,
@@ -30,12 +28,17 @@ router.post("/private/createArticle", async (req, res, nxt) => {
     });
 
     let updated = await User.findByIdAndUpdate(id, {
-      $push: { articles: userPost.id },
+      $push: { articles: userPost._id },
     });
 
     let articlesFromDB = await Article.find();
 
-    res.redirect("/private/main.hbs");
+    res.render('private/main.hbs', {
+      layout: false,
+      articles: articlesFromDB,
+      userInSession: req.session.currentUser
+    })
+    
 
   } catch (e) {
     console.log(e);
