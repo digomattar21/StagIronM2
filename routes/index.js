@@ -21,8 +21,6 @@ router.get("/", async (req, res, next) => {
 
     if (ip != undefined && ip != null && ip != '::1') {
 
-    if (ip!=undefined && ip!=null && ip!='::1') {
-
       let ipsList = await IpInfo.find();
       console.log('length:', ipsList.length)
       await IpInfo.deleteMany();
@@ -189,7 +187,7 @@ router.get("/noticias/pagina-noticia/:noticiaId", (req, res) => {
 
 
 
-function getIpInfo(ip){
+function getIpInfo(ip) {
 
 
   if (ip.includes("::ffff:")) {
