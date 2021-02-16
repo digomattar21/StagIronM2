@@ -6,6 +6,7 @@ const Article = require("../models/Article.model");
 const News = require("../models/News.model");
 const IpInfo = require("../models/IpInfo.model");
 const yf = require("yahoo-finance");
+const axios = require('axios');
 
 var news_api_key = process.env.NEWS_API_KEY;
 

@@ -16,14 +16,15 @@ router.get("/private/createArticle", (req, res) => {
 
 router.post("/private/createArticle", async (req, res, nxt) => {
   try {
-    const { title, category, imgPath, message, author } = req.body;
-    const id = req.session.currentUser.id;
+    const { title, category, imgPath, content, author } = req.body;
+    // const id = req.session.currentUser._id;
+    // console.log(id)
 
     let userPost = await Article.create({
       title,
       category,
       imgPath,
-      message,
+      content,
       author,
     });
 
@@ -33,10 +34,7 @@ router.post("/private/createArticle", async (req, res, nxt) => {
 
     let articlesFromDB = await Article.find();
 
-    res.render("private/main.hbs", {
-      articles: articlesFromDB,
-      userInSession: req.session.currentUser,
-    });
+    res.redirect("/private/main.hbs");
   } catch (e) {
     console.log(e);
   }
@@ -69,11 +67,14 @@ router.get('/private/main/:articleId', (req, res) => {
 
   Article.findById(articleId)
     .populate(id)
-    .then(foundArticle => res.render('private/article-detail.hbs', {
-      foundArticle,
-      userInSession: req.session.currentUser,
-      layout: false,
-    }))
+    .then(foundArticle => {
+      console.log(foundArticle)
+      res.render('private/article-detail.hbs', {
+        article: foundArticle,
+        userInSession: req.session.currentUser,
+        layout: false,
+      })
+    })
     .catch(err => console.log(`Error while getting the details about this article: ${err}`));
 })
 
