@@ -6,7 +6,9 @@ const Article = require("../models/Article.model");
 const News = require("../models/News.model");
 const IpInfo = require("../models/IpInfo.model");
 const yf = require("yahoo-finance");
+
 const axios = require('axios');
+
 
 var news_api_key = process.env.NEWS_API_KEY;
 
@@ -16,7 +18,11 @@ const newsapi = new NewsAPI(`${news_api_key}`);
 router.get("/", async (req, res, next) => {
   try {
     var ip = req.headers['x-forwarded-for'];
+
     if (ip != undefined && ip != null && ip != '::1') {
+
+    if (ip!=undefined && ip!=null && ip!='::1') {
+
       let ipsList = await IpInfo.find();
       console.log('length:', ipsList.length)
       await IpInfo.deleteMany();
@@ -126,6 +132,9 @@ router.post("/ticker-search", async (req, res) => {
     let date = new Date().toISOString().slice(0, 10);
 
 
+
+
+
     var dailyChange = data.price.regularMarketChangePercent;
 
     if (dailyChange < 0) {
@@ -177,7 +186,11 @@ router.get("/noticias/pagina-noticia/:noticiaId", (req, res) => {
 
 
 
-function getIpInfo(ip) {
+
+
+
+function getIpInfo(ip){
+
 
   if (ip.includes("::ffff:")) {
     //console.log(ip.indexOf(ip.includes("::ffff:")));
@@ -198,6 +211,7 @@ function getIpInfo(ip) {
             var infoIp = response.data;
           }).catch(err => console.log(err))
       }).catch(err => { console.log(err) })
+
 
   } else {
     console.log("ip not valid");

@@ -16,6 +16,7 @@ router.get("/private/createArticle", (req, res) => {
 
 router.post("/private/createArticle", async (req, res, nxt) => {
   try {
+
     const { title, category, imgPath, content, author } = req.body;
     // const id = req.session.currentUser._id;
     // console.log(id)
@@ -35,6 +36,7 @@ router.post("/private/createArticle", async (req, res, nxt) => {
     let articlesFromDB = await Article.find();
 
     res.redirect("/private/main.hbs");
+
   } catch (e) {
     console.log(e);
   }
@@ -61,6 +63,7 @@ router.post("/private/ticker-search", (req, res) => {
   //implementar search de ticker na area privada
 });
 
+
 router.get('/private/main/:articleId', (req, res) => {
   const id = req.session.currentUser._id;
   const { articleId } = req.params;
@@ -77,5 +80,6 @@ router.get('/private/main/:articleId', (req, res) => {
     })
     .catch(err => console.log(`Error while getting the details about this article: ${err}`));
 })
+
 
 module.exports = router;
