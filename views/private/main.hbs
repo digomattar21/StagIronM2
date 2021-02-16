@@ -22,7 +22,7 @@
 <body>
 
   <div class='container' style='margin-top:60px'>
-    <h1>Welcome {{userInSession.username}}</h1>
+    <h1 style='text-align:center'>Welcome <span style='color: #017bcd;'>{{userInSession.username}}</span></h1>
   </div>
 
   <section style="width: 100%;height: auto;margin-top: 80px;">
@@ -39,7 +39,8 @@
           <div class="card-body d-flex flex-column align-items-center">
             <h4 class="card-title">{{this.title}}</h4>
             <p class="card-text">{{this.resumo}}</p>
-            <a href="/articles/{{this._id}}"><button class="btn btn-primary" type="button">Mais Detalhes</button></a>
+            <a href="/private/main/{{this._id}}"><button class="btn btn-primary" type="button">Mais
+                Detalhes</button></a>
           </div>
         </div>
       </div>

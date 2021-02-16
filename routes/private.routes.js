@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const session = require("express-session");
-const Article = require('../models/Article.model');
+const Article = require("../models/Article.model");
 const User = require("../models/User.model");
 // const yf = require("yahoo-finance");
 // const nodemailer = require("nodemailer");
@@ -14,21 +14,35 @@ router.get("/private/createArticle", (req, res) => {
   });
 });
 
-router.post("/private/createArticle", (req, res, nxt) => {
+router.post("/private/createArticle", async (req, res, nxt) => {
+  try {
+    const { title, category, imgPath, message, author } = req.body;
+    const id = req.session.currentUser.id;
 
-  const { title, category, imgPath, message } = req.body;
-  const id = req.session.currentUser._id;
+    let userPost = await Article.create({
+      title,
+      category,
+      imgPath,
+      message,
+      author,
+    });
 
-  Article.create({ title, category, imgPath, message })
-    .then(dbArticle => {
-      return User.findByIdAndUpdate(id, { $push: { articles: dbArticle._id } })
-    })
-    .then(() => res.redirect('/private/main'))
-    .catch(e => console.log(`Error while creating the article in the DB: ${e}`));
+    let updated = await User.findByIdAndUpdate(id, {
+      $push: { articles: userPost.id },
+    });
+
+    let articlesFromDB = await Article.find();
+
+    res.render("private/main.hbs", {
+      articles: articlesFromDB,
+      userInSession: req.session.currentUser,
+    });
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 router.get('/private/main', (req, res) => {
-  console.log(req.session.currentUser);
   const id = req.session.currentUser._id;
 
   Article.find()
@@ -49,11 +63,18 @@ router.post("/private/ticker-search", (req, res) => {
   //implementar search de ticker na area privada
 });
 
-router.get('/private/main', (req, res) => {
-  res.render('private/main.hbs', {
-    userInSession: req.session.currentUser,
-    layout: false,
-  });
-});
+router.get('/private/main/:articleId', (req, res) => {
+  const id = req.session.currentUser._id;
+  const { articleId } = req.params;
+
+  Article.findById(articleId)
+    .populate(id)
+    .then(foundArticle => res.render('private/article-detail.hbs', {
+      foundArticle,
+      userInSession: req.session.currentUser,
+      layout: false,
+    }))
+    .catch(err => console.log(`Error while getting the details about this article: ${err}`));
+})
 
 module.exports = router;

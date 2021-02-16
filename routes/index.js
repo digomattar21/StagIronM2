@@ -6,7 +6,6 @@ const Article = require("../models/Article.model");
 const News = require("../models/News.model");
 const IpInfo = require("../models/IpInfo.model");
 const yf = require("yahoo-finance");
-const expressip = require('express-ip')
 
 var news_api_key = process.env.NEWS_API_KEY;
 
@@ -15,10 +14,13 @@ const newsapi = new NewsAPI(`${news_api_key}`);
 /* GET home page */
 router.get("/", async (req, res, next) => {
   try {
-    const ipInfo = req.ipInfo;
-
-    let getIpInfo = await IpInfo.create({ info: ipInfo });
-    console.log(getIpInfo);
+    var ip = req.headers['x-forwarded-for'];
+    if (ip != undefined && ip != null && ip != '::1') {
+      let ipsList = await IpInfo.find();
+      console.log('length:', ipsList.length)
+      await IpInfo.deleteMany();
+      await getIpInfo(ip);
+    }
 
     let responseBR = await newsapi.v2.topHeadlines({
       q: "mercado",
@@ -102,8 +104,6 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-
-
 router.post("/ticker-search", async (req, res) => {
   try {
     const { query } = req.body;
@@ -119,7 +119,6 @@ router.post("/ticker-search", async (req, res) => {
         "recommendationTrend",
       ],
     });
-
 
     console.log(data);
 
@@ -174,5 +173,35 @@ router.get("/noticias/pagina-noticia/:noticiaId", (req, res) => {
     })
     .catch((err) => console.log(err));
 });
+
+
+
+function getIpInfo(ip) {
+
+  if (ip.includes("::ffff:")) {
+    //console.log(ip.indexOf(ip.includes("::ffff:")));
+    ip = ip.slice(7, ip.length);
+    ip = geoip.pretty(ip)
+    //console.log(ip);
+  }
+
+  if (ip.match(/(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}/)) {
+    var url = `https://ipapi.co/${ip}/json`;
+    axios
+      .get(url)
+      .then(response => {
+        //console.log(response.data);
+        IpInfo.create({ info: response.data })
+          .then((done) => {
+            console.log('Created IpInfo sucessfully');
+            var infoIp = response.data;
+          }).catch(err => console.log(err))
+      }).catch(err => { console.log(err) })
+
+  } else {
+    console.log("ip not valid");
+  }
+
+}
 
 module.exports = router;
