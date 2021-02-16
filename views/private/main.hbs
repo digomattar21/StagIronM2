@@ -33,17 +33,17 @@
         <h1 class="headline text-center">Artigos </h1>
       </div>
     </div>
-  </div>
-  <div class="row d-flex flex-row flex-wrap" style='margin-left: 5%; margin-right:5%'>
-    {{#each articles}}
-    <div class="col-sm-6 col-md-4 col-lg-4">
-      <div class="card article-card" style='height:300px; max-height:300px; margin-top: 30px'>
-        <img src='{{imgPath}}' class="card-img-top w-100 d-block" style='width:auto; height: 150px'/>
-        <div class="card-body d-flex flex-column align-items-center">
-          <h4 class="card-title">{{title}}</h4>
-          <h6>Categoria: {{category}}</h6>
-          <p class="card-text">{{message}}</p>
-          <a href="/private/main/{{_id}}"><button class="btn btn-primary" type="button">Mais Detalhes</button></a>
+    <div class="row d-flex flex-row flex-wrap" style='margin-left: 5%; margin-right:5%'>
+      {{#each articles}}
+      <div class="col-sm-6 col-md-4 col-lg-4">
+        <div class="card article-card" style='height:300px; max-height:300px; margin-top: 30px'>
+          <img src='{{imgPath}}' class="card-img-top w-100 d-block" style='width:auto; height: 150px' />
+          <div class="card-body d-flex flex-column align-items-center">
+            <h4 class="card-title">{{this.title}}</h4>
+            <p class="card-text">{{this.resumo}}</p>
+            <a href="/private/main/{{this._id}}"><button class="btn btn-primary" type="button">Mais
+                Detalhes</button></a>
+          </div>
         </div>
       </div>
       {{/each}}
