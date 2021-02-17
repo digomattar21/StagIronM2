@@ -16,8 +16,10 @@ router.post("/private/createArticle", async (req, res, nxt) => {
   try {
 
     const { title, category, imgPath, content, author } = req.body;
-
-    const id = req.session.currentUser._id;
+    let authorName = await User.findById(author);
+    // console.log(authorName.username);
+    req.session.currentUser = authorName;
+    console.log(req.session.currentUser.username)
 
     let userPost = await Article.create({
       title,
@@ -27,7 +29,7 @@ router.post("/private/createArticle", async (req, res, nxt) => {
       author,
     });
 
-    let updated = await User.findByIdAndUpdate(id, {
+    let updated = await User.findByIdAndUpdate(author, {
       $push: { articles: userPost._id },
     });
 
@@ -38,7 +40,7 @@ router.post("/private/createArticle", async (req, res, nxt) => {
       articles: articlesFromDB,
       userInSession: req.session.currentUser
     })
-    
+
 
   } catch (e) {
     console.log(e);
@@ -46,15 +48,18 @@ router.post("/private/createArticle", async (req, res, nxt) => {
 });
 
 router.get('/private/main', (req, res) => {
-  const id = req.session.currentUser._id;
+  // const id = req.session.currentUser._id;
 
   Article.find()
-    .populate(id)
-    .then(dbArticle => res.render('private/main.hbs', {
-      articles: dbArticle,
-      userInSession: req.session.currentUser,
-      layout: false,
-    }))
+    .populate('author')
+    .then(dbArticle => {
+      console.log(dbArticle)
+      res.render('private/main.hbs', {
+        articles: dbArticle,
+        userInSession: req.session.currentUser,
+        layout: false,
+      })
+    })
     .catch(e => console.log(`Error while getting articles from DB: ${e}`));
 })
 
@@ -68,13 +73,11 @@ router.post("/private/ticker-search", (req, res) => {
 
 
 router.get('/private/main/:articleId', (req, res) => {
-  const id = req.session.currentUser._id;
   const { articleId } = req.params;
 
   Article.findById(articleId)
-    .populate(id)
+    .populate('author')
     .then(foundArticle => {
-      console.log(foundArticle)
       res.render('private/article-detail.hbs', {
         article: foundArticle,
         userInSession: req.session.currentUser,
@@ -82,6 +85,18 @@ router.get('/private/main/:articleId', (req, res) => {
       })
     })
     .catch(err => console.log(`Error while getting the details about this article: ${err}`));
+});
+
+router.get('/private/author/:authorId', async (req, res) => {
+  try {
+
+    const { authorId } = req.params;
+    let user = await User.findById(authorId).populate('articles');
+    res.render('private/author-profile', { user: user, layout: false });
+
+  } catch (error) {
+    console.log(error);
+  }
 })
 
 
