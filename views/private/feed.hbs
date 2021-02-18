@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/Navigation-with-Search.css">
+    <link rel="stylesheet" href="/assets/fonts/ionicons.css">
+    <link rel="stylesheet" href="/assets/ionicons.min.css">
+    <link rel="stylesheet" href="/assets/css/Header-Blue.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,500;1,300;1,400&display=swap"
+        rel="stylesheet">
+    <link rel="icon" href="/img/stag-talk-bulb-logo-white-bg.png">
+    <link rel="stylesheet" href="/assets/css/Footer-Dark.css">
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="stylesheet" href="/assets/css/index.css">
+
+</head>
+
+<body>
+
+    {{>memberNav}}
+
+    <div class="row" style='margin-top:60px; margin-left: 5px'>
+        <div class="col-lg-12">
+            <h3 style='text-align:center'>Bem Vindo <span style='color: #017bcd; font-weight:600'>{{user.username}}</span></h3>
+        </div>
+    </div>
+
+    <section style="width: 100%;height: auto;margin-top: 80px;">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="headline text-center">Artigos </h1>
+            </div>
+        </div>
+        <div class="row d-flex flex-row flex-wrap" style='margin-left: 5%; margin-right:5%'>
+            {{#each articles}}
+            <div class="col-sm-6 col-md-4 col-lg-4">
+                <div class="card article-card" style='height:400px; max-height:400px; margin-top: 30px'>
+                    <img src='{{imgPath}}' class="card-img-top w-100% d-block" style='width:auto; height: 150px' />
+                    <div class="card-body d-flex flex-column align-items-center">
+                        <h4 class="card-title">{{this.title}}</h4>
+                        <div class="card-body d-flex flex-column justify-content: center; align-items: center;">
+                            <h6 class="card-text"> Autor: {{this.author.username}}</h6>
+                            <a href="/private/main/{{this._id}}"><button class="btn btn-primary" type="button">Mais
+                                    Detalhes</button></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+
+        </div>
+    </section>
+</body>
+
+
+</html>

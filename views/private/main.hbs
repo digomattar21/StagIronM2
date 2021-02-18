@@ -23,39 +23,87 @@
 
   {{>memberNav}}
 
-  <div class='container' style='margin-top:60px'>
-    <h1 style='text-align:center'>Welcome <span style='color: #017bcd;'>{{userInSession.username}}</span></h1>
+  <div class="row" style='margin-top:60px; margin-left: 5px'>
+    <div class="col-lg-4">
+      <h3>Bem Vindo <span style='color: #017bcd; font-weight:600'>{{user.username}}</span></h3>
+    </div>
   </div>
 
-  <section style="width: 100%;height: auto;margin-top: 80px;">
+  <section style="height: 600px; margin-left: 20px;">
     <div class="row">
-      <div class="col-lg-12">
-        <h1 class="headline text-center">Artigos </h1>
-      </div>
-    </div>
-    <div class="row d-flex flex-row flex-wrap" style='margin-left: 5%; margin-right:5%'>
-      {{#each articles}}
-      <div class="col-sm-6 col-md-4 col-lg-4">
-        <div class="card article-card" style='height:400px; max-height:400px; margin-top: 30px'>
-          <img src='{{imgPath}}' class="card-img-top w-100% d-block" style='width:auto; height: 150px' />
-          <div class="card-body d-flex flex-column align-items-center">
-            <h4 class="card-title">{{this.title}}</h4>
-            <div class="card-body d-flex flex-column justify-content: center; align-items: center;">
-              <h6 class="card-text"> Autor: {{this.author.username}}</h6>
-              <a href="/private/main/{{this._id}}"><button class="btn btn-primary" type="button">Mais
-                  Detalhes</button></a>
-              <form action="/private/main/{{this._id}}/delete" method="POST">
-                <button class="btn btn-primary" type="button" style="margin-top: 5px;">Apagar Artigo</button>
-              </form>
+      <div class="col-lg-6 col-xl-5">
+        <div style="height: 400px;">
+          <div class="row">
+            <div class="col">
+              <h5>Resumo Da Carteira</h5>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div style="height: 200px;"></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <h5>Principais Altas</h5>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6 col-lg-6">
+              <ul class="list-unstyled">
+                <li>Item 1</li>
+                <li>Item 2</li>
+                <li>Item 3</li>
+                <li>Item 4</li>
+              </ul>
+            </div>
+            <div class="col-6 col-lg-6">
+              <ul class="list-unstyled">
+                <li>Item 1</li>
+                <li>Item 2</li>
+                <li>Item 3</li>
+                <li>Item 4</li>
+              </ul>
             </div>
           </div>
         </div>
       </div>
-      {{/each}}
+      <div class="col">
+        <div></div>
+        <div class="row">
+          <div class="col">
+            <h5 class="text-center">Meus Artigos</h5>
+          </div>
+        </div>
+        <div class="row d-flex flex-row justify-content-between flex-wrap" style="height: 90%;">
+          <div class="row d-flex flex-row flex-wrap" style='margin-left: 5%; margin-right:5%'>
+            {{#each articles}}
+            <div class="col-sm-12 col-md-6 col-lg-6">
+              <div class="card article-card" style='height:350px; max-height:350px; margin-top: 30px'>
+                <img src='{{imgPath}}' class="card-img-top w-100% d-block" style='width:auto; height: 150px' />
+                <div class="card-body d-flex flex-column align-items-center">
+                  <h4 class="card-title">{{this.title}}</h4>
+                  <div class="card-body d-flex flex-column justify-content: center; align-items: center;">
+                    <a href="/private/main/{{this._id}}"><button class="btn btn-primary" type="button">Mais
+                        Detalhes</button></a>
+                    <form action="/private/main/{{this._id}}/delete" method="POST">
+                      <button class="btn btn-primary" type="button" style="margin-top: 5px;">Apagar Artigo</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {{/each}}
 
+          </div>
+
+        </div>
+      </div>
     </div>
   </section>
 
+
+  
 
 
 

@@ -22,57 +22,57 @@ router.get("/", async (req, res, next) => {
     if (ip != undefined && ip != null && ip != '::1') {
 
       let ipsList = await IpInfo.find();
-      console.log('length:', ipsList.length)
+      //console.log('length:', ipsList.length)
       await IpInfo.deleteMany();
       await getIpInfo(ip);
     }
 
-    let responseBR = await newsapi.v2.topHeadlines({
-      q: "mercado",
-      category: "business",
-      language: "pt",
-      country: "br",
-    });
+    // let responseBR = await newsapi.v2.topHeadlines({
+    //   q: "mercado",
+    //   category: "business",
+    //   language: "pt",
+    //   country: "br",
+    // });
 
-    var newsBR = responseBR.articles;
+    // var newsBR = responseBR.articles;
 
-    if (newsBR.length > 6) {
-      newsBR.splice(6, newsBR.length - 6);
-    }
+    // if (newsBR.length > 6) {
+    //   newsBR.splice(6, newsBR.length - 6);
+    // }
 
-    newsBR.forEach((noticia, index) => {
-      if (noticia.title.includes("-")) {
-        var indice = noticia.title.indexOf("-");
-        if (indice > 30) {
-          noticia.title = noticia.title.slice(0, indice);
-        }
-      }
-      noticia.country = "br";
-    });
+    // newsBR.forEach((noticia, index) => {
+    //   if (noticia.title.includes("-")) {
+    //     var indice = noticia.title.indexOf("-");
+    //     if (indice > 30) {
+    //       noticia.title = noticia.title.slice(0, indice);
+    //     }
+    //   }
+    //   noticia.country = "br";
+    // });
 
-    let responseUSA = await newsapi.v2.topHeadlines({
-      q: "",
-      category: "business",
-      language: "en",
-      country: "us",
-    });
+    // let responseUSA = await newsapi.v2.topHeadlines({
+    //   q: "",
+    //   category: "business",
+    //   language: "en",
+    //   country: "us",
+    // });
 
-    var newsUSA = responseUSA.articles;
-    newsUSA.country = "us";
+    // var newsUSA = responseUSA.articles;
+    // newsUSA.country = "us";
 
-    if (newsUSA.length > 7) {
-      newsUSA.splice(7, newsUSA.length - 7);
-    }
+    // if (newsUSA.length > 7) {
+    //   newsUSA.splice(7, newsUSA.length - 7);
+    // }
 
-    newsUSA.forEach((noticia, index) => {
-      if (noticia.title.includes("-")) {
-        var indice = noticia.title.indexOf("-");
-        if (indice > 30) {
-          noticia.title = noticia.title.slice(0, indice);
-        }
-      }
-      noticia.country = "us";
-    });
+    // newsUSA.forEach((noticia, index) => {
+    //   if (noticia.title.includes("-")) {
+    //     var indice = noticia.title.indexOf("-");
+    //     if (indice > 30) {
+    //       noticia.title = noticia.title.slice(0, indice);
+    //     }
+    //   }
+    //   noticia.country = "us";
+    // });
 
     //importing articles from DB
     let mainArticlesFromDB = await Article.find({ category: { $eq: "main" } })
@@ -84,14 +84,14 @@ router.get("/", async (req, res, next) => {
       .sort({ _id: -1 })
       .limit(4);
 
-    await News.deleteMany();
-    console.log(`Sucessfully Cleared DB`);
+    // await News.deleteMany();
+    // console.log(`Sucessfully Cleared DB`);
 
-    await News.create(newsUSA);
-    console.log(`SucessFully added newsUSA to DB`);
+    // await News.create(newsUSA);
+    // console.log(`SucessFully added newsUSA to DB`);
 
-    await News.create(newsBR);
-    console.log(`Sucessfully added NewsBR to DB`);
+    // await News.create(newsBR);
+    // console.log(`Sucessfully added NewsBR to DB`);
 
     allNewsUSA = await News.find({ country: { $eq: "us" } });
 
@@ -125,7 +125,7 @@ router.post("/ticker-search", async (req, res) => {
       ],
     });
 
-    console.log(data);
+    //console.log(data);
 
     let date = new Date().toISOString().slice(0, 10);
 

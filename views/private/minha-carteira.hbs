@@ -18,16 +18,20 @@
   {{>memberNav}}
 
   <nav class="navbar navbar-light navbar-expand navigation-clean-search" style='margin-top:50px;'>
-    <div class="container"><a class="navbar-brand btn btn-carteira" href="#" style='font-weight: bold'>Minha Carteira</a><button data-toggle="collapse"
-        class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span
-          class="navbar-toggler-icon"></span></button>
+    <div class="container"><a class="navbar-brand btn btn-carteira" href="#" style='font-weight: bold'>Minha
+        Carteira</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span
+          class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
       <div class="collapse navbar-collapse" id="navcol-1">
         <form class="form-inline mr-auto searchbar-form" method="post" action="/private/ticker-search">
           <div class="form-group"><label for="search-field"><i id='btn-search' class="fa fa-search"
                 style="margin-right: 5px;filter: brightness(10%);"></i></label><input type="search"
               class="border rounded-pill border-dark form-control search-field" id="yfinance-search" name="query"
               placeholder="Buscar" /></div>
+          {{#if msg}}
+          <h6><span style='color: red; margin-left:5px; margin-top: 5px;'>{{msg}}</span></h6>
+          {{/if}}
         </form>
+
       </div>
     </div>
   </nav>
@@ -50,7 +54,7 @@
 
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script src= '/assets/js/autocomplete.js'></script>
+  <script src='/assets/js/autocomplete.js'></script>
 
 
 </body>

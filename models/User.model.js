@@ -20,6 +20,8 @@ const userSchema = new Schema(
     },
     password: { type: String, required: [true, `Insira uma Senha`] },
     articles: [{ type: Schema.Types.ObjectId, ref: "Article" }],
+    carteira: {type: Schema.Types.ObjectId, ref: "Carteira"}
+    
   },
   {
     timestamps: true,
