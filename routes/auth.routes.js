@@ -102,13 +102,12 @@ router.post("/auth/confirm", async (req, res) => {
       let user = await User.findOne({ email: email }).populate('articles');
 
       req.session.currentUser = user;
-      let articlesFromDB = await Article.find();
 
       let carteiraCreate = await Carteira.create({user: user._id});
 
-      console.log('carteira:',carteiraCreate);
-
-      console.log('User', user);
+      let updated = await User.findByIdAndUpdate(user._id, {
+        $push: { carteira: carteiraCreate._id },
+      });
 
       res.render("private/main.hbs", {
         user: req.session.currentUser,

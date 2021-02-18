@@ -36,7 +36,45 @@
     </div>
   </nav>
 
-
+  <section style="height: 600px;">
+    {{!-- <div class="row">
+      <div class="col" style='margin-top:50px; margin-left:50px;'>
+        <h4>Meus Tickers</h4>
+      </div>
+    </div> --}}
+    <div class="row" style='padding: 50px'>
+      <div class="col">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Ticker</th>
+                <th>Preço</th>
+                <th>Var Dia</th>
+                <th>Posição(un)</th>
+                <th>Posicão($)</th>
+                <th>Preço Médio</th>
+                <th>Ganho %</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each tickers}}
+              <tr>
+                <td>{{this.name}}</td>
+                <td>${{this.currentPrice}}</td>
+                <td><span>{{this.dayChangePct}}%</span></td>
+                <td><form action=""><input type="number" name='position' placeholder="posição"></form></td>
+                <td></td>
+                <td>Preço M</td>
+                <td>...%</td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
 
 
 

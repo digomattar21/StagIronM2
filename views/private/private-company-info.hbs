@@ -26,12 +26,15 @@
                 data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle
                     navigation</span><span class="navbar-toggler-icon"></span></button>
             <div class="collapse navbar-collapse" id="navcol-1">
-                <a class="btn btn-light action-button" role="button" href="#"><svg width='15px' height='15px'
+                <form action="/private/addticker" method="post">
+                <button class="btn btn-light action-button" type="submit" href="#"><svg width='15px' height='15px'
                         xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
                         <title>Bookmark</title>
                         <path d="M352 48H160a48 48 0 00-48 48v368l144-128 144 128V96a48 48 0 00-48-48z" fill="none"
                             stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" />
-                    </svg></a>
+                    </svg></button>
+                    <input style='display: none' type="text" name='symbol' value='{{price.symbol}}'>
+                </form>
             </div>
         </div>
     </nav>
