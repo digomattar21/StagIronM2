@@ -98,5 +98,13 @@ router.get('/private/author/:authorId', async (req, res) => {
   }
 });
 
+router.post('/private/main/:articleId/delete', (req, res) => {
+  const { id } = req.params;
+  console.log(id)
+  Article.findByIdAndDelete(id)
+    .then(() => res.redirect('/private/main'))
+    .catch(err => console.log(`Error while deleting an article: ${err}`));
+});
+
 
 module.exports = router;
