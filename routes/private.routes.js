@@ -71,7 +71,6 @@ router.post("/private/ticker-search", (req, res) => {
   //implementar search de ticker na area privada
 });
 
-
 router.get('/private/main/:articleId', (req, res) => {
   const { articleId } = req.params;
 
@@ -97,7 +96,7 @@ router.get('/private/author/:authorId', async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-})
+});
 
 
 module.exports = router;
