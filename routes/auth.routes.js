@@ -7,6 +7,7 @@ const bcrypt = require("bcryptjs");
 var saltRounds = 12;
 const nodemailer = require("nodemailer");
 const Article = require("../models/Article.model");
+const Carteira = require("../models/Carteira.model");
 
 router.get("/auth/signup", (req, res) => {
   res.render("auth/sign-up.hbs");
@@ -55,14 +56,14 @@ router.get("/auth/login", (req, res) => {
 
 router.post("/auth/login", async (req, res) => {
   try {
-    console.log("SESSION==>", req.session);
+    //console.log("SESSION==>", req.session);
     const { username, password } = req.body;
 
     if (username === "" || password === "") {
       throw new Error(`Por favor insira seu nome de usuário e senha `);
     }
 
-    let user = await User.findOne({ username: username });
+    let user =  await User.findOne({ username: username }).populate('articles');
 
     if (user != null) {
       let validate = await bcrypt.compareSync(password, user.password);
@@ -70,12 +71,10 @@ router.post("/auth/login", async (req, res) => {
       if (validate) {
         req.session.currentUser = user;
 
-        let articlesFromDB = await Article.find()
-
         res.render("private/main.hbs", {
-          userInSession: req.session.currentUser,
+          user: req.session.currentUser,
           layout: false,
-          articles: articlesFromDB
+          articles: user.articles,
         });
       } else {
         throw new Error(`Senha Incorreta`);
@@ -99,14 +98,24 @@ router.post("/auth/confirm", async (req, res) => {
     var { inputNum, email, username } = req.body;
 
     if (inputNum === crypt.toString()) {
-      let user = await User.findOne({ email: email });
+
+      let user = await User.findOne({ email: email }).populate('articles');
+
       req.session.currentUser = user;
       let articlesFromDB = await Article.find();
 
+      let carteiraCreate = await Carteira.create({user: user._id});
+
+      console.log('carteira:',carteiraCreate);
+
+      console.log('User', user);
+
       res.render("private/main.hbs", {
-        userInSession: req.session.currentUser,
-        articles: articlesFromDB
+        user: req.session.currentUser,
+        articles: user.articles
       });
+
+
     } else {
 
       let deletedUser = await User.findOneAndDelete({ email: email });
