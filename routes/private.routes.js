@@ -71,7 +71,6 @@ router.post("/private/ticker-search", (req, res) => {
   //implementar search de ticker na area privada
 });
 
-
 router.get('/private/main/:articleId', (req, res) => {
   const { articleId } = req.params;
 
@@ -97,7 +96,15 @@ router.get('/private/author/:authorId', async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-})
+});
+
+router.post('/private/main/:articleId/delete', (req, res) => {
+  const { id } = req.params;
+  console.log(id)
+  Article.findByIdAndDelete(id)
+    .then(() => res.redirect('/private/main'))
+    .catch(err => console.log(`Error while deleting an article: ${err}`));
+});
 
 
 module.exports = router;
