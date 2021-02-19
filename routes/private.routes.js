@@ -1,4 +1,3 @@
-
 require("dotenv").config();
 const express = require("express");
 const router = express.Router();
@@ -34,14 +33,9 @@ router.post("/private/createArticle", async (req, res, nxt) => {
       $push: { articles: userPost._id },
     });
 
-    let userUpdated = await User.findById(author).populate('articles');
+    let userUpdated = await User.findById(author).populate("articles");
 
-
-    res.render("private/main.hbs", {
-      layout: false,
-      articles: userUpdated.articles,
-      user: req.session.currentUser,
-    });
+    res.redirect("/private/main");
   } catch (e) {
     console.log(e);
   }
@@ -57,9 +51,15 @@ router.get("/private/main", async (req, res) => {
 
     var dailyChanges = {};
 
-    carteira.tickers.forEach((ticker) => {
-      dailyChanges[ticker.name] = ticker.dayChangePct;
-    });
+    for (let i = 0; i < carteira.tickers.length; i++) {
+      let ticker = carteira.tickers[i];
+      let data = await yf.quote({
+        symbol: `${ticker.name}`,
+        modules: ["price"],
+      });
+      let changePct = data.price.regularMarketChangePercent * 100;
+      dailyChanges[ticker.name] = changePct.toFixed(2);
+    }
 
     if (carteira.tickers.length < 5) {
       num = carteira.tickers.length;
@@ -68,6 +68,7 @@ router.get("/private/main", async (req, res) => {
     }
 
     let highest = pickHighest(dailyChanges, num);
+    let lowest = pickLowest(dailyChanges,num);
 
     let articles = user.articles;
 
@@ -76,6 +77,7 @@ router.get("/private/main", async (req, res) => {
       articles: articles,
       user: req.session.currentUser,
       maioresAltas: highest,
+      maioresBaixas: lowest
     });
   } catch (err) {
     console.log(err);
@@ -253,6 +255,21 @@ function pickHighest(obj, num) {
   }
   Object.keys(obj)
     .sort((a, b) => obj[b] - obj[a])
+    .forEach((key, ind) => {
+      if (ind < num) {
+        requiredObj[key] = obj[key];
+      }
+    });
+  return requiredObj;
+}
+
+function pickLowest(obj, num) {
+  const requiredObj = {};
+  if (num > Object.keys(obj).length) {
+    return false;
+  }
+  Object.keys(obj)
+    .sort((a, b) => obj[a] - obj[b])
     .forEach((key, ind) => {
       if (ind < num) {
         requiredObj[key] = obj[key];
