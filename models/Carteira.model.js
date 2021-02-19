@@ -5,6 +5,8 @@ const carteiraSchema = new Schema(
   {
     user: {type: Schema.Types.ObjectId, ref: "User"},
     tickers: [{type: Object}],
+    patrimonio: {type: Number},
+    
   },
   {
     timestamps: true,
