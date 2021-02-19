@@ -46,6 +46,11 @@ app.use(express.static(path.join(__dirname, "/public")));
 app.use(favicon(path.join(__dirname, 'public', 'assets','img', 'logo_white.ico')));
 hbs.registerPartials(path.join(__dirname, "/views/partials"));
 
+hbs.registerHelper('biggerThanZero', function (value) {
+  value = parseFloat(value);
+  return value >0 ;
+});
+
 
 
 
