@@ -33,9 +33,12 @@ router.post("/private/createArticle", async (req, res, nxt) => {
       $push: { articles: userPost._id },
     });
 
+    let userUpdated = await User.findById(author).populate('articles');
+
+
     res.render("private/main.hbs", {
       layout: false,
-      articles: user.articles,
+      articles: userUpdated.articles,
       user: req.session.currentUser,
     });
   } catch (e) {
@@ -234,10 +237,10 @@ router.get("/private/author/:authorId", async (req, res) => {
   }
 });
 
-router.post("/private/main/:articleId/delete", (req, res) => {
-  const { id } = req.params;
+router.post("/private/:articleId/delete", (req, res) => {
+  const { articleId } = req.params;
   //console.log(id)
-  Article.findByIdAndDelete(id)
+  Article.findByIdAndDelete(articleId)
     .then(() => res.redirect("/private/main"))
     .catch((err) => console.log(`Error while deleting an article: ${err}`));
 });
