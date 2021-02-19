@@ -47,7 +47,23 @@ router.get("/private/main", async (req, res) => {
   try {
     let id = req.session.currentUser._id;
 
-    let user = await User.findById(id).populate("articles");
+    let user = await User.findById(id).populate("articles carteira");
+
+    let carteira = await Carteira.findById(user.carteira._id);
+
+    var dailyChanges = {};
+
+    carteira.tickers.forEach((ticker) => {
+      dailyChanges[ticker.name] = ticker.dayChangePct;
+    });
+
+    if (carteira.tickers.length < 5) {
+      num = carteira.tickers.length;
+    } else {
+      num = 5;
+    }
+
+    let highest = pickHighest(dailyChanges, num);
 
     let articles = user.articles;
 
@@ -55,6 +71,7 @@ router.get("/private/main", async (req, res) => {
       layout: false,
       articles: articles,
       user: req.session.currentUser,
+      maioresAltas: highest,
     });
   } catch (err) {
     console.log(err);
@@ -78,17 +95,16 @@ router.get("/private/feed", async (req, res) => {
 router.get("/private/minha-carteira", async (req, res) => {
   let id = req.session.currentUser._id;
   try {
-
-    let user = await User.findById(id).populate('articles').populate('carteira');
+    let user = await User.findById(id)
+      .populate("articles")
+      .populate("carteira");
 
     let tickers = user.carteira.tickers;
 
-
     res.render("private/minha-carteira.hbs", {
       layout: false,
-      tickers: tickers
+      tickers: tickers,
     });
-
   } catch (err) {
     console.log(err);
   }
@@ -110,8 +126,6 @@ router.post("/private/ticker-search", async (req, res) => {
       ],
     });
 
-    //console.log(data);
-
     let date = new Date().toISOString().slice(0, 10);
 
     var dailyChange = data.price.regularMarketChangePercent;
@@ -122,9 +136,18 @@ router.post("/private/ticker-search", async (req, res) => {
       var posChange = dailyChange.toFixed(2);
     }
 
-    var outros = {};
+    let user = await User.findById(req.session.currentUser._id).populate(
+      "carteira"
+    );
 
-    //fazer calculos p colocar no company info
+    let carteira = await Carteira.findById(user.carteira._id);
+
+    var hasTicker;
+    carteira.tickers.forEach((ticker, index) => {
+      if (ticker.name === queryCap) {
+        hasTicker = true;
+      }
+    });
 
     res.render("private/private-company-info.hbs", {
       sumDet: data.summaryDetails,
@@ -132,8 +155,9 @@ router.post("/private/ticker-search", async (req, res) => {
       defKey: data.defaultKeyStatistics,
       sumProf: data.summaryProfile,
       finData: data.financialData,
-      posChange: posChange,
-      negChange: negChange,
+      posChange,
+      negChange,
+      hasTicker: hasTicker,
     });
   } catch (e) {
     console.log(e);
@@ -161,41 +185,44 @@ router.get("/private/main/:articleId", (req, res) => {
     );
 });
 
+router.post("/private/addticker", async (req, res) => {
+  try {
+    const { symbol } = req.body;
 
+    let user = await User.findById(req.session.currentUser._id).populate(
+      "articles carteira"
+    );
 
-router.post('/private/addticker', async (req, res) => {
-  try{
-    const {symbol} = req.body;
-
-    let user = await User.findById(req.session.currentUser._id).populate('articles carteira');
-
-    
     let yfData = await yf.quote({
       symbol: `${symbol}`,
-      modules: [
-        "price",
-      ],
+      modules: ["price"],
     });
 
     let dayChangePct = yfData.price.regularMarketChangePercent.toFixed(2);
 
-    let tickerInfo = {name: symbol, currentPrice: yfData.price.regularMarketPrice,dayChangePct: dayChangePct, };
+    let tickerInfo = {
+      name: symbol,
+      currentPrice: yfData.price.regularMarketPrice,
+      dayChangePct: dayChangePct,
+    };
 
-
-    let updatedCarteira = await Carteira.findByIdAndUpdate(user.carteira._id, {$push: { tickers: tickerInfo }})
+    let updatedCarteira = await Carteira.findByIdAndUpdate(user.carteira._id, {
+      $push: { tickers: tickerInfo },
+    });
 
     let carteira = await Carteira.findById(user.carteira._id);
 
     let tickers = carteira.tickers;
 
-    res.render('private/minha-carteira.hbs', {layout: false, user:req.session.currentUser, tickers: tickers})
-
-  }catch(err){
+    res.render("private/minha-carteira.hbs", {
+      layout: false,
+      user: req.session.currentUser,
+      tickers: tickers,
+    });
+  } catch (err) {
     console.log(err);
   }
-
-
-})
+});
 
 router.get("/private/author/:authorId", async (req, res) => {
   try {
@@ -214,5 +241,20 @@ router.post("/private/main/:articleId/delete", (req, res) => {
     .then(() => res.redirect("/private/main"))
     .catch((err) => console.log(`Error while deleting an article: ${err}`));
 });
+
+function pickHighest(obj, num) {
+  const requiredObj = {};
+  if (num > Object.keys(obj).length) {
+    return false;
+  }
+  Object.keys(obj)
+    .sort((a, b) => obj[b] - obj[a])
+    .forEach((key, ind) => {
+      if (ind < num) {
+        requiredObj[key] = obj[key];
+      }
+    });
+  return requiredObj;
+}
 
 module.exports = router;

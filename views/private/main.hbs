@@ -48,21 +48,23 @@
               <h5 style='color: #017bcd'>Principais Altas</h5>
             </div>
           </div>
-          <div class="row">
-            <div class="col-6 col-lg-6">
+          <div class="row" style='margin-top: 10px;'>
+            <div class="col-4 col-lg-4">
               <ul class="list-unstyled">
-                <li>Item 1</li>
-                <li>Item 2</li>
-                <li>Item 3</li>
-                <li>Item 4</li>
+                {{#each maioresAltas}}
+                <li><span style='color: black; font-size:1.2rem; font-weight: 600'>{{@key}}</span></li>
+                {{/each}}
               </ul>
             </div>
-            <div class="col-6 col-lg-6">
+            <div class="col-4 col-lg-4">
               <ul class="list-unstyled">
-                <li>Item 1</li>
-                <li>Item 2</li>
-                <li>Item 3</li>
-                <li>Item 4</li>
+                {{#each maioresAltas}}
+                {{#if (biggerThanZero this)}}
+                <li><span style='font-size: 1.2rem; color: rgb(47, 216, 47);'>{{this}}%</span></li>
+                {{else}}
+                <li><span style='font-size: 1.2rem; color: red'>{{this}}%</span></li>
+                {{/if}}
+                {{/each}}
               </ul>
             </div>
           </div>
