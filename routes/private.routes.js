@@ -68,7 +68,7 @@ router.get("/private/main", async (req, res) => {
     }
 
     let highest = pickHighest(dailyChanges, num);
-    let lowest = pickLowest(dailyChanges,num);
+    let lowest = pickLowest(dailyChanges, num);
 
     let articles = user.articles;
 
@@ -77,7 +77,7 @@ router.get("/private/main", async (req, res) => {
       articles: articles,
       user: req.session.currentUser,
       maioresAltas: highest,
-      maioresBaixas: lowest
+      maioresBaixas: lowest,
     });
   } catch (err) {
     console.log(err);
@@ -107,9 +107,28 @@ router.get("/private/minha-carteira", async (req, res) => {
 
     let tickers = user.carteira.tickers;
 
+    let tickerInfo = [];
+
+    for (let i = 0; i < user.carteira.tickers.length; i++) {
+      let ticker = user.carteira.tickers[i];
+      let data = await yf.quote({
+        symbol: `${ticker.name}`,
+        modules: ["price"],
+      });
+      let dayChangePct = data.price.regularMarketChangePercent * 100;
+      let info = {
+        name: ticker.name,
+        dayChangePct: dayChangePct.toFixed(2),
+        currentPrice: data.price.regularMarketPrice,
+      };
+      tickerInfo.push(info);
+    }
+
+    console.log(tickerInfo);
+
     res.render("private/minha-carteira.hbs", {
       layout: false,
-      tickers: tickers,
+      tickers: tickerInfo,
     });
   } catch (err) {
     console.log(err);
@@ -237,6 +256,35 @@ router.get("/private/author/:authorId", async (req, res) => {
     res.render("private/author-profile", { user: user, layout: false });
   } catch (error) {
     console.log(error);
+  }
+});
+
+router.get("/private/:articleId/edit", async (req, res) => {
+  try {
+    const {articleId} = req.params;
+
+    let article = await Article.findById(articleId);
+
+    res.render("private/article-edit.hbs", {layout: false, article: article});
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+router.post("/private/:articleId/edit", async (req, res) => {
+  try {
+    const { articleId } = req.params;
+    const { title, category, imgPath, content } = req.body;
+
+    let article = await Article.findByIdAndUpdate(
+      articleId,
+      { title, category, imgPath, content },
+      { new: true }
+    );
+
+    res.redirect("/private/main");
+  } catch (err) {
+    console.log(err);
   }
 });
 

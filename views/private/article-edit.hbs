@@ -32,8 +32,8 @@
                     value="{{userInSession._id}}" style="width: 30vw;min-width: 30vw;" />
             </div>
             <div class="form-group">
-                <select name="category" id="category" {{article.category}}>
-                    <option value="Geral">--Favor Selecionar Categoria--</option>
+                <select name="category" id="category" >
+                    <option value="{{article.category}}">{{article.category}}</option>
                     <option value="Ações EUA">Ações EUA</option>
                     <option value="Ações BR">Ações BR</option>
                     <option value="Renda Fixa">Renda Fixa</option>

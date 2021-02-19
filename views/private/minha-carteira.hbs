@@ -62,7 +62,11 @@
               <tr>
                 <td>{{this.name}}</td>
                 <td>${{this.currentPrice}}</td>
-                <td><span>{{this.dayChangePct}}%</span></td>
+                {{#if (biggerThanZero this.dayChangePct)}}
+                <td><span style='color: rgb(47, 216, 47);'>{{this.dayChangePct}}%</span></span></td>
+                {{else}}
+                <td><span style='color: red'>{{this.dayChangePct}}%</span></td>
+                {{/if}}
                 <td><form action=""><input type="number" name='position' placeholder="posição"></form></td>
                 <td></td>
                 <td>Preço M</td>
