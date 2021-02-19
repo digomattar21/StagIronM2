@@ -86,10 +86,9 @@
               <div class="card-body d-flex flex-column align-items-center">
                 <h4 class="card-title">{{this.title}}</h4>
                 <div class="card-body d-flex flex-column justify-content: center; align-items: center;">
-                  <a href="/private/main/{{this._id}}"><button class="btn btn-primary" type="button">Mais
-                      Detalhes</button></a>
-                  <form action="/private/main/{{this._id}}/delete" method="POST">
-                    <button class="btn btn-primary" type="button" style="margin-top: 5px;">Apagar Artigo</button>
+                  <a href="/private/{{this._id}}/edit"><button class="btn btn-primary" type="button">Editar</button></a>
+                  <form action="/private/{{this._id}}/delete" method="POST">
+                    <button class="btn btn-primary" type="submit" style="margin-top: 5px;">Excluir</button>
                   </form>
                 </div>
               </div>
