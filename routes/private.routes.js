@@ -1,3 +1,4 @@
+
 require("dotenv").config();
 const express = require("express");
 const router = express.Router();
@@ -33,9 +34,12 @@ router.post("/private/createArticle", async (req, res, nxt) => {
       $push: { articles: userPost._id },
     });
 
+    let userUpdated = await User.findById(author).populate('articles');
+
+
     res.render("private/main.hbs", {
       layout: false,
-      articles: user.articles,
+      articles: userUpdated.articles,
       user: req.session.currentUser,
     });
   } catch (e) {
@@ -236,29 +240,11 @@ router.get("/private/author/:authorId", async (req, res) => {
 
 router.post("/private/:articleId/delete", (req, res) => {
   const { articleId } = req.params;
+  //console.log(id)
   Article.findByIdAndDelete(articleId)
     .then(() => res.redirect("/private/main"))
     .catch((err) => console.log(`Error while deleting an article: ${err}`));
 });
-
-router.get('/private/:articleId/edit', (req, res) => {
-  const { articleId } = req.params;
-  console.log(articleId)
-  Article.findById(articleId)
-    .then(articleToEdit => {
-      res.render('private/article-edit', { article: articleToEdit, layout: false });
-    })
-    .catch(err => console.log(`Error while getting an article to edit: ${err}`));
-})
-
-router.post('/private/:articleId/edit', (req, res) => {
-  const { articleId } = req.params;
-  const { title, category, imgPath, content } = req.body;
-
-  Article.findByIdAndUpdate(articleId, { title, category, imgPath, content }, { new: true })
-    .then(updatedArticle => res.redirect(`/private/main/${updatedArticle._id}`))
-    .catch(err => console.log(`Error while updating an article: ${err}`));
-})
 
 function pickHighest(obj, num) {
   const requiredObj = {};
