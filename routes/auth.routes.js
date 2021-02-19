@@ -63,7 +63,7 @@ router.post("/auth/login", async (req, res) => {
       throw new Error(`Por favor insira seu nome de usuário e senha `);
     }
 
-    let user =  await User.findOne({ username: username }).populate('articles');
+    let user = await User.findOne({ username: username }).populate('articles');
 
     if (user != null) {
       let validate = await bcrypt.compareSync(password, user.password);
@@ -103,7 +103,7 @@ router.post("/auth/confirm", async (req, res) => {
 
       req.session.currentUser = user;
 
-      let carteiraCreate = await Carteira.create({user: user._id});
+      let carteiraCreate = await Carteira.create({ user: user._id });
 
       let updated = await User.findByIdAndUpdate(user._id, {
         $push: { carteira: carteiraCreate._id },
