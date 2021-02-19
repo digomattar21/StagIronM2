@@ -105,9 +105,9 @@ router.get("/private/minha-carteira", async (req, res) => {
       .populate("articles")
       .populate("carteira");
 
-    let tickers = user.carteira.tickers;
-
     let tickerInfo = [];
+
+    let carteira = user.carteira;
 
     for (let i = 0; i < user.carteira.tickers.length; i++) {
       let ticker = user.carteira.tickers[i];
@@ -120,15 +120,19 @@ router.get("/private/minha-carteira", async (req, res) => {
         name: ticker.name,
         dayChangePct: dayChangePct.toFixed(2),
         currentPrice: data.price.regularMarketPrice,
+        positionUn: carteira.tickers[i].positionUn
       };
+      let positionUnidade = carteira.tickers[i];
+      console.log('posicao un', positionUnidade)
+      console.log(positionUnidade['positionUn'])
       tickerInfo.push(info);
     }
-
-    console.log(tickerInfo);
 
     res.render("private/minha-carteira.hbs", {
       layout: false,
       tickers: tickerInfo,
+      tickerCarteira: carteira.tickers
+
     });
   } catch (err) {
     console.log(err);
@@ -295,6 +299,35 @@ router.post("/private/:articleId/delete", (req, res) => {
     .then(() => res.redirect("/private/main"))
     .catch((err) => console.log(`Error while deleting an article: ${err}`));
 });
+
+
+router.post('/private/updatewallet', async (req, res) => {
+  try{
+    const {position} = req.body;
+
+    let user = await User.findById(req.session.currentUser._id).populate('carteira');
+
+    let carteira = user.carteira;
+    
+    carteira.tickers.forEach((ticker,index) => {
+      ticker['positionUn'] = position[index];
+      let positionUn = parseInt(position[index]);
+      console.log(positionUn)
+      let tickerPrice = parseFloat(ticker.currentPrice)
+      console.log(tickerPrice)
+      let positionMoney = positionUn * tickerPrice;
+      console.log(positionMoney)
+      ticker['position'] = positionMoney
+    })
+
+
+    res.redirect('/private/minha-carteira')
+
+  }catch(err){
+    console.log(err)
+  }
+})
+
 
 function pickHighest(obj, num) {
   const requiredObj = {};

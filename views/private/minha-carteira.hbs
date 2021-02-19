@@ -34,6 +34,7 @@
         </form>
 
       </div>
+      <a style='font-weight: bold; color: black; font-size:1rem' class='nav-item btn btn-carteira' href="">Meu Patrimônio:<span>{{patrimonio}}</span></a>
     </div>
   </nav>
 
@@ -46,6 +47,10 @@
     <div class="row" style='padding: 50px'>
       <div class="col">
         <div class="table-responsive table wrapper">
+          <form action="/private/updatewallet" method='post'>
+           <div class='salvar-container' style='width: 88vw;display: flex; justify-content: flex-end; margin-bottom:5px'>
+              <button class="btn btn-primary" type="submit">Salvar Mudanças</button>
+           </div>
           <table class="table fl-table">
             <thead>
               <tr>
@@ -62,20 +67,25 @@
               {{#each tickers}}
               <tr>
                 <td>{{this.name}}</td>
-                <td>${{this.currentPrice}}</td>
+                <td>$<span class='ticker-current-price'>{{this.currentPrice}}</span></td>
                 {{#if (biggerThanZero this.dayChangePct)}}
                 <td><span style='color: rgb(47, 216, 47);'>{{this.dayChangePct}}%</span></span></td>
                 {{else}}
                 <td><span style='color: red'>{{this.dayChangePct}}%</span></td>
                 {{/if}}
-                <td><form action=""><input type="number" name='position' placeholder="posição"></form></td>
-                <td></td>
+                <td><input class='posicao-input' min='0' type="number" name='position' placeholder="posição" value="0" ></td>
+                {{#if this.positionUn}}
+                {{else}}
+                <td class='ticker-posicao'>0.00</td>
+                {{/if}}
                 <td>Preço M</td>
                 <td>...%</td>
               </tr>
               {{/each}}
             </tbody>
           </table>
+          
+          </form>
         </div>
       </div>
     </div>
@@ -85,6 +95,7 @@
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script src='/assets/js/autocomplete.js'></script>
+  <script src='/assets/js/minha-carteira.js'></script>
 
 
 </body>
