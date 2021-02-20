@@ -4,6 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+   <link rel="stylesheet" type="text/css"
+    href="https://pixinvent.com/stack-responsive-bootstrap-4-admin-template/app-assets/fonts/simple-line-icons/style.min.css">
   <link rel="stylesheet" href="/assets/css/Navigation-with-Search.css">
   <link rel="stylesheet" href="/assets/css/Navigation-Clean.css">
   <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
@@ -40,7 +42,7 @@
   </nav>
 
   <section style="height: 600px;">
-    <form action="/private/updatewallet" method='post'>
+    {{!-- <form action="/private/updatewallet" method='post'> --}}
       <div class="row d-flex" style='justify-content:center;'>
         <div class="col coluna-tabela-tickers">
           <div class="table-responsive table wrapper">
@@ -54,11 +56,15 @@
                   <th>Posicão($)</th>
                   <th>Preço Médio</th>
                   <th>Ganho %</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
+                <form id='salvarCarteiraForm' action="/private/updatewallet" method='post'>
                 {{#each tickers}}
+                 
                 <tr>
+                  
                   <td>{{this.name}}</td>
                   <td>$<span class='ticker-current-price'>{{this.currentPrice}}</span></td>
                   {{#if (biggerThanZero this.dayChangePct)}}
@@ -89,8 +95,14 @@
                   {{/if}}
                   <td>Preço M</td>
                   <td>...%</td>
+                  
+                  <td>
+                    <button class='btn' style='background-color: transparent; border: none' type='button'><i class='icon-close' style='color: red; height: 16px'></i></button>
+                    {{!-- <input type="text" style='display: none' value="{{this.name}}" name='tickerName'> --}}
+                  </td>
                 </tr>
                 {{/each}}
+               </form>
               </tbody>
             </table>
 
@@ -98,11 +110,12 @@
           </div>
         </div>
       </div>
+      
       <div class='salvar-container'
         style='display: flex; justify-content: flex-end; margin-bottom:5px; margin-right:20px'>
-        <button class="btn btn-primary" type="submit">Salvar Mudanças</button>
+        <button class="btn btn-primary" id='salvarCarteiraBtn' >Salvar Mudanças</button></label>
       </div>
-    </form>
+    
 
 
   </section>

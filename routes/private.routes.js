@@ -38,6 +38,9 @@ router.post("/private/createArticle", async (req, res, nxt) => {
     res.redirect("/private/main");
   } catch (e) {
     console.log(e);
+    setTimeout(() =>{
+      res.redirect('index');
+    },1000)
   }
 });
 
@@ -95,6 +98,9 @@ router.get("/private/feed", async (req, res) => {
     });
   } catch (err) {
     console.log(err);
+    setTimeout(() =>{
+      res.redirect('index');
+    },1000)
   }
 });
 
@@ -108,7 +114,7 @@ router.get("/private/minha-carteira", async (req, res) => {
 
     let carteira = await Carteira.findById(user.carteira._id);
 
-    console.log(carteira.tickers)
+    //console.log(carteira.tickers)
 
     for (let i = 0; i < user.carteira.tickers.length; i++) {
       let ticker = carteira.tickers[i];
@@ -136,6 +142,9 @@ router.get("/private/minha-carteira", async (req, res) => {
 
   } catch (err) {
     console.log(err);
+    setTimeout(() =>{
+      res.redirect('index');
+    },1000)
   }
 });
 
@@ -209,8 +218,12 @@ router.get("/private/main/:articleId", (req, res) => {
         layout: false,
       });
     })
-    .catch((err) =>
+    .catch((err) =>{
       console.log(`Error while getting the details about this article: ${err}`)
+      setTimeout(() =>{
+        res.redirect('index');
+      },1000)
+    }
     );
 });
 
@@ -243,6 +256,9 @@ router.post("/private/addticker", async (req, res) => {
 
   } catch (err) {
     console.log(err);
+    setTimeout(() =>{
+      res.redirect('index');
+    },1000)
   }
 });
 
@@ -265,6 +281,9 @@ router.get("/private/:articleId/edit", async (req, res) => {
     res.render("private/article-edit.hbs", {layout: false, article: article});
   } catch (err) {
     console.log(err);
+    setTimeout(() =>{
+      res.redirect('index');
+    },1000)
   }
 });
 
@@ -282,6 +301,9 @@ router.post("/private/:articleId/edit", async (req, res) => {
     res.redirect("/private/main");
   } catch (err) {
     console.log(err);
+    setTimeout(() =>{
+      res.redirect('index');
+    },1000)
   }
 });
 
@@ -290,13 +312,20 @@ router.post("/private/:articleId/delete", (req, res) => {
   //console.log(id)
   Article.findByIdAndDelete(articleId)
     .then(() => res.redirect("/private/main"))
-    .catch((err) => console.log(`Error while deleting an article: ${err}`));
+    .catch((err) => {
+      console.log(`Error while deleting an article: ${err}`)
+      setTimeout(() =>{
+        res.redirect('index');
+      },1000)
+    });
 });
 
 
 router.post('/private/updatewallet', async (req, res) => {
   try{
     const {position} = req.body;
+
+    console.log(req.body)
 
     let user = await User.findById(req.session.currentUser._id).populate('carteira');
 
@@ -316,9 +345,15 @@ router.post('/private/updatewallet', async (req, res) => {
     res.redirect('/private/minha-carteira')
 
   }catch(err){
-    console.log(err)
+    console.log(err);
+    setTimeout(() =>{
+      res.redirect('index');
+    },1000);
   }
-})
+});
+
+
+
 
 
 function pickHighest(obj, num) {

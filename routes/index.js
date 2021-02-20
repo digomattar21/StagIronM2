@@ -179,7 +179,12 @@ router.get("/noticias/pagina-noticia/:noticiaId", (req, res) => {
       //console.log(noticia);
       res.render("main/pagina-noticia.hbs", noticia);
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      setTimeout(() =>{
+        res.redirect('index');
+      },1000)
+    });
 });
 
 

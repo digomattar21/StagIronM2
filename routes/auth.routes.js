@@ -125,6 +125,9 @@ router.post("/auth/confirm", async (req, res) => {
     }
   } catch (err) {
     console.log(err);
+    setTimeout(() =>{
+      res.redirect('index');
+    },1000);
   }
 });
 
