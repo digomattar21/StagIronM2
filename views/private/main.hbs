@@ -12,10 +12,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,500;1,300;1,400&display=swap"
     rel="stylesheet">
+  <link rel="stylesheet" type="text/css"
+    href="https://pixinvent.com/stack-responsive-bootstrap-4-admin-template/app-assets/fonts/simple-line-icons/style.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
   <link rel="icon" href="/img/stag-talk-bulb-logo-white-bg.png">
   <link rel="stylesheet" href="/assets/css/Footer-Dark.css">
   <link rel="stylesheet" href="/assets/css/styles.css">
   <link rel="stylesheet" href="/assets/css/index.css">
+  <link rel="stylesheet" href="/assets/css/tabela.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 
 </head>
 
@@ -32,63 +37,65 @@
   <section style="height: 600px; margin-left: 20px; margin-top: 30px">
     <div class="row">
       <div class="col-lg-6 col-xl-5">
-        <div style="height: 400px;">
+        <div style="height: auto;">
           <div class="row">
-            <div class="col">
+            <div class='col-8 d-flex flex-column' style='justify-content: flex-start; align-content: flex-start; align-items: flex-start' >
               <h5 style='color: #017bcd'>Resumo Da Carteira</h5>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-12">
-              <div style="height: 200px;"></div>
+              <canvas id='walletPieChart' style='margin-top:30px'></canvas>
             </div>
           </div>
           <div class="row">
             <div class="col">
-              <h5 style='color: #017bcd'>Destaques da Carteira</h5>
+              <h5 style='color: #017bcd; margin-top:30px'>Destaques da Carteira</h5>
             </div>
           </div>
-          <div class="row" style='margin-top: 10px;'>
-            <div class="col-4 col-lg-4">
-              
-              <ul class="list-unstyled">
-                {{#each maioresAltas}}
-                <li><span style='color: black; font-size:1.2rem; font-weight: 600'>{{@key}}</span></li>
-                {{/each}}
-              </ul>
+
+          <div class="row" style='margin-top: 10px; margin-bottom: 50px;'>
+
+            {{#each maioresAltas}}
+            {{#if (biggerThanZero this)}}
+            <div class="col-xl-5 col-sm-5 col-12" style='margin-top:3px'>
+              <div class="card">
+                <div class="card-content">
+                  <div class="card-body">
+                    <div class="media d-flex">
+                      <div class="media-body text-left">
+                        <h3 class="success" style='font-size: 1.2rem; color: rgb(47, 216, 47);'>{{this}}%</h3>
+                        <span style='font-size:1.2rem; font-weight: bold'>{{@key}}</span>
+                      </div>
+                      <div class="align-self-center">
+                        <i class="icon-arrow-up success float-center "
+                          style=' height: 30px; width: 30px;color:rgb(47, 216, 47)'></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="col-4 col-lg-4">
-              <ul class="list-unstyled">
-                {{#each maioresAltas}}
-                {{#if (biggerThanZero this)}}
-                <li><span style='font-size: 1.2rem; color: rgb(47, 216, 47);'>{{this}}%</span></li>
-                {{else}}
-                <li><span style='font-size: 1.2rem; color: red'>{{this}}%</span></li>
-                {{/if}}
-                {{/each}}
-              </ul>
+            {{/if}}
+            {{/each}}
+
+            {{#each maioresBaixas}}
+            <div class="col-xl-5 col-sm-5 col-12" style='margin-top:3px'>
+              <div class="card">
+                <div class="card-content">
+                  <div class="card-body">
+                    <div class="media d-flex">
+                      <div class="media-body text-left">
+                        <h3 class="success" style='font-size: 1.2rem; color: red'>{{this}} %</h3>
+                        <span style='font-size:1.2rem; font-weight: bold'>{{@key}}</span>
+                      </div>
+                      <div class="align-self-center">
+                        <i class="icon-arrow-down danger font-large-2 float-center"
+                          style=' height: 30px; width: 30px;color:red'></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="row" style='margin-top: 10px;'>
-            <div class="col-4 col-lg-4">
-              
-              <ul class="list-unstyled">
-                {{#each maioresBaixas}}
-                <li><span style='color: black; font-size:1.2rem; font-weight: 600'>{{@key}}</span></li>
-                {{/each}}
-              </ul>
-            </div>
-            <div class="col-4 col-lg-4">
-              <ul class="list-unstyled">
-                {{#each maioresBaixas}}
-                {{#if (biggerThanZero this)}}
-                <li><span style='font-size: 1.2rem; color: rgb(47, 216, 47);'>{{this}}%</span></li>
-                {{else}}
-                <li><span style='font-size: 1.2rem; color: red'>{{this}}%</span></li>
-                {{/if}}
-                {{/each}}
-              </ul>
-            </div>
+            {{/each}}
+
           </div>
         </div>
       </div>
@@ -108,7 +115,8 @@
               <div class="card-body d-flex flex-column align-items-center">
                 <h5 class="card-title">{{this.title}}</h5>
                 <div class="card-body d-flex flex-row" style='justify-content: space-between; '>
-                  <a href="/private/{{this._id}}/edit"><button  style='margin-right:20px' class="btn btn-primary" type="button">Editar</button></a>
+                  <a href="/private/{{this._id}}/edit"><button style='margin-right:20px' class="btn btn-primary"
+                      type="button">Editar</button></a>
                   <form action="/private/{{this._id}}/delete" method="POST">
                     <button class="btn btn-primary" type="submit">Apagar</button>
                   </form>
@@ -126,12 +134,11 @@
       </div>
     </div>
   </section>
+  
+  
 
-
-
-
-
-
+  <script src="/assets/js/rpie.js"></script>
+  <script src='/assets/js/walletCharts.js'></script>
 </body>
 
 </html>
