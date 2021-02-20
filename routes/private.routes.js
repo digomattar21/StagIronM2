@@ -61,10 +61,10 @@ router.get("/private/main", async (req, res) => {
       dailyChanges[ticker.name] = changePct.toFixed(2);
     }
 
-    if (carteira.tickers.length < 5) {
+    if (carteira.tickers.length < 4) {
       num = carteira.tickers.length;
     } else {
-      num = 5;
+      num = 4;
     }
 
     let highest = pickHighest(dailyChanges, num);
@@ -99,18 +99,19 @@ router.get("/private/feed", async (req, res) => {
 });
 
 router.get("/private/minha-carteira", async (req, res) => {
-  let id = req.session.currentUser._id;
   try {
+    let id = req.session.currentUser._id;
     let user = await User.findById(id)
-      .populate("articles")
       .populate("carteira");
 
     let tickerInfo = [];
 
-    let carteira = user.carteira;
+    let carteira = await Carteira.findById(user.carteira._id);
+
+    console.log(carteira.tickers)
 
     for (let i = 0; i < user.carteira.tickers.length; i++) {
-      let ticker = user.carteira.tickers[i];
+      let ticker = carteira.tickers[i];
       let data = await yf.quote({
         symbol: `${ticker.name}`,
         modules: ["price"],
@@ -120,20 +121,19 @@ router.get("/private/minha-carteira", async (req, res) => {
         name: ticker.name,
         dayChangePct: dayChangePct.toFixed(2),
         currentPrice: data.price.regularMarketPrice,
-        positionUn: carteira.tickers[i].positionUn
+        positionUn: ticker.positionUn,
+        position: ticker.position
       };
       let positionUnidade = carteira.tickers[i];
-      console.log('posicao un', positionUnidade)
-      console.log(positionUnidade['positionUn'])
+      
       tickerInfo.push(info);
     }
 
     res.render("private/minha-carteira.hbs", {
       layout: false,
       tickers: tickerInfo,
-      tickerCarteira: carteira.tickers
-
     });
+
   } catch (err) {
     console.log(err);
   }
@@ -157,7 +157,7 @@ router.post("/private/ticker-search", async (req, res) => {
 
     let date = new Date().toISOString().slice(0, 10);
 
-    var dailyChange = data.price.regularMarketChangePercent;
+    var dailyChange = data.price.regularMarketChangePercent*100;
 
     if (dailyChange < 0) {
       var negChange = dailyChange.toFixed(2);
@@ -227,7 +227,7 @@ router.post("/private/addticker", async (req, res) => {
       modules: ["price"],
     });
 
-    let dayChangePct = yfData.price.regularMarketChangePercent.toFixed(2);
+    let dayChangePct = (yfData.price.regularMarketChangePercent*100).toFixed(2);
 
     let tickerInfo = {
       name: symbol,
@@ -239,15 +239,8 @@ router.post("/private/addticker", async (req, res) => {
       $push: { tickers: tickerInfo },
     });
 
-    let carteira = await Carteira.findById(user.carteira._id);
+    res.redirect('/private/minha-carteira')
 
-    let tickers = carteira.tickers;
-
-    res.render("private/minha-carteira.hbs", {
-      layout: false,
-      user: req.session.currentUser,
-      tickers: tickers,
-    });
   } catch (err) {
     console.log(err);
   }
@@ -307,19 +300,18 @@ router.post('/private/updatewallet', async (req, res) => {
 
     let user = await User.findById(req.session.currentUser._id).populate('carteira');
 
-    let carteira = user.carteira;
+    let carteira = await Carteira.findById(user.carteira._id)
     
     carteira.tickers.forEach((ticker,index) => {
       ticker['positionUn'] = position[index];
       let positionUn = parseInt(position[index]);
-      console.log(positionUn)
       let tickerPrice = parseFloat(ticker.currentPrice)
-      console.log(tickerPrice)
       let positionMoney = positionUn * tickerPrice;
-      console.log(positionMoney)
       ticker['position'] = positionMoney
-    })
+    });
 
+    carteira.markModified('tickers')
+    await carteira.save()
 
     res.redirect('/private/minha-carteira')
 
