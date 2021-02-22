@@ -3,6 +3,11 @@
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
 }
+
+body{
+  overflow-x: hidden;
+}
+
 h2 {
   text-align: center;
   font-size: 18px;
@@ -58,7 +63,8 @@ h2 {
 
 .coluna-tabela-tickers {
   height: 400px;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   margin-left: 20px;
   margin-right: 20px;
 }
@@ -137,6 +143,27 @@ h2 {
     height: 50%;
   }
 
+
+  #search-icon{
+    color: darkgray
+  }
+  
+  #search-icon:hover{
+    transform: scale(1.1);
+    color: white;
+    cursor: pointer;
+  }
+  
+  #search-btn{
+    background: transparent;
+    border: none;
+  }
+  
+  #search-btn:active{
+    outline: none;
+    
+  }
+
 /* Responsive */
 
 @media (max-width: 767px) {
@@ -166,7 +193,7 @@ h2 {
   .fl-table tbody {
     width: auto;
     position: relative;
-    overflow-x: auto;
+    overflow-x: hidden;
   }
   .fl-table td,
   .fl-table th {

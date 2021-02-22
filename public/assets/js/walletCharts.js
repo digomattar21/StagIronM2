@@ -1,6 +1,6 @@
 
 var config = {
-  type: 'pie',
+  type: 'doughnut',
   data: {
       labels: ["USSD", "URP", "MyTsel App", "Chatbot"],
       datasets: [{

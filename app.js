@@ -51,6 +51,9 @@ hbs.registerHelper('biggerThanZero', function (value) {
   return value >0 ;
 });
 
+hbs.registerHelper('getArticlesLength', function (articles) {
+  return articles.length
+});
 
 
 
