@@ -72,11 +72,7 @@ router.post("/auth/login", async (req, res) => {
         req.session.currentUser = user;
 
         res.redirect('/private/main');
-        // res.render("private/main.hbs", {
-        //   user: req.session.currentUser,
-        //   layout: false,
-        //   articles: user.articles,
-        // });
+    
       } else {
         throw new Error(`Senha Incorreta`);
       }

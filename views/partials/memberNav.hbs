@@ -12,6 +12,25 @@
         </li>
         <li class="nav-item text-light"><a class="nav-link text-light" href="/private/feed">Meu feed</a></li>
         <li class="nav-item text-light"><a class="nav-link text-light" href="/private/main">Meu Perfil</a></li>
+        <li class='nav-item'>
+          <form class="form-inline mr-auto searchbar-form" method="post" action="/private/ticker-search">
+
+            <div class="form-group"><label for="search-field">
+
+                <button type='submit' id='search-btn'><svg id='search-icon' xmlns="http://www.w3.org/2000/svg"
+                    class="ionicon" width='16' height='16' viewBox="0 0 512 512">
+                    <title>Search</title>
+                    <path d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z" fill="none"
+                      stroke="currentColor" stroke-miterlimit="10" stroke-width="32" />
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10"
+                      stroke-width="32" d="M338.29 338.29L448 448" />
+                  </svg>
+              </label></button>
+              <input type="search" class="border rounded-pill border-light form-control search-field"
+                id="yfinance-search" name="query" style='color:white'placeholder="Buscar Empresas" />
+            </div>
+          </form>
+        </li>
       </ul>
 
 

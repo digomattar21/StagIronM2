@@ -38,9 +38,9 @@ router.post("/private/createArticle", async (req, res, nxt) => {
     res.redirect("/private/main");
   } catch (e) {
     console.log(e);
-    setTimeout(() =>{
+    setTimeout(() => {
       res.redirect('index');
-    },1000)
+    }, 1000)
   }
 });
 
@@ -84,13 +84,15 @@ router.get("/private/main", async (req, res) => {
     });
   } catch (err) {
     console.log(err);
+    res.render('auth/login.hbs', { msg: `Sua sessao expirou: favor entrar novamente` })
   }
 });
 
 router.get("/private/feed", async (req, res) => {
   try {
-    let articles = await Article.find().populate("author");
-
+    let articles = await Article.find().populate('author');
+    
+    
     res.render("private/feed.hbs", {
       layout: false,
       articles: articles,
@@ -98,9 +100,9 @@ router.get("/private/feed", async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    setTimeout(() =>{
+    setTimeout(() => {
       res.redirect('index');
-    },1000)
+    }, 1000)
   }
 });
 
@@ -114,8 +116,12 @@ router.get("/private/minha-carteira", async (req, res) => {
 
     let carteira = await Carteira.findById(user.carteira._id);
 
-    //console.log(carteira.tickers)
+    //fazendo os calculos de porcetagem da posicao total e aumento do patrimonio
+    let patrimonio = carteira.patrimonio;
+    console.log(patrimonio)
 
+
+    //Pegando os quotes dos tickers da carteira do usuario
     for (let i = 0; i < user.carteira.tickers.length; i++) {
       let ticker = carteira.tickers[i];
       let data = await yf.quote({
@@ -128,23 +134,31 @@ router.get("/private/minha-carteira", async (req, res) => {
         dayChangePct: dayChangePct.toFixed(2),
         currentPrice: data.price.regularMarketPrice,
         positionUn: ticker.positionUn,
-        position: ticker.position
+        position: ticker.position,
+        volume: data.price.regularMarketVolume.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+        mktCap: (data.price.marketCap/1000000000).toFixed(2)
       };
-      let positionUnidade = carteira.tickers[i];
-      
+
+      if (ticker.precoMedio){
+        info['precoMedio'] = ticker.precoMedio;
+      }
+
+
       tickerInfo.push(info);
     }
-
+    
     res.render("private/minha-carteira.hbs", {
       layout: false,
       tickers: tickerInfo,
+      patrimonio: patrimonio,
+     
     });
 
   } catch (err) {
     console.log(err);
-    setTimeout(() =>{
+    setTimeout(() => {
       res.redirect('index');
-    },1000)
+    }, 1000)
   }
 });
 
@@ -164,9 +178,12 @@ router.post("/private/ticker-search", async (req, res) => {
       ],
     });
 
+    //console.log(data);
+
     let date = new Date().toISOString().slice(0, 10);
 
-    var dailyChange = data.price.regularMarketChangePercent*100;
+    
+    var dailyChange = data.price.regularMarketChangePercent;
 
     if (dailyChange < 0) {
       var negChange = dailyChange.toFixed(2);
@@ -174,18 +191,8 @@ router.post("/private/ticker-search", async (req, res) => {
       var posChange = dailyChange.toFixed(2);
     }
 
-    let user = await User.findById(req.session.currentUser._id).populate(
-      "carteira"
-    );
+    var outros = {};
 
-    let carteira = await Carteira.findById(user.carteira._id);
-
-    var hasTicker;
-    carteira.tickers.forEach((ticker, index) => {
-      if (ticker.name === queryCap) {
-        hasTicker = true;
-      }
-    });
 
     res.render("private/private-company-info.hbs", {
       sumDet: data.summaryDetails,
@@ -193,15 +200,22 @@ router.post("/private/ticker-search", async (req, res) => {
       defKey: data.defaultKeyStatistics,
       sumProf: data.summaryProfile,
       finData: data.financialData,
-      posChange,
-      negChange,
-      hasTicker: hasTicker,
+      posChange: posChange,
+      negChange: negChange,
     });
   } catch (e) {
     console.log(e);
-    res.render("private/minha-carteira.hbs", {
-      layout: false,
-      msg: `Ticker Invalido`,
+    Article.find({ category: { $eq: "main" } }).then((mainArticlesFromDB) => {
+      News.find({ country: { $eq: "us" } }).then((allNewsUSA) => {
+        News.find({ country: { $eq: "br" } }).then((allNewsBR) => {
+          res.render("index.hbs", {
+            newsUSA: allNewsUSA,
+            newsBR: allNewsBR,
+            mainArticles: mainArticlesFromDB,
+            message: `Ticker inválido`,
+          });
+        });
+      });
     });
   }
 });
@@ -218,11 +232,11 @@ router.get("/private/main/:articleId", (req, res) => {
         layout: false,
       });
     })
-    .catch((err) =>{
+    .catch((err) => {
       console.log(`Error while getting the details about this article: ${err}`)
-      setTimeout(() =>{
+      setTimeout(() => {
         res.redirect('index');
-      },1000)
+      }, 1000)
     }
     );
 });
@@ -240,12 +254,18 @@ router.post("/private/addticker", async (req, res) => {
       modules: ["price"],
     });
 
-    let dayChangePct = (yfData.price.regularMarketChangePercent*100).toFixed(2);
+    
+
+    let dayChangePct = (yfData.price.regularMarketChangePercent * 100).toFixed(2);
+    let volume = yfData.price.regularMarketVolume
+    let mktCap = yfData.price.marketCap/1000000000;
 
     let tickerInfo = {
       name: symbol,
       currentPrice: yfData.price.regularMarketPrice,
       dayChangePct: dayChangePct,
+      mktCap: mktCap,
+      volume: volume
     };
 
     let updatedCarteira = await Carteira.findByIdAndUpdate(user.carteira._id, {
@@ -256,9 +276,9 @@ router.post("/private/addticker", async (req, res) => {
 
   } catch (err) {
     console.log(err);
-    setTimeout(() =>{
+    setTimeout(() => {
       res.redirect('index');
-    },1000)
+    }, 1000)
   }
 });
 
@@ -274,16 +294,16 @@ router.get("/private/author/:authorId", async (req, res) => {
 
 router.get("/private/:articleId/edit", async (req, res) => {
   try {
-    const {articleId} = req.params;
+    const { articleId } = req.params;
 
     let article = await Article.findById(articleId);
 
-    res.render("private/article-edit.hbs", {layout: false, article: article});
+    res.render("private/article-edit.hbs", { layout: false, article: article });
   } catch (err) {
     console.log(err);
-    setTimeout(() =>{
+    setTimeout(() => {
       res.redirect('index');
-    },1000)
+    }, 1000)
   }
 });
 
@@ -301,9 +321,9 @@ router.post("/private/:articleId/edit", async (req, res) => {
     res.redirect("/private/main");
   } catch (err) {
     console.log(err);
-    setTimeout(() =>{
+    setTimeout(() => {
       res.redirect('index');
-    },1000)
+    }, 1000)
   }
 });
 
@@ -314,43 +334,77 @@ router.post("/private/:articleId/delete", (req, res) => {
     .then(() => res.redirect("/private/main"))
     .catch((err) => {
       console.log(`Error while deleting an article: ${err}`)
-      setTimeout(() =>{
+      setTimeout(() => {
         res.redirect('index');
-      },1000)
+      }, 1000)
     });
 });
 
 
-router.post('/private/updatewallet', async (req, res) => {
-  try{
-    const {position} = req.body;
 
-    console.log(req.body)
+router.post('/private/:tickerName/updateTicker', async (req, res) => {
+  try {
+
+    const { tickerName, positionUn, currentPrice } = req.body;
 
     let user = await User.findById(req.session.currentUser._id).populate('carteira');
 
-    let carteira = await Carteira.findById(user.carteira._id)
-    
-    carteira.tickers.forEach((ticker,index) => {
-      ticker['positionUn'] = position[index];
-      let positionUn = parseInt(position[index]);
-      let tickerPrice = parseFloat(ticker.currentPrice)
-      let positionMoney = positionUn * tickerPrice;
-      ticker['position'] = positionMoney
-    });
+
+    let carteira = await Carteira.findById(user.carteira._id);
+
+
+    carteira.tickers.forEach((ticker, index) => {
+      let positionChange = positionUn - ticker.positionUn;
+      if (ticker.name === tickerName) {
+        ticker['positionUn'] = positionUn;
+        ticker['position'] = positionUn * currentPrice;
+        console.log(ticker)
+      }
+
+    })
+
 
     carteira.markModified('tickers')
-    await carteira.save()
+    await carteira.save();
+    console.log(carteira)
+
 
     res.redirect('/private/minha-carteira')
 
-  }catch(err){
+
+  } catch (err) {
     console.log(err);
-    setTimeout(() =>{
-      res.redirect('index');
-    },1000);
+    res.redirect('/private/minha-carteira')
+
   }
+
+
 });
+
+
+router.get('/private/:tickerName/delete', async (req, res) =>{
+
+  try{
+    const {tickerName} = req.params;
+
+    let user = await User.findById(req.session.currentUser._id).populate('carteira');
+
+    let carteira = await Carteira.findByIdAndUpdate();
+
+    
+
+    
+    await carteira.save();
+
+    res.redirect('/private/minha-carteira')
+
+
+  }catch(err){
+    console.log(err)
+  }
+
+
+})
 
 
 

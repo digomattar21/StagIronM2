@@ -54,7 +54,7 @@
                         <div class="carousel-inner">
                             <div class="carousel-item active">
                                 <img id='car1-img' class="w-100 d-block" src="{{mainArticles.0.imgPath}}"
-                                    alt="Slide Image" width="90%" height="200px">
+                                    alt="Slide Image" width="90%">
                                 <div class="carousel-caption d-none d-md-block" id='car1-text-container'>
                                     <h1 class='carousel-text' style='font-weight: bold'>{{mainArticles.0.title}}</h1>
                                 </div>
@@ -122,34 +122,41 @@
                 <div class='trading-view-market-container'>
                     <div class="tradingview-widget-container">
                         <div class="tradingview-widget-container__widget"></div>
+                        
                         <script type="text/javascript"
                             src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
                                 {
                                     "colorTheme": "light",
-                                        "dateRange": "1D",
+                                        "dateRange": "12M",
                                             "showChart": true,
                                                 "locale": "en",
-                                                    "width": "100%",
-                                                        "height": "100%",
-                                                            "largeChartUrl": "",
-                                                                "isTransparent": false,
-                                                                    "showSymbolLogo": false,
-                                                                        "plotLineColorGrowing": "rgba(0, 255, 0, 1)",
+                                                    "largeChartUrl": "",
+                                                        "isTransparent": false,
+                                                            "showSymbolLogo": true,
+                                                                "width": "350",
+                                                                    "height": "400",
+                                                                        "plotLineColorGrowing": "rgba(0, 255, 0, 0.7)",
                                                                             "plotLineColorFalling": "rgba(255, 0, 0, 1)",
                                                                                 "gridLineColor": "rgba(240, 243, 250, 1)",
-                                                                                    "scaleFontColor": "rgba(0, 0, 0, 1)",
-                                                                                        "belowLineFillColorGrowing": "rgba(0, 255, 0, 0.12)",
-                                                                                            "belowLineFillColorFalling": "rgba(255, 0, 0, 0.12)",
+                                                                                    "scaleFontColor": "rgba(120, 123, 134, 1)",
+                                                                                        "belowLineFillColorGrowing": "rgba(217, 234, 211, 0.67)",
+                                                                                            "belowLineFillColorFalling": "rgba(244, 204, 204, 0.68)",
                                                                                                 "symbolActiveColor": "rgba(33, 150, 243, 0.12)",
                                                                                                     "tabs": [
                                                                                                         {
                                                                                                             "title": "Indices",
                                                                                                             "symbols": [
                                                                                                                 {
-                                                                                                                    "s": "FOREXCOM:SPXUSD"
+                                                                                                                    "s": "INDEX:IBOV",
+                                                                                                                    "d": "Ibovespa"
                                                                                                                 },
                                                                                                                 {
-                                                                                                                    "s": "INDEX:IBOV"
+                                                                                                                    "s": "CURRENCYCOM:US500",
+                                                                                                                    "d": "S&P 500"
+                                                                                                                },
+                                                                                                                {
+                                                                                                                    "s": "CURRENCYCOM:US100",
+                                                                                                                    "d": "Nasdaq"
                                                                                                                 }
                                                                                                             ],
                                                                                                             "originalTitle": "Indices"
@@ -159,53 +166,62 @@
                                                                                                             "symbols": [
                                                                                                                 {
                                                                                                                     "s": "TVC:GOLD",
-                                                                                                                    "d": "OURO"
+                                                                                                                    "d": "Ouro"
                                                                                                                 },
                                                                                                                 {
                                                                                                                     "s": "TVC:SILVER",
-                                                                                                                    "d": "PRATA"
+                                                                                                                    "d": "Prata"
+                                                                                                                },
+                                                                                                                {
+                                                                                                                    "s": "TVC:UKOIL",
+                                                                                                                    "d": "Petróleo BRENT"
+                                                                                                                },
+                                                                                                                {
+                                                                                                                    "s": "TVC:USOIL",
+                                                                                                                    "d": "Petróleo WTI"
                                                                                                                 }
                                                                                                             ],
                                                                                                             "originalTitle": "Commodities"
                                                                                                         },
                                                                                                         {
-                                                                                                            "title": "Cripto",
+                                                                                                            "title": "Moedas",
+                                                                                                            "symbols": [
+                                                                                                                {
+                                                                                                                    "s": "FX_IDC:USDBRL",
+                                                                                                                    "d": "Dólar"
+                                                                                                                },
+                                                                                                                {
+                                                                                                                    "s": "FX_IDC:EURBRL",
+                                                                                                                    "d": "Euro"
+                                                                                                                },
+                                                                                                                {
+                                                                                                                    "s": "FX_IDC:GBPBRL",
+                                                                                                                    "d": "Libras"
+                                                                                                                }
+                                                                                                            ],
+                                                                                                            "originalTitle": "Forex"
+                                                                                                        },
+                                                                                                        {
+                                                                                                            "title": "Criptomoedas",
                                                                                                             "symbols": [
                                                                                                                 {
                                                                                                                     "s": "BITSTAMP:BTCUSD",
-                                                                                                                    "d": "BITCOIN"
+                                                                                                                    "d": "Bitcoin Dólar"
                                                                                                                 },
                                                                                                                 {
-                                                                                                                    "s": "BINANCE:LTCUSDT",
-                                                                                                                    "d": "LITECOIN"
-                                                                                                                },
-                                                                                                                {
-                                                                                                                    "s": "CURRENCYCOM:XRPUSD",
-                                                                                                                    "d": "RIPPLE"
-                                                                                                                },
-                                                                                                                {
-                                                                                                                    "s": "CRYPTOCAP:ETH",
-                                                                                                                    "d": "ETHEREUM"
+                                                                                                                    "s": "MERCADO:BTCBRL",
+                                                                                                                    "d": "Bitcoin Real"
                                                                                                                 }
                                                                                                             ]
                                                                                                         },
                                                                                                         {
-                                                                                                            "title": "Forex",
+                                                                                                            "title": "Juros",
                                                                                                             "symbols": [
                                                                                                                 {
-                                                                                                                    "s": "FX:GBPUSD"
-                                                                                                                },
-                                                                                                                {
-                                                                                                                    "s": "FX:USDJPY"
-                                                                                                                },
-                                                                                                                {
-                                                                                                                    "s": "FX:EURUSD"
-                                                                                                                },
-                                                                                                                {
-                                                                                                                    "s": "FX_IDC:BRLUSD"
+                                                                                                                    "s": "FRED:DGS30",
+                                                                                                                    "d": "Juros USA"
                                                                                                                 }
-                                                                                                            ],
-                                                                                                            "originalTitle": "Forex"
+                                                                                                            ]
                                                                                                         }
                                                                                                     ]
                                 }
