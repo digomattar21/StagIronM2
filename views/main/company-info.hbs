@@ -18,158 +18,226 @@
 <body>
 
 
-  <nav class="navbar navbar-light navbar-expand navigation-clean-search" style='margin-top: 50px'>
-    <div class="container" style='margin-left: 12%;'><a id='ticker-text' class="navbar-brand" href="#"
-        style='color: blue; font-weight: bold; font-size:1.8rem'>{{price.symbol}}</a><button data-toggle="collapse"
-        class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span
-          class="navbar-toggler-icon"></span></button>
-      <div class="collapse navbar-collapse" id="navcol-1">
-        <a class="btn btn-light action-button" role="button" href="#"><svg width='15px' height='15px'
-            xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
-            <title>Bookmark</title>
-            <path d="M352 48H160a48 48 0 00-48 48v368l144-128 144 128V96a48 48 0 00-48-48z" fill="none" stroke="white"
-              stroke-linecap="round" stroke-linejoin="round" stroke-width="32" />
-          </svg></a>
-      </div>
-    </div>
-  </nav>
+  <section style="height: auto;margin-bottom: 20px;">
+    <div class="row d-flex justify-content-center" style="margin-top: 80px;">
+      <div class="col-lg-8 offset-lg-0">
+        <div class="card" style='height: 650px; max-height:750px;'>
+          <div class="card-body">
+            <div class="d-flex flex-row align-items-center" style="height: 50px; justify-content: flex-start">
+              <div>
+                <a id='ticker-text' class="navbar-brand" href="#"
+                  style='color: blue; font-weight: bold; font-size:1.8rem'>{{price.symbol}}</a>
 
-  <section style='border-bottom: 1px solid lightgray'>
+              </div>
+              <div>
+                {{#if posChange}}
+                <span
+                  style='margin-left: 5px;color: rgb(22, 158, 22); font-weight: bold; font-size:1.6rem'>(+{{posChange}}%)</span>
+                {{/if}}
+                {{#if negChange}}
+                <span
+                  style='margin-left: 5px;color: rgb(238, 27, 27); font-weight: bold; font-size:1.6rem'>({{negChange}}%)</span>
+                {{/if}}
+              </div>
+              <div style='margin-left: 5px;'>
+                <a class="btn action-button" style='background-color: #56c6c6'role="button" href="#"><svg width='15px' height='15px'
+                    xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
+                    <title>Bookmark</title>
+                    <path d="M352 48H160a48 48 0 00-48 48v368l144-128 144 128V96a48 48 0 00-48-48z" fill="none"
+                      stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" />
+                  </svg></a>
+              </div>
 
-    <div class="row">
-      <div class="col-lg-7 d-flex flex-column">
-        <div class='d-flex justify-content-start'>
-          <h3 style='font-weight: 800;margin-left: 25%;font-size: 2.1rem; color: black;'>{{price.regularMarketPrice}}
-          </h3>
-          {{#if posChange}}
-          <span
-            style='margin-left: 5px;color: rgb(22, 158, 22); font-weight: bold; font-size:1.6rem'>(+{{posChange}}%)</span>
-          {{/if}}
-          {{#if negChange}}
-          <span
-            style='margin-left: 5px;color: rgb(238, 27, 27); font-weight: bold; font-size:1.6rem'>({{negChange}}%)</span>
-          {{/if}}
+            </div>
+            {{#if price.shortName}}
+            <h5 class="text-muted card-subtitle mb-2">{{price.shortName}}</h5>
+            {{else}}
+            <h5 class="text-muted card-subtitle mb-2">{{price.longName}}</h5>
+            {{/if}}
+            <div class="d-flex flex-row justify-content-center" style="height: 45px;margin-bottom: 30px; margin-top:30px; width:100%">
+              <div class="d-flex flex-column" style="height: 45px;width: 30%;">
+                {{#if foundedDate}}
+                <h6 class="text-center text-dark mb-2" style="color: black; font-weight:600">Fundada</h6>
+                <h6 class="text-center text-muted mb-2">{{foundedDate}}</h6>
+                {{else}}
+                <h6 class="text-center text-dark mb-2" style="color: black;font-weight:600">Pais</h6>
+                <h6 class="text-center text-muted mb-2">{{sumProf.country}}</h6>
+                {{/if}}
+              </div>
+              <div class="d-flex flex-column" style="height: 45px;width: 30%;">
+                {{#if sumProf.website}}
+                <h6 class="text-center text-dark mb-2" style="color: black;font-weight:600">Website</h6>
+                <h6 class="text-center text-muted mb-2"><a href='{{sumProf.website}}'
+                    target='_blank'>{{sumProf.website}}</a></h6>
+                {{else}}
+                <h6 class="text-center text-dark mb-2" style="color: black;font-weight:600">Cidade</h6>
+                <h6 class="text-center text-muted mb-2">{{sumProf.city}}</h6>
+                {{/if}}
+              </div>
+              <div class="d-flex flex-column" style="height: 45px;width: 30%;">
+                {{#if sumProf.fullTimeEmployees}}
+                <h6 class="text-center text-dark mb-2" style="color: black;font-weight:600">Nº de empregados</h6>
+                <h6 class="text-center text-muted mb-2">{{sumProf.fullTimeEmployees}}</h6>
+                {{else}}
+                <h6 class="text-center text-dark mb-2" style="color: black;font-weight:600">Estado</h6>
+                <h6 class="text-center text-muted mb-2">{{sumProf.state}}</h6>
+                {{/if}}
+              </div>
+            </div>
+           
+            <div class="d-flex flex-row justify-content-center" style="height: 45px;margin-top: 30px; width:100%">
+              <div class="d-flex flex-column" style="height: 45px;width: 30%;">
+                <h6 class="text-center text-dark mb-2" style="color: black;font-weight:600">Sede</h6>
+                <h6 class="text-center text-muted mb-2">{{sumProf.city}}</h6>
+              </div>
+              <div class="d-flex flex-column" style="height: 45px;width: 30%;">
+                {{#if exchange}}
+                <h6 class="text-center text-dark mb-2" style="color: black;font-weight:600">Listada em</h6>
+                <h6 class="text-center text-muted mb-2">{{exchange}}</h6>
+                {{else}}
+
+                {{/if}}
+              </div>
+              <div class="d-flex flex-column" style="height: 45px;width: 30%;">
+                {{#if sumProf.address2}}
+                <h6 class="text-center text-dark mb-2" style="color: black;font-weight:600">Endereco</h6>
+                <h6 class="text-center text-muted mb-2">{{sumProf.address2}}</h6>
+                {{else}}
+                <h6 class="text-center text-dark mb-2" style="color: black;font-weight:600">Endereco</h6>
+                <h6 class="text-center text-muted mb-2">{{sumProf.address1}}</h6>
+                {{/if}}
+              </div>
+            </div>
+            <div class="d-flex flex-row justify-content-between" style="height: 45px;width: 100%;margin-top: 30px;">
+              {{#if sumProf.industry}}
+              <div class="d-flex flex-column" style="height: 45px;width: 50%;">
+                <h6 class="text-center text-dark mb-2" style="color: black;font-weight:600">Industria</h6>
+                <h6 class="text-nowrap text-center text-muted mb-2">{{sumProf.industry}}</h6>
+              </div>
+              {{else}}
+              <div class="d-flex flex-column" style="height: 45px;width: 50%;">
+                <h6 class="text-center text-dark mb-2" style="color: black;font-weight:600">Industria</h6>
+                <h6 class="text-nowrap text-center text-muted mb-2">Outros</h6>
+              </div>
+              {{/if}}
+              {{#if sumProf.sector}}
+              <div class="d-flex flex-column" style="height: 45px;width: 50%;">
+                <h6 class="text-center text-dark mb-2" style="color: black;font-weight:600">Setor</h6>
+                <h6 class="text-nowrap text-center text-muted mb-2">{{sumProf.sector}}</h6>
+              </div>
+              {{else}}
+              <div class="d-flex flex-column" style="height: 45px;width: 50%;">
+                <h6 class="text-center text-dark mb-2" style="color: black;font-weight:600">Setor</h6>
+                <h6 class="text-nowrap text-left text-muted mb-2">Outros</h6>
+              </div>
+              {{/if}}
+            </div>
+            <div class="d-flex flex-column just" style="height: 45px;width: 90%;margin-top: 40px;margin-bottom: 20px;">
+              <h6 style='font-weight:bold'>Descricao</h6>
+              <p class='text-start text-muted mb-2'>{{sumProf.longBusinessSummary}}</p>
+            </div>
+          </div>
         </div>
-        <canvas id='myCanvas'></canvas>
-      </div>
-      <div class="col-lg-4 d-flex flex-column justify-content-start">
-        <h5 style='font-weight:700; color: #017bcd; font-size: 1.2rem; font-weight: bold'>Perfil Empresarial</h5>
-        <ul class="list-unstyled" style='font-size:1.5rem; color: black'>
-          {{!-- COLOAR INFORMACOES DE PERFIL EMPRESARIAL --}}
-          <li><span>{{price.longName}}</span></li>
-          {{#if sumProf.sector}}
-          <li><span>Setor: {{sumProf.sector}}</span></li>
-          {{#if sumProf.industry}}
-          <li><span>Industria: {{sumProf.industry}}</span></li>
-          {{/if}}
-          {{else}}
-          <li><span>{{sumProf.address1}}, {{sumProf.address2}}, {{sumProf.city}}</span></li>
-          {{/if}}
-
-          <li><span style=''>Website: <a href="{{sumProf.website}}" target="blank"
-                style='color: black; text-decoration:none'>{{sumProf.website}}</a></span></li>
-          {{#if sumProf.fullTimeEmployees}}
-          <li>Nº de empregados: {{sumProf.fullTimeEmployees}}</li>
-          {{else}}
-          {{/if}}
-
-        </ul>
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-5" style=' border-bottom: 1px solid lightgray;'>
-        <h4 style='color: #017bcd; text-align: center; margin-top:3px; margin-left: 5%; font-size:1.3rem;font-weight: bold'>Estatísticas</h4>
-      </div>
-      <div class="col-lg-7 text-center justify-content-center align-items-center"
-        style=' border-bottom: 1px solid lightgray;'>
-        <h4 style='color: #017bcd; text-align: center; margin-top:3px; font-size:1.3rem; font-weight: bold'>Indicadores Financeiros</h4>
+      <div class="col">
+        <div style="height: 60px;margin-bottom: 30px;"></div>
       </div>
     </div>
     <div class="row">
-      
-      <div class="col-lg-4" style='border-right: 1px solid lightgray; margin-left: 5%'>
-        <ul class="list-unstyled text-start lista-company-infos">
-          <li><span>Shares Outstanding:</span> {{defKey.sharesOutstanding}}</li>
-          {{!-- COLOCAR INDICADORES DE DEFKEY STATISTICS --}}
-          {{#if price.marketCap}}
-          <li><span>Market Cap: </span>{{price.marketCap}}</li>
-          {{/if}}
-          {{#if price.regularMarketDayLow}}
-          <li><span>Day Range: </span>{{price.regularMarketDayLow}}-{{price.regularMarketDayHigh}}</li>
-          {{/if}}
-          {{#if defKey.52WeekChange}}
-          <li><span>Variação 52 sem: </span>{{defKey.52WeekChange}}</li>
-          {{/if}}
-          {{#if defKey.beta}}
-          <li><span>Beta: </span>{{defKey.beta}}</li>
-          {{/if}}
-          {{#if defKey.trailingEps}}
-          <li><span>EPS Passado: </span>{{defKey.trailingEps}}</li>
-          {{/if}}
-          {{#if defKey.forwardEps}}
-          <li><span>EPS Futuro: </span>{{defKey.forwardEps}}</li>
-          {{/if}}
+      <div class="col">
+        <div class="d-flex flex-column justify-content-center align-items-center" style="height: auto;">
+          <div class="d-flex flex-row justify-content-center align-items-center align-content-center"
+            style="height: 50px;width: 225px;background: #fafafa;border-top-left-radius: 25px;border-top-right-radius: 25px;border-bottom-right-radius: 25px;border-bottom-left-radius: 25px;box-shadow: 0px 0px 2px;">
+            <button class="btn btn-primary border rounded-pill" type="button">Estatisticas</button><button
+              class="btn btn-primary text-dark" type="button"
+              style="color: rgb(0,0,0);background: rgba(255,255,255,0);border-style: none;border-color: rgba(0,0,0,0);">Indicadores</button>
+          </div>
+          <div class="table-responsive border-light shadow" style="width: 70%;margin-top: 30px;">
+            <table class="table tabela-infos">
+              <thead class='tabela-infos-head'>
+                <tr>
+                  <th class='primeira-coluna-header'></th>
+                  <th class='segunda-coluna-header'>Shares Outs</th>
+                  <th class='terceira-coluna-header'>Mkt Cap</th>
+                  <th class='quarta-coluna-header'>Day Range</th>
+                  <th class='quinta-coluna-header'>Volume</th>
+                  <th class='sexta-coluna-header'>Volume Med</th>
+                  <th class='setima-coluna-header'>200d Med</th>
+                  <th>52w Range</th>
+                  <th>Beta</th>
+                  <th>EPS</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class='primeira-coluna'>{{price.symbol}}</td>
+                  <td class='segunda-coluna'>{{defKey.sharesOutstanding}}M</td>
+                  {{#if price.marketCap}}
+                  <td class='segunda-coluna'>{{price.marketCap}}M</td>
+                  {{else}}
+                  <td class='segunda-coluna'>{{price.regularMarketPreviousClose}}M</td>
+                  {{/if}}
 
+                  {{#if sumDet.regularMarketDayHigh}}
+                  <td class='segunda-coluna'>{{sumDet.regularMarketDayLow}} - {{sumDet.regularMarketDayHigh}}</td>
+                  {{else}}
+                   <td class='segunda-coluna'>{{price.regularMarketDayLow}} - {{price.regularMarketDayHigh}}</td>
+                  {{/if}}
 
-        </ul>
-      </div>
-      <div class="col" >
-        {{!-- <div class="d-flex justify-content-around" style="height: 15%;margin-top:10px;">
-          <h6 class="text-left" style="height: 30px; font-size:1.3rem; color: #017bcd;">Operacional </h6>
-          <h6 class="text-left" style="height: 30px; font-size:1.3rem; color: #017bcd;">Balanço</h6>
-        </div> --}}
-        <div class="d-flex justify-content-around" style="height: 80%;">
-          <ul class="list-unstyled text-left lista-company-infos" style="padding-right: 5%;border-right: 1px solid lightgray;">
-            {{!-- LISTAR DADOS OPERACIONAIS --}}
-            {{#if finData.targetMeanPrice}}
-            <li><span>Preco alvo médio: </span>{{finData.targetMeanPrice}}</li>
-            {{/if}}
-            {{#if finData.numberOfAnalystOpinions}}
-            <li><span>Númeo de opiniões de analistas: </span>{{finData.numberOfAnalystOpinions}}</li>
-            {{/if}}
-            {{#if finData.operatingCashflow}}
-            <li><span>FC Operacional: </span>{{finData.operatingCashflow}}</li>
-            {{/if}}
-            {{#if finData.totalRevenue}}
-            <li><span>Receita: </span>{{finData.totalRevenue}}</li>
-            {{/if}}
-            {{#if finData.grossProfits}}
-            <li><span>Lucro Bruto: </span>{{finData.grossProfits}}</li>
-            {{/if}}
-            {{#if finData.totalCash}}
-            <li><span>Caixa Total: </span>{{finData.totalCash}}</li>
-            {{/if}}
-            {{#if finData.totalDebt}}
-            <li><span>Dívida Bruta: </span>{{finData.totalDebt}}</li>
-            {{/if}}
+                  {{#if sumDet.volume}}
+                  <td class='segunda-coluna'>{{sumDet.volume}}M</td>
+                  {{else}}
+                  <td class='segunda-coluna'>{{price.regularMarketVolume}}M</td>
+                  {{/if}}
 
-          </ul>
-          <ul class="list-unstyled lista-company-infos" style="">
-            {{!-- LISTAR DADOS DO BALANCO --}}
-            {{#if finData.returnOnAssets}}
-            <li><span>ROA: </span>{{finData.returnOnAssets}}</li>
-            {{/if}}
-            {{#if finData.returnOnEquity}}
-            <li><span>ROE: </span>{{finData.returnOnEquity}}</li>
-            {{/if}}
-            {{#if finData.grossMargins}}
-            <li><span>Margem Bruta: </span>{{finData.grossMargins}}</li>
-            {{/if}}
-            {{#if finData.operatingMargins}}
-            <li><span>Margem Operacional: </span>{{finData.operatingMargins}}</li>
-            {{/if}}
-            {{#if finData.profitMargins}}
-            <li><span>Margem de Lucro: </span>{{finData.profitMargins}}</li>
-            {{/if}}
-            {{#if finData.earningsGrowth}}
-            <li><span>Cresc Lucro: </span>{{finData.earningsGrowth}}</li>
-            {{/if}}
-            {{#if finData.revenueGrowth}}
-            <li><span>Cresc Receita: </span>{{finData.revenueGrowth}}</li>
-            {{/if}}
+                  {{#if sumDet.averageDailyVolume10Day}}
+                  <td class='segunda-coluna'>{{sumDet.averageDailyVolume10Day}}M</td>
+                  {{else}}
+                  <td class='segunda-coluna'>{{price.averageDailyVolume3Month}}M</td>
+                  {{/if}}
 
-            
-          </ul>
+                  {{#if twoHundredDayAverage}}
+                  <td class='segunda-coluna'>{{twoHundredDayAverage}}</td>
+                  {{else}}
+                  <td class='segunda-coluna'>{{sumDet.fiftyDayAverage}}NaN</td>
+                  {{/if}}
+
+                 {{#if fiftyTwoWeekHigh}}
+                  <td class='segunda-coluna'>{{fiftyTwoWeekLow}} - {{fiftyTwoWeekHigh}}</td>
+                  {{else}}
+                  <td class='segunda-coluna'>NaN</td>
+                  {{/if}}
+
+                  
+                  {{#if beta}}
+                  <td class='segunda-coluna'>{{beta}}</td>
+                  {{else}}
+                  <td class='segunda-coluna'>NaN</td>
+                  {{/if}}
+
+                  {{#if defKey.trailingEps}}
+                  <td class='segunda-coluna'>{{defKey.trailingEps}}</td>
+                  {{else}}
+                  <td class='segunda-coluna'>NaN</td>
+                  {{/if}}
+                </tr>
+                {{!-- <tr>
+                  <td class='primeira-coluna'>{{price.symbol}}</td>
+                  <td class='segunda-coluna'>Cell 6</td>
+                  <td class='segunda-coluna'>Cell 6</td>
+                  <td class='segunda-coluna'>Cell 6</td>
+                  <td class='segunda-coluna'>Cell 6</td>
+                  <td class='segunda-coluna'>Cell 6</td>
+                  <td>Cell 7</td>
+                  <td>Cell 8</td>
+                  <td>Cell 9</td>
+                  <td>Cell 10</td>
+                </tr> --}}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

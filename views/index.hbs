@@ -53,22 +53,28 @@
                     <div class="carousel slide" data-ride="carousel" id="carousel-1">
                         <div class="carousel-inner">
                             <div class="carousel-item active">
-                                <img id='car1-img' class="w-100 d-block" src="{{mainArticles.0.imgPath}}"
-                                    alt="Slide Image" width="90%">
+                                <a href="/private/main/{{mainArticles.0._id}}">
+                                    <img id='car3-img' class="w-100 d-block" src="{{mainArticles.0.imgPath}}"
+                                    alt="Slide Image">
+                                </a>
                                 <div class="carousel-caption d-none d-md-block" id='car1-text-container'>
                                     <h1 class='carousel-text' style='font-weight: bold'>{{mainArticles.0.title}}</h1>
                                 </div>
                             </div>
                             <div class="carousel-item">
-                                <img id='car2-img' class="w-100 d-block" src="{{mainArticles.1.imgPath}}"
+                                <a href="/private/main/{{mainArticles.1._id}}">
+                                    <img id='car3-img' class="w-100 d-block" src="{{mainArticles.1.imgPath}}"
                                     alt="Slide Image">
+                                </a>
                                 <div class="carousel-caption d-none d-md-block" id='car2-text-container'>
                                     <h1 class='carousel-text' style='font-weight: bold'>{{mainArticles.1.title}}</h1>
                                 </div>
                             </div>
                             <div class="carousel-item">
-                                <img id='car3-img' class="w-100 d-block" src="{{mainArticles.2.imgPath}}"
+                                <a href="/private/main/{{mainArticles.2._id}}">
+                                    <img id='car3-img' class="w-100 d-block" src="{{mainArticles.2.imgPath}}"
                                     alt="Slide Image">
+                                </a>
                                 <div class="carousel-caption d-none d-md-block" id='car3-text-container'>
                                     <h1 class='carousel-text' style='font-weight: bold'>{{mainArticles.2.title}}</h1>
                                 </div>
@@ -94,7 +100,7 @@
                                 <path fill="none" stroke="#017bcd" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="48" d="M268 112l144 144-144 144M392 256H100" />
                             </svg>
-                            <span>{{mainArticles.3.title}}</span>
+                            <a style='color: black; text-decoration:none' href="/private/main/{{mainArticles.3._id}}"><span>{{mainArticles.3.title}}</span></a>   
                         </li>
                         <li class="list-group-item noticia-embaixo-carousel" style='border: none;'>
                             <svg width='15' height='15' xmlns="http://www.w3.org/2000/svg" class="ionicon"
@@ -103,7 +109,7 @@
                                 <path fill="none" stroke="#017bcd" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="48" d="M268 112l144 144-144 144M392 256H100" />
                             </svg>
-                            <span>{{mainArticles.4.title}}</span>
+                            <a style='color: black; text-decoration:none' href="/private/main/{{mainArticles.4._id}}"><span>{{mainArticles.4.title}}</span></a>   
                         </li>
                         <li class="list-group-item noticia-embaixo-carousel" style='border: none;'>
                             <svg width='15' height='15' xmlns="http://www.w3.org/2000/svg" class="ionicon"
@@ -112,7 +118,7 @@
                                 <path fill="none" stroke="#017bcd" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="48" d="M268 112l144 144-144 144M392 256H100" />
                             </svg>
-                            <span>{{mainArticles.5.title}}</span>
+                            <a style='color: black; text-decoration:none' href="/private/main/{{mainArticles.5._id}}"><span>{{mainArticles.5.title}}</span></a>   
                         </li>
                     </ul>
                 </div>
@@ -265,13 +271,16 @@
             <div class="card">
                 <div class="row no-gutters">
                     <div class="col-md-4">
-                        <div class="card-img"
+                        <a href="/private/main/{{cpvArticles.0._id}}">
+                            <div class="card-img"
                             style="background-image: url('{{cpvArticles.0.imgPath}}');background-size: cover;height: 100px; width:auto;background-repeat: no-repeat;background-position: center;">
                         </div>
+                        </a>
                     </div>
                     <div class="col-md-8">
                         <div class="card-body">
-                            <a href=""><span style='color: rgb(172, 167, 167); text-decoration: underline'>Recomendação
+                            <a href="/private/main/{{cpvArticles.0._id}}">
+                                <span style='color: rgb(172, 167, 167); text-decoration: underline'>Recomendação
                                     de carteira</span></a>
                             <h5 style='margin-top: 5px'>{{cpvArticles.0.title}}</h5>
                         </div>
@@ -283,13 +292,16 @@
             <div class="card">
                 <div class="row no-gutters">
                     <div class="col-md-4">
+                        <a href="/private/main/{{cpvArticles.1._id}}">
                         <div class="card-img"
                             style="background-image: url('{{cpvArticles.1.imgPath}}');background-size: cover;height: 100px; width:auto;background-repeat: no-repeat;background-position: center;">
                         </div>
+                        </a>
                     </div>
                     <div class="col-md-8">
                         <div class="card-body">
-                            <a href=""><span style='color: rgb(172, 167, 167); text-decoration: underline'>Recomendação
+                            <a href="/private/main/{{cpvArticles.1._id}}">
+                                <span style='color: rgb(172, 167, 167); text-decoration: underline'>Recomendação
                                     de carteira</span></a>
                             <h5 style='margin-top: 5px'>{{cpvArticles.1.title}}</h5>
                         </div>
@@ -303,13 +315,16 @@
             <div class="card">
                 <div class="row no-gutters">
                     <div class="col-md-4">
+                        <a href="/private/main/{{cpvArticles.2._id}}">
                         <div class="card-img"
                             style="background-image: url('{{cpvArticles.2.imgPath}}');background-size: cover;height: 100px; width:auto;background-repeat: no-repeat;background-position: center;">
                         </div>
+                        </a>
                     </div>
                     <div class="col-md-8">
                         <div class="card-body">
-                            <a href=""><span style='color: rgb(172, 167, 167); text-decoration: underline'>Recomendação
+                            <a href="/private/main/{{cpvArticles.2._id}}">
+                                <span style='color: rgb(172, 167, 167); text-decoration: underline'>Recomendação
                                     de carteira</span></a>
                             <h5 style='margin-top: 5px'>{{cpvArticles.2.title}}</h5>
                         </div>
@@ -387,3 +402,4 @@
         </div>
     </div>
 </section>
+
