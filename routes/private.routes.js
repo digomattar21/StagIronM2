@@ -91,8 +91,8 @@ router.get("/private/main", async (req, res) => {
 router.get("/private/feed", async (req, res) => {
   try {
     let articles = await Article.find().populate('author');
-    
-    
+
+
     res.render("private/feed.hbs", {
       layout: false,
       articles: articles,
@@ -136,22 +136,22 @@ router.get("/private/minha-carteira", async (req, res) => {
         positionUn: ticker.positionUn,
         position: ticker.position,
         volume: data.price.regularMarketVolume.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-        mktCap: (data.price.marketCap/1000000000).toFixed(2)
+        mktCap: (data.price.marketCap / 1000000000).toFixed(2)
       };
 
-      if (ticker.precoMedio){
+      if (ticker.precoMedio) {
         info['precoMedio'] = ticker.precoMedio;
       }
 
 
       tickerInfo.push(info);
     }
-    
+
     res.render("private/minha-carteira.hbs", {
       layout: false,
       tickers: tickerInfo,
       patrimonio: patrimonio,
-     
+
     });
 
   } catch (err) {
@@ -182,7 +182,7 @@ router.post("/private/ticker-search", async (req, res) => {
 
     let date = new Date().toISOString().slice(0, 10);
 
-    
+
     var dailyChange = data.price.regularMarketChangePercent;
 
     if (dailyChange < 0) {
@@ -254,11 +254,11 @@ router.post("/private/addticker", async (req, res) => {
       modules: ["price"],
     });
 
-    
+
 
     let dayChangePct = (yfData.price.regularMarketChangePercent * 100).toFixed(2);
     let volume = yfData.price.regularMarketVolume
-    let mktCap = yfData.price.marketCap/1000000000;
+    let mktCap = yfData.price.marketCap / 1000000000;
 
     let tickerInfo = {
       name: symbol,
@@ -344,14 +344,11 @@ router.post("/private/:articleId/delete", (req, res) => {
 
 router.post('/private/:tickerName/updateTicker', async (req, res) => {
   try {
-
     const { tickerName, positionUn, currentPrice } = req.body;
 
     let user = await User.findById(req.session.currentUser._id).populate('carteira');
 
-
     let carteira = await Carteira.findById(user.carteira._id);
-
 
     carteira.tickers.forEach((ticker, index) => {
       let positionChange = positionUn - ticker.positionUn;
@@ -360,50 +357,41 @@ router.post('/private/:tickerName/updateTicker', async (req, res) => {
         ticker['position'] = positionUn * currentPrice;
         console.log(ticker)
       }
-
     })
-
 
     carteira.markModified('tickers')
     await carteira.save();
     console.log(carteira)
-
-
     res.redirect('/private/minha-carteira')
-
 
   } catch (err) {
     console.log(err);
     res.redirect('/private/minha-carteira')
-
   }
-
-
 });
 
 
-router.get('/private/:tickerName/delete', async (req, res) =>{
-
-  try{
-    const {tickerName} = req.params;
+router.get('/private/:tickerName/delete', async (req, res) => {
+  try {
+    const { tickerName } = req.params;
 
     let user = await User.findById(req.session.currentUser._id).populate('carteira');
 
     let carteira = await Carteira.findByIdAndUpdate();
 
-    
-
-    
     await carteira.save();
-
     res.redirect('/private/minha-carteira')
 
-
-  }catch(err){
+  } catch (err) {
     console.log(err)
   }
+})
 
-
+router.get('/private/article-detail', (req, res) => {
+  res.render('private/article-detail', {
+    userInSession: req.session.currentUser,
+    layout: false,
+  })
 })
 
 
