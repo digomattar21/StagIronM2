@@ -558,7 +558,7 @@ $("#yfinance-search").autocomplete({
   source: tickers,
   minLength: 2,
   position: {
-    my: "center+75 top+7"
+    my: "center+115 top+7"
   },
 
 });

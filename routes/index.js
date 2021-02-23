@@ -131,7 +131,7 @@ router.post("/ticker-search", async (req, res) => {
 
 
 
-
+    console.log(data)
 
     var dailyChange = data.price.regularMarketChangePercent;
 
@@ -143,7 +143,34 @@ router.post("/ticker-search", async (req, res) => {
 
     var outros = {};
 
+    data.defaultKeyStatistics.sharesOutstanding = toMillion(data.defaultKeyStatistics.sharesOutstanding)
+    data.price.marketCap = toMillion(data.price.marketCap)
+    data.summaryDetail.volume = toMillion(data.summaryDetail.volume);
+    data.price.regularMarketVolume = toMillion(data.price.regularMarketVolume)
+    data.summaryDetail.averageDailyVolume10Day = toMillion(data.summaryDetail.averageDailyVolume10Day)
+    data.price.averageDailyVolume3Month = toMillion(data.price.averageDailyVolume3Month)
+
     //fazer calculos p colocar no company info
+
+    let cutSymbol = data.price.symbol.slice(0,-3)
+    let logoUrl = `https://eodhistoricaldata.com/img/logos/US/${cutSymbol}.png`;
+    let foundedText = data.summaryProfile.longBusinessSummary;
+    var fd;
+    if (foundedText.includes('founded in')){
+       fd = foundedText.slice(foundedText.indexOf('founded in')+11,foundedText.indexOf('founded in')+15)
+    }
+
+    let exchange = data.price.exchange;
+
+    if(exchange ==='SAO'){
+      exchange = 'B3';
+    }
+    
+    let twoHundredDayAverage = data.summaryDetail.twoHundredDayAverage.toFixed(2) || data.summaryDetail.fiftyDayAverage.toFixed(2);
+    let beta = data.summaryDetail.beta.toFixed(2) || data.defaultKeyStatistics.beta.toFixed(2);
+    let fiftyTwoWeekHigh = data.summaryDetail.fiftyTwoWeekHigh.toFixed(2);
+    let fiftyTwoWeekLow = data.summaryDetail.fiftyTwoWeekLow.toFixed(2);
+
 
     res.render("main/company-info.hbs", {
       sumDet: data.summaryDetails,
@@ -153,6 +180,13 @@ router.post("/ticker-search", async (req, res) => {
       finData: data.financialData,
       posChange: posChange,
       negChange: negChange,
+      logoUrl: logoUrl,
+      foundedDate: fd,
+      exchange: exchange,
+      twoHundredDayAverage,
+      beta,
+      fiftyTwoWeekLow,
+      fiftyTwoWeekHigh
     });
   } catch (e) {
     console.log(e);
@@ -220,6 +254,10 @@ function getIpInfo(ip) {
     console.log("ip not valid");
   }
 
+}
+
+function toMillion(data){
+  return (data/1000000).toFixed(1)
 }
 
 module.exports = router;

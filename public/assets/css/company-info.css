@@ -7,6 +7,42 @@
 
 .lista-company-infos>li>span{
     font-weight: 600;
+}
 
+.primeira-coluna{
+  background-color:#4e657f;
+  border: none;
+  border-radius: 5px;
+  color: lightgray
+}
+
+table{
+  border: none;
+  border-radius: 6px;
+  margin-bottom:30px;
+}
+
+table>thead>tr>th{
+  background-color: rgba(201,236,168,0.7);
+  border-right: 1px solid lightgray;
+  color:rgb(248, 241, 241);
+}
+
+table>tbody>tr>td{
+  text-align: center;
+}
+
+table>thead{
+
+}
+
+.segunda-coluna-header,
+.terceira-coluna-header,
+.quarta-coluna-header,
+.quinta-coluna-header,
+.sexta-coluna-header{
+  background-color: rgba(201,236,168,0.7);
+  border-right: 1px solid lightgray;
+  color:rgb(248, 241, 241);
 }
 

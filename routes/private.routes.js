@@ -164,59 +164,96 @@ router.get("/private/minha-carteira", async (req, res) => {
 
 router.post("/private/ticker-search", async (req, res) => {
   try {
-    const { query } = req.body;
-    var queryCap = query.toUpperCase();
-    let data = await yf.quote({
-      symbol: `${queryCap}`,
-      modules: [
-        "price",
-        "summaryDetail",
-        "financialData",
-        "summaryProfile",
-        "defaultKeyStatistics",
-        "recommendationTrend",
-      ],
-    });
+      const { query } = req.body;
+      var queryCap = query.toUpperCase();
+      let data = await yf.quote({
+        symbol: `${queryCap}`,
+        modules: [
+          "price",
+          "summaryDetail",
+          "financialData",
+          "summaryProfile",
+          "defaultKeyStatistics",
+          "recommendationTrend",
+        ],
+      });
+      
+      let hasTicker = false;
 
-    //console.log(data);
+      let user = await User.findById(req.session.currentUser._id).populate('carteira');
 
-    let date = new Date().toISOString().slice(0, 10);
+      let tickers = user.carteira.tickers;
 
+      tickers.forEach((ticker,index) => {
+        if (ticker.name === queryCap) {
+          hasTicker = true;
+        }
+      })
 
-    var dailyChange = data.price.regularMarketChangePercent;
-
-    if (dailyChange < 0) {
-      var negChange = dailyChange.toFixed(2);
-    } else {
-      var posChange = dailyChange.toFixed(2);
-    }
-
-    var outros = {};
-
-
-    res.render("private/private-company-info.hbs", {
-      sumDet: data.summaryDetails,
-      price: data.price,
-      defKey: data.defaultKeyStatistics,
-      sumProf: data.summaryProfile,
-      finData: data.financialData,
-      posChange: posChange,
-      negChange: negChange,
-    });
+  
+      let date = new Date().toISOString().slice(0, 10);
+  
+  
+      var dailyChange = data.price.regularMarketChangePercent;
+  
+      if (dailyChange < 0) {
+        var negChange = dailyChange.toFixed(2);
+      } else {
+        var posChange = dailyChange.toFixed(2);
+      }
+  
+      var outros = {};
+  
+      data.defaultKeyStatistics.sharesOutstanding = toMillion(data.defaultKeyStatistics.sharesOutstanding)
+      data.price.marketCap = toMillion(data.price.marketCap)
+      data.summaryDetail.volume = toMillion(data.summaryDetail.volume);
+      data.price.regularMarketVolume = toMillion(data.price.regularMarketVolume)
+      data.summaryDetail.averageDailyVolume10Day = toMillion(data.summaryDetail.averageDailyVolume10Day)
+      data.price.averageDailyVolume3Month = toMillion(data.price.averageDailyVolume3Month)
+  
+      //fazer calculos p colocar no company info
+  
+      let cutSymbol = data.price.symbol.slice(0,-3)
+      let logoUrl = `https://eodhistoricaldata.com/img/logos/US/${cutSymbol}.png`;
+      let foundedText = data.summaryProfile.longBusinessSummary;
+      var fd;
+      if (foundedText.includes('founded in')){
+         fd = foundedText.slice(foundedText.indexOf('founded in')+11,foundedText.indexOf('founded in')+15)
+      }
+  
+      let exchange = data.price.exchange;
+  
+      if(exchange ==='SAO'){
+        exchange = 'B3';
+      }
+      
+      let twoHundredDayAverage = data.summaryDetail.twoHundredDayAverage.toFixed(2) || data.summaryDetail.fiftyDayAverage.toFixed(2);
+      let beta = data.summaryDetail.beta.toFixed(2) || data.defaultKeyStatistics.beta.toFixed(2);
+      let fiftyTwoWeekHigh = data.summaryDetail.fiftyTwoWeekHigh.toFixed(2);
+      let fiftyTwoWeekLow = data.summaryDetail.fiftyTwoWeekLow.toFixed(2);
+  
+  
+      res.render("private/private-company-info.hbs", {
+        sumDet: data.summaryDetails,
+        price: data.price,
+        defKey: data.defaultKeyStatistics,
+        sumProf: data.summaryProfile,
+        finData: data.financialData,
+        posChange: posChange,
+        negChange: negChange,
+        logoUrl: logoUrl,
+        foundedDate: fd,
+        exchange: exchange,
+        twoHundredDayAverage,
+        beta,
+        fiftyTwoWeekLow,
+        fiftyTwoWeekHigh,
+        hasTicker
+      });
   } catch (e) {
     console.log(e);
-    Article.find({ category: { $eq: "main" } }).then((mainArticlesFromDB) => {
-      News.find({ country: { $eq: "us" } }).then((allNewsUSA) => {
-        News.find({ country: { $eq: "br" } }).then((allNewsBR) => {
-          res.render("index.hbs", {
-            newsUSA: allNewsUSA,
-            newsBR: allNewsBR,
-            mainArticles: mainArticlesFromDB,
-            message: `Ticker inválido`,
-          });
-        });
-      });
-    });
+    res.redirect('/private/main')
+    
   }
 });
 
@@ -426,6 +463,10 @@ function pickLowest(obj, num) {
       }
     });
   return requiredObj;
+}
+
+function toMillion(data){
+  return (data/1000000).toFixed(1)
 }
 
 module.exports = router;
