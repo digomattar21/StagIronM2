@@ -55,6 +55,10 @@ hbs.registerHelper('getArticlesLength', function (articles) {
   return articles.length
 });
 
+hbs.registerHelper('verifyEqual', function (arg1,arg2) {
+  return arg1===arg2
+});
+
 
 
 // default value for title local

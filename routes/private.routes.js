@@ -8,6 +8,7 @@ const yf = require("yahoo-finance");
 const Carteira = require("../models/Carteira.model");
 const Comment = require('../models/Comment.model');
 
+
 router.get("/private/createArticle", (req, res) => {
   res.render("private/createArticle.hbs", {
     userInSession: req.session.currentUser,
@@ -259,21 +260,31 @@ router.post("/private/ticker-search", async (req, res) => {
 });
 
 router.get("/private/main/:articleId", async (req, res) => {
+  
   try {
     const { articleId } = req.params;
     let article = await Article.findById(articleId).populate("author comments")
-    let comments = article.comments;
-    console.log(comments)
+    
+    let comments = await Comment.find({ article: article._id}).populate('author');
+    
+
+
     res.render("private/article-detail.hbs", {
       article: article,
       userInSession: req.session.currentUser,
-      comments: comments,
       layout: false,
+      comments: comments
     });
-  } catch (error) {
 
+
+  } catch (err) {
+    console.log(`Error while getting the details about this article: ${err}`)
+    setTimeout(() => {
+      res.redirect('index');
+    }, 100)
   }
-})
+
+});
 
 router.post("/private/addticker", async (req, res) => {
   try {
@@ -363,7 +374,7 @@ router.post("/private/:articleId/edit", async (req, res) => {
 
 router.post("/private/:articleId/delete", (req, res) => {
   const { articleId } = req.params;
-
+  //console.log(id)
   Article.findByIdAndDelete(articleId)
     .then(() => res.redirect("/private/main"))
     .catch((err) => {
@@ -395,6 +406,7 @@ router.post('/private/:tickerName/updateTicker', async (req, res) => {
 
     carteira.markModified('tickers')
     await carteira.save();
+    console.log(carteira)
     res.redirect('/private/minha-carteira')
 
   } catch (err) {
@@ -407,15 +419,13 @@ router.post('/private/:tickerName/updateTicker', async (req, res) => {
 router.get('/private/minha-carteira/ticker/delete', async (req, res) => {
   try {
     const { tickerName } = req.body;
-
+    console.log(tickerName);
     let user = await User.findById(req.session.currentUser._id).populate('carteira');
-
-    let carteira = await carteira.findById(user.carteira._id);
-    console.log('ticker', tickerName)
+    let carteira = await Carteira.findById(user.carteira._id);
 
     carteira.tickers.forEach((ticker, index) => {
       if (ticker.name === tickerName) {
-        console.log(carteira.tickers)
+        console.log(carteira)
         carteira.tickers.slice(index, 1)
       }
     })
@@ -447,14 +457,13 @@ router.post('/private/comment/post', async (req, res) => {
     let updated = await Article.findByIdAndUpdate(articleId, {
       $push: { comments: comment._id },
     });
-    console.log(updated)
+    
     res.redirect(`/private/main/${articleId}`)
 
   } catch (error) {
     console.log(error)
   }
 })
-
 
 
 

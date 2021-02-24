@@ -75,44 +75,35 @@ margin-left: -15px'>
         </div>
     </div>
 
-    <section style="height: auto;">
+
+    <section style="height: auto; margin-top:40px">
         <div class="row justify-content-center">
             <div class="col-lg-8 offset-lg-0">
                 <h6>DISCUSSÃO</h6>
             </div>
         </div>
-
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div style="height: 100px;">
-                    <div class="row">
-                        <div class="col">
-                            <div class="d-flex flex-row justify-content-start align-items-center"
-                                style="height: 100px;">
-                                <img src="https://picsum.photos/140"
-                                    style="width: 50px; height: 50px; border-radius: 50%;" />
-                                <div style="width: 100%;height: 100px;">
-                                    <h6>{{userInSession.username}}</h6>
-                                    <form action="/private/comment/post" method="POST">
-                                        <input type="text" name="content" placeholder="Deixe seu comentário" required>
-                                        <input type="text" name="articleId" style="display: none;"
-                                            value="{{article._id}}">
-                                        <div class="d-flex flex-row justify-content-start" style="height: 25px;">
-                                            <button class="btn d-flex align-items-center" type="submit"
-                                                style="height: 20px;margin-left: 5px;padding: 0 0;">Postar</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <div class="row justify-content-center" style='margin-top:7px;' >
+            <div class="col-lg-8 col-xl-8" style='border-right: 1px solid lightgray; border-left: 1px solid lightgray; border-top: 1px solid lightgray'>
+                <div class="d-flex flex-column justify-content-center align-items-start" style="height: 200px;">
+                    <form action="/private/comment/post" method="POST">
+                        <div class="d-flex flex-row justify-content-start align-items-center"
+                            style="width: 450px;height: 40px;"><img src="https://picsum.photos/140" style="width: 10%;height: 100%; border-radius:50%" />
+                            <h5 style='margin-left:3px' >{{userInSession.username}}</h5>
+                            <input type="text" name="articleId" style="display: none;" value="{{article._id}}">
+                        </div><textarea style="resize:none;margin-top:5px;width: 100%;height: 100px;border: 1px solid lightgray none;background-color: #f1f2f3 " name="content"
+                            placeholder='Digite seu comentario' minlength="0" maxlength="400" required></textarea>
+                        <button class="btn btn-primary" type="submit"
+                            style="margin-left: 5%;height: 25px;padding: 3px 3px;font-size: 14px;">Postar</button>
+                    </form>
                 </div>
             </div>
-        </div>
-        {{#each comments}}
-        {{>comment}}
-        {{/each}}
+            {{#each comments}}
+            {{>comment}}
+            {{/each}}
         </div>
     </section>
+
+
 
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
