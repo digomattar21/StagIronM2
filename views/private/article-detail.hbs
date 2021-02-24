@@ -17,8 +17,8 @@
     <link rel="stylesheet" href="/assets/fonts/ionicons.css">
     <link rel="stylesheet" href="/assets/fonts/ionicons.min.css">
     <link rel="stylesheet" href="/assets/css/styles.css">
-    <link rel="stylesheet" href="/assets/css/article-page.css">
     <link rel="stylesheet" href="/assets/css/index.css">
+    <link rel="stylesheet" href="/assets/css/article-page.css">
 
 
 </head>
@@ -44,7 +44,7 @@
                     <div class="col-4 d-flex flex-row justify-content-start align-items-center" style='margin-top: 15px; 
 margin-left: -15px'>
                         {{#if article.author.username}}
-                        <a href="/private/author/{{article.author._id}}">
+                        <a href="/private/author/{{article.author._id}}/articles">
                             <h6 style='font-size: 14px;margin-left:-10px'>{{article.author.username}}</h6>
                         </a>
                         {{else}}
@@ -75,23 +75,25 @@ margin-left: -15px'>
         </div>
     </div>
 
-
-    <section style="height: auto; margin-top:40px">
+    
+    <section style="height: auto; margin-top:80px">
         <div class="row justify-content-center">
-            <div class="col-lg-8 offset-lg-0">
+            <div class="col-lg-4 offset-lg-0">
                 <h6>DISCUSSÃO</h6>
             </div>
         </div>
-        <div class="row justify-content-center" style='margin-top:7px;' >
-            <div class="col-lg-8 col-xl-8" style='border-right: 1px solid lightgray; border-left: 1px solid lightgray; border-top: 1px solid lightgray'>
-                <div class="d-flex flex-column justify-content-center align-items-start" style="height: 200px;">
+        <div class="row d-flex flex-column justify-content-center align-items-center" style='margin-top:7px;'>
+            <div class="col-lg-4 col-xl-4"
+                style='border-right: 1px solid lightgray; border-left: 1px solid lightgray; border-top: 1px solid lightgray'>
+                <div class="d-flex flex-column justify-content-center align-items-start" style="height: auto; margin-top:20px">
                     <form action="/private/comment/post" method="POST">
                         <div class="d-flex flex-row justify-content-start align-items-center"
-                            style="width: 450px;height: 40px;"><img src="https://picsum.photos/140" style="width: 10%;height: 100%; border-radius:50%" />
-                            <h5 style='margin-left:3px' >{{userInSession.username}}</h5>
+                            style="width: 450px;height: 40px;"><img src="https://picsum.photos/140"
+                                style="width: 10%;height: 100%; border-radius:50%" />
+                            <h5 style='margin-left:3px'>{{userInSession.username}}</h5>
                             <input type="text" name="articleId" style="display: none;" value="{{article._id}}">
-                        </div><textarea style="resize:none;margin-top:5px;width: 100%;height: 100px;border: 1px solid lightgray none;background-color: #f1f2f3 " name="content"
-                            placeholder='Digite seu comentario' minlength="0" maxlength="400" required></textarea>
+                        </div><textarea class='comment-input' name="content" placeholder='Digite seu comentario'
+                            minlength="0" maxlength="400" required></textarea>
                         <button class="btn btn-primary" type="submit"
                             style="margin-left: 5%;height: 25px;padding: 3px 3px;font-size: 14px;">Postar</button>
                     </form>
@@ -104,7 +106,7 @@ margin-left: -15px'>
     </section>
 
 
-
+    <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src='/assets/js/autocomplete.js'></script>
