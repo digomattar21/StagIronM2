@@ -327,7 +327,7 @@ router.post("/private/addticker", async (req, res) => {
   }
 });
 
-router.get("/private/author/:authorId", async (req, res) => {
+router.get("/private/author/:authorId/articles", async (req, res) => {
   try {
     const { authorId } = req.params;
     let user = await User.findById(authorId).populate("articles");
@@ -336,6 +336,18 @@ router.get("/private/author/:authorId", async (req, res) => {
     console.log(error);
   }
 });
+
+router.get("/private/author/:authorId/perfil", async (req, res) => {
+  try {
+    const { authorId } = req.params;
+    let user = await User.findById(authorId).populate("articles");
+    res.render("private/author-profile-perfil.hbs", { user: user, layout: false });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+
 
 router.get("/private/:articleId/edit", async (req, res) => {
   try {
