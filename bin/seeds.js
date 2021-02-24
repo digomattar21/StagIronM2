@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const User = require('../models/User.model');
 const Article = require('../models/Article.model');
 const News = require('../models/News.model');
+const Comment = require('../models/Comment.model');
+const Carteira = require('../models/Carteira.model');
  
 require('../configs/db.config');
 
