@@ -47,7 +47,7 @@
                 <th>Posicão($)</th>
                 <th>Volume</th>
                 <th>Market Cap</th>
-                <th></th>  
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -81,10 +81,10 @@
                 </td>
                 {{/if}}
                 {{#if this.position}}
-                   <td class='ticker-posicao'>{{this.position}}</td>
+                <td class='ticker-posicao'>{{this.position}}</td>
                 {{else}}
                 <td class='ticker-posicao'>0.00</td>
-                {{/if}}  
+                {{/if}}
                 {{#if this.volume}}
                 <td>{{this.volume}}</td>
                 {{else}}
@@ -98,7 +98,7 @@
 
                 <td style='display:flex; justify-content: center;'>
 
-                  <form action="/private/{{this.name}}/delete" method='post'>
+                  <form action="/private/minha-carteira/ticker/delete" method='post'>
                     <input type="text" style='display: none' value="{{this.name}}" name='tickerName'>
                     <button type='submit' class='btn btn-primary'
                       style='background-color: transparent; border: 1px solid transparent; border-radius: 50%; width:20px; height:30px; display: flex; justify-content: center; align-items: center'><i
