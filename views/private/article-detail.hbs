@@ -75,14 +75,26 @@ margin-left: -15px'>
         </div>
     </div>
 
+    <div class="row" style='margin-top: 40px;'>
+        <div class="col d-flex flex-column justify-content-center align-items-center">
+            <div style="width: 60%;height: auto;">
+                
+            </div>
+        </div>
+    </div>
+
     
     <section style="height: auto; margin-top:80px">
         <div class="row justify-content-center">
             <div class="col-lg-4 offset-lg-0">
-                <h6>DISCUSSÃO</h6>
+                <div class='d-flex flex-row justify-content-start'>
+                    <h6 style='font-weight: 600'>DISCUSSÃO</h6>
+                    <ion-icon style='margin-left:8px' name="chatbubble-ellipses-outline"></ion-icon>
+                </div>
             </div>
         </div>
         <div class="row d-flex flex-column justify-content-center align-items-center" style='margin-top:7px;'>
+            {{#if userInSession}}
             <div class="col-lg-4 col-xl-4"
                 style='border-right: 1px solid lightgray; border-left: 1px solid lightgray; border-top: 1px solid lightgray'>
                 <div class="d-flex flex-column justify-content-center align-items-start" style="height: auto; margin-top:20px">
@@ -93,12 +105,15 @@ margin-left: -15px'>
                             <h5 style='margin-left:3px'>{{userInSession.username}}</h5>
                             <input type="text" name="articleId" style="display: none;" value="{{article._id}}">
                         </div><textarea class='comment-input' name="content" placeholder='Digite seu comentario'
-                            minlength="0" maxlength="400" required></textarea>
+                            minlength="10" maxlength="400" required></textarea>
                         <button class="btn btn-primary" type="submit"
                             style="margin-left: 5%;height: 25px;padding: 3px 3px;font-size: 14px;">Postar</button>
                     </form>
                 </div>
             </div>
+            {{else}}
+            <div class="row d-flex flex-column justify-content-center align-items-center" style='hieght:auto;margin-top:7px;border-top:1px solid lightgray'></div>
+            {{/if}}
             {{#each comments}}
             {{>comment}}
             {{/each}}
