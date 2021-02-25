@@ -171,28 +171,27 @@
             <div class="col">
                 <div class="d-flex flex-column justify-content-center align-items-center" style="height: auto;">
                     <div class="d-flex flex-row justify-content-center align-items-center align-content-center"
-                        style="height: 50px;width: 225px;background: #fafafa;border-top-left-radius: 25px;border-top-right-radius: 25px;border-bottom-right-radius: 25px;border-bottom-left-radius: 25px;box-shadow: 0px 0px 2px;">
-                        <button class="btn btn-primary border rounded-pill" type="button">Estatisticas</button><button
-                            class="btn btn-primary text-dark" type="button"
-                            style="color: rgb(0,0,0);background: rgba(255,255,255,0);border-style: none;border-color: rgba(0,0,0,0);">Indicadores</button>
+                        style="height: 50px;width: 225px;background: transparent;">
+                        <button id='btnEstatisticas' style='padding: 6px 12px'
+                            class="btn btn-primary border rounded-pill" type="button">Estatisticas</button>
                     </div>
-                    <div class="table-responsive border-light shadow" style="width: 70%;margin-top: 30px;">
+                    <div class="table-responsive border-light shadow" style="width: 70%;margin-top: 15px;">
                         <table class="table tabela-infos">
                             <thead class='tabela-infos-head'>
                                 <tr>
-                                    <th class='primeira-coluna-header'></th>
-                                    <th class='segunda-coluna-header'>Shares Outs</th>
-                                    <th class='terceira-coluna-header'>Mkt Cap</th>
-                                    <th class='quarta-coluna-header'>Day Range</th>
-                                    <th class='quinta-coluna-header'>Volume</th>
-                                    <th class='sexta-coluna-header'>Volume Med</th>
-                                    <th class='setima-coluna-header'>200d Med</th>
+                                    <th class='primeira-coluna'></th>
+                                    <th>Shares Outs</th>
+                                    <th>Mkt Cap</th>
+                                    <th>Day Range</th>
+                                    <th>Volume</th>
+                                    <th>Volume Med</th>
+                                    <th>200d Med</th>
                                     <th>52w Range</th>
                                     <th>Beta</th>
                                     <th>EPS</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class='tabela-infos-body'>
                                 <tr>
                                     <td class='primeira-coluna'>{{price.symbol}}</td>
                                     <td class='segunda-coluna'>{{defKey.sharesOutstanding}}M</td>
@@ -247,18 +246,98 @@
                                     <td class='segunda-coluna'>NaN</td>
                                     {{/if}}
                                 </tr>
-                                {{!-- <tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex flex-row justify-content-center align-items-center align-content-center"
+                        style="height: 50px;width: 225px;background: transparent; margin-top:40px;">
+                        <button id='btnIndicadores' style='padding: 6px 12px'
+                            class="btn btn-primary border rounded-pill" type="button">Indicadores</button>
+                    </div>
+                    <div class="table-responsive border-light shadow" style="width: 70%;margin-top: 15px;">
+                        <table class="table tabela-infos">
+                            <thead class='tabela-infos-head'>
+                                <tr>
+                                    <th class='primeira-coluna'></th>
+                                    <th class='segunda-coluna-header'>Receita</th>
+                                    <th class='terceira-coluna-header'>EBITDA</th>
+                                    <th class='quarta-coluna-header'>Lucro Bruto</th>
+                                    <th class='quinta-coluna-header'>FC Livre</th>
+                                    <th class='sexta-coluna-header'>FC operacional</th>
+                                    <th class='setima-coluna-header'>Dívida Total</th>
+                                    <th class='oitava-coluna-header'>Dívida/Equity</th>
+                                    <th class='nona-coluna-header'>ROA</th>
+                                    <th class='decima-coluna-header'>ROE</th>
+                                    <th class='decimaprimeira-coluna-header'>M. Operacional</th>
+                                    <th class='decimasegunda-coluna-header'>M. Lucro</th>
+                                </tr>
+                            </thead>
+                            <tbody class='tabela-infos-body'>
+                                <tr>
                                     <td class='primeira-coluna'>{{price.symbol}}</td>
-                                    <td class='segunda-coluna'>Cell 6</td>
-                                    <td class='segunda-coluna'>Cell 6</td>
-                                    <td class='segunda-coluna'>Cell 6</td>
-                                    <td class='segunda-coluna'>Cell 6</td>
-                                    <td class='segunda-coluna'>Cell 6</td>
-                                    <td>Cell 7</td>
-                                    <td>Cell 8</td>
-                                    <td>Cell 9</td>
-                                    <td>Cell 10</td>
-                                </tr> --}}
+                                    <td class='segunda-coluna'>{{finData.totalRevenue}}M</td>
+                                    {{#if finData.ebitda}}
+                                    <td class='segunda-coluna'>{{finData.ebitda}}M</td>
+                                    {{else}}
+                                    <td class='segunda-coluna'>NaN</td>
+                                    {{/if}}
+
+                                    {{#if finData.grossProfits}}
+                                    <td class='segunda-coluna'>{{finData.grossProfits}}M</td>
+                                    {{else}}
+                                    <td class='segunda-coluna'>NaN</td>
+                                    {{/if}}
+
+                                    {{#if finData.freeCashflow}}
+                                    <td class='segunda-coluna'>{{finData.freeCashflow}}M</td>
+                                    {{else}}
+                                    <td class='segunda-coluna'>NaN</td>
+                                    {{/if}}
+
+                                    {{#if finData.operatingCashflow}}
+                                    <td class='segunda-coluna'>{{finData.operatingCashflow}}M</td>
+                                    {{else}}
+                                    <td class='segunda-coluna'>NaN</td>
+                                    {{/if}}
+
+                                    {{#if finData.totalDebt}}
+                                    <td class='segunda-coluna'>{{finData.totalDebt}}M</td>
+                                    {{else}}
+                                    <td class='segunda-coluna'>NaN</td>
+                                    {{/if}}
+
+                                    {{#if finData.debtToEquity}}
+                                    <td class='segunda-coluna'>{{finData.debtToEquity}}</td>
+                                    {{else}}
+                                    <td class='segunda-coluna'>NaN</td>
+                                    {{/if}}
+
+
+                                    {{#if finData.returnOnAssets}}
+                                    <td class='segunda-coluna'>{{finData.returnOnAssets}}%</td>
+                                    {{else}}
+                                    <td class='segunda-coluna'>NaN</td>
+                                    {{/if}}
+
+                                    {{#if finData.returnOnEquity}}
+                                    <td class='segunda-coluna'>{{finData.returnOnEquity}}%</td>
+                                    {{else}}
+                                    <td class='segunda-coluna'>NaN</td>
+                                    {{/if}}
+
+                                    {{#if finData.operatingMargins}}
+                                    <td class='segunda-coluna'>{{finData.operatingMargins}}%</td>
+                                    {{else}}
+                                    <td class='segunda-coluna'>NaN</td>
+                                    {{/if}}
+
+                                    {{#if finData.profitMargins}}
+                                    <td class='segunda-coluna'>{{finData.profitMargins}}%</td>
+                                    {{else}}
+                                    <td class='segunda-coluna'>NaN</td>
+                                    {{/if}}
+
+                                </tr>
                             </tbody>
                         </table>
                     </div>
