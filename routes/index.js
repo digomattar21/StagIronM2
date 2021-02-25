@@ -153,7 +153,7 @@ router.post("/ticker-search", async (req, res) => {
 
     console.log(data);
 
-    var dailyChange = (data.price.regularMarketChangePercent*100).toFixed(2);
+    var dailyChange = data.price.regularMarketChangePercent;
 
     if (dailyChange < 0) {
       var negChange = dailyChange.toFixed(2);
