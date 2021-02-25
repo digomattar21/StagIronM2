@@ -35,8 +35,14 @@ router.get("/", async (req, res, next) => {
       `https://newsapi.org/v2/everything?language=pt&q=bradesco OR fintech OR fintechs OR itau OR magalu OR (magazine AND luiza) OR taesa OR cteep OR petrobas OR (rumo AND b3) OR vale OR (iguatemi AND mercado) OR iochpe OR (dias AND branco) OR renner OR ambev OR santander OR (banco AND do AND brasil) OR weg OR eletrobras&apiKey=${news_api_key}`
     );
 
+    var requestStockNewsBr2 = await axios.get(
+      `https://newsapi.org/v2/everything?language=pt&q=(fundos AND (imobiliários OR imobiliarios)) OR IRBR OR IRBR3 OR (fundo AND (imobiliário OR imoboliario)) OR dividendos OR criptomoeda OR criptomoedas OR bitcoin OR ethereum OR litecoin OR Bitcoin OR (renda AND (fixa OR Fixa)) OR (Renda AND (fixa or Fixa))&apiKey=${news_api_key}`
+    );
+
+
     var newsBR = requestNewsBr.data.articles;
     var stockNewsBr = requestStockNewsBr.data.articles;
+    var stockNewsBr2 = requestStockNewsBr2.data.articles;
 
     if (newsBR.length > 6) {
       newsBR.splice(6, newsBR.length - 6);
@@ -44,6 +50,10 @@ router.get("/", async (req, res, next) => {
 
     if (stockNewsBr.length > 10) {
       stockNewsBr.splice(6, stockNewsBr.length - 10);
+    }
+
+    if (stockNewsBr2.length > 10) {
+      stockNewsBr2.splice(6, stockNewsBr2.length - 10);
     }
 
     newsBR.forEach((noticia, index) => {
@@ -64,6 +74,16 @@ router.get("/", async (req, res, next) => {
         }
       }
       noticia.country = "stockBr";
+    });
+
+    stockNewsBr2.forEach((noticia, index) => {
+      if (noticia.title.includes("-")) {
+        var indice = noticia.title.indexOf("-");
+        if (indice > 30) {
+          noticia.title = noticia.title.slice(0, indice);
+        }
+      }
+      noticia.country = "stockBr2";
     });
 
     let responseUSA = await newsapi.v2.topHeadlines({
@@ -107,6 +127,7 @@ router.get("/", async (req, res, next) => {
     console.log(`SucessFully added newsUSA to DB`);
 
     await News.create(stockNewsBr);
+    await News.create(stockNewsBr2);
 
     await News.create(newsBR);
     console.log(`Sucessfully added NewsBR to DB`);
@@ -117,6 +138,8 @@ router.get("/", async (req, res, next) => {
 
     allStockNewsBr = await News.find({ country: { $eq: "stockBr" } });
 
+    allStockNewsBr2 = await News.find({ country: { $eq: "stockBr2" } });
+
     res.render("index", {
       newsUSA: allNewsUSA,
       newsBR: allNewsBR,
@@ -124,6 +147,7 @@ router.get("/", async (req, res, next) => {
       cpvArticles: comprarOuVenderArticles,
       userInSession: req.session.currentUser,
       stockNewsBr: allStockNewsBr,
+      stockNewsBr2: allStockNewsBr2
     });
   } catch (e) {
     console.log(e);
