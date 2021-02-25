@@ -100,7 +100,7 @@ router.post("/auth/confirm", async (req, res) => {
 
       req.session.currentUser = user;
 
-      let carteiraCreate = await Carteira.create({user: user._id});
+      let carteiraCreate = await Carteira.create({user: user._id, patrimonio:0});
 
       let updated = await User.findByIdAndUpdate(user._id, {
         $push: { carteira: carteiraCreate._id },
