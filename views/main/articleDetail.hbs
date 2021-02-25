@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/css/Header-Blue.css">
+    <link rel="stylesheet" href="/assets/css/Footer-Dark.css">
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,500;1,300;1,400&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/Navigation-with-Search.css">
+    <link rel="stylesheet" href="/assets/fonts/ionicons.css">
+    <link rel="stylesheet" href="/assets/fonts/ionicons.min.css">
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="stylesheet" href="/assets/css/index.css">
+    <link rel="stylesheet" href="/assets/css/article-page.css">
+
+
+</head>
+
+<body>
+    {{#if userInSession}}
+    {{>memberNav}}
+    {{/if}}
+
+    <div class="row" style='margin-top: 80px'>
+        <div class="col d-flex flex-row justify-content-center align-items-center">
+            <div style="width: 60%;height: auto;">
+                <h1 class="display-4 text-center" style="font-size: 4rem;"><span
+                        style='font-weight: bold'>{{article.title}}</span>
+                </h1>
+                <div class="row" style='margin-top:20px'>
+                    <div class="col-lg-1 text-center d-flex flex-row justify-content-center align-items-center"
+                        style=' margin-top:8px;'><svg width='15' height='15' xmlns="http://www.w3.org/2000/svg"
+                            class="ionicon" viewBox="0 0 512 512">
+                            <title>Person</title>
+                            <path
+                                d="M332.64 64.58C313.18 43.57 286 32 256 32c-30.16 0-57.43 11.5-76.8 32.38-19.58 21.11-29.12 49.8-26.88 80.78C156.76 206.28 203.27 256 256 256s99.16-49.71 103.67-110.82c2.27-30.7-7.33-59.33-27.03-80.6zM432 480H80a31 31 0 01-24.2-11.13c-6.5-7.77-9.12-18.38-7.18-29.11C57.06 392.94 83.4 353.61 124.8 326c36.78-24.51 83.37-38 131.2-38s94.42 13.5 131.2 38c41.4 27.6 67.74 66.93 76.18 113.75 1.94 10.73-.68 21.34-7.18 29.11A31 31 0 01432 480z" />
+                        </svg></div>
+                    <div class="col-4 d-flex flex-row justify-content-start align-items-center" style='margin-top: 15px; 
+margin-left: -15px'>
+                        {{#if article.author.username}}
+                        <a href="/private/author/{{article.author._id}}/articles">
+                            <h6 style='font-size: 14px;margin-left:-10px'>{{article.author.username}}</h6>
+                        </a>
+                        {{else}}
+                        <h6 style='font-size: 14px; margin-left:-10px'>Autor Desconhecido</h6>
+                        {{/if}}
+                    </div>
+                    <div class="col-4 d-flex flex-row justify-content-start align-items-center"
+                        style='margin-top: 15px;'>
+                        <h6 style='font-size: 14px; color: #017bcd'>Categoria: {{article.category}}</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style='margin-top:40px'>
+        <div class="col d-flex flex-column justify-content-center align-items-center">
+            <div style="width: 60%;height: auto;">
+                <p style="text-align: center; font-size: 1.3rem; font-weight: 300">{{article.content}}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style='margin-top: 40px;'>
+        <div class="col d-flex flex-column justify-content-center align-items-center">
+            <div style="width: 60%;height: auto;">
+                <p style="text-align: center; font-size: 13px;">Atualizado: {{article.updatedAt}}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style='margin-top: 40px;'>
+        <div class="col d-flex flex-column justify-content-center align-items-center">
+            <div style="width: 60%;height: auto;">
+                
+            </div>
+        </div>
+    </div>
+
+    
+    <section style="height: auto; margin-top:80px">
+        <div class="row justify-content-center">
+            <div class="col-lg-4 offset-lg-0">
+                <div class='d-flex flex-row justify-content-start'>
+                    <h6 style='font-weight: 600'>DISCUSSÃO</h6>
+                    <ion-icon style='margin-left:8px' name="chatbubble-ellipses-outline"></ion-icon>
+                </div>
+            </div>
+        </div>
+        <div class="row d-flex flex-column justify-content-center align-items-center" style='margin-top:7px;'>
+            {{#if userInSession}}
+            <div class="col-lg-4 col-xl-4"
+                style='border-right: 1px solid lightgray; border-left: 1px solid lightgray; border-top: 1px solid lightgray'>
+                <div class="d-flex flex-column justify-content-center align-items-start" style="height: auto; margin-top:20px">
+                    <form action="/private/comment/post" method="POST">
+                        <div class="d-flex flex-row justify-content-start align-items-center"
+                            style="width: 450px;height: 40px;"><img src="https://picsum.photos/140"
+                                style="width: 10%;height: 100%; border-radius:50%" />
+                            <h5 style='margin-left:3px'>{{userInSession.username}}</h5>
+                            <input type="text" name="articleId" style="display: none;" value="{{article._id}}">
+                        </div><textarea class='comment-input' name="content" placeholder='Digite seu comentario'
+                            minlength="10" maxlength="400" required></textarea>
+                        <button class="btn btn-primary" type="submit"
+                            style="margin-left: 5%;height: 25px;padding: 3px 3px;font-size: 14px;">Postar</button>
+                    </form>
+                </div>
+            </div>
+            {{else}}
+            <div class="row d-flex flex-column justify-content-center align-items-center" style='hieght:auto;margin-top:7px;border-top:1px solid lightgray'></div>
+            {{/if}}
+            {{#each comments}}
+            {{>comment}}
+            {{/each}}
+        </div>
+    </section>
+
+
+    <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src='/assets/js/autocomplete.js'></script>
+</body>
+
+</html>

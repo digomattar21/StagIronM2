@@ -71,12 +71,14 @@ require("./configs/db.config");
 const index = require("./routes/index");
 const private = require("./routes/private.routes");
 const auth = require("./routes/auth.routes");
+const articles = require("./routes/articleAuthor.routes")
 
 //app.use(helmet());
 
 app.use("/", index);
 app.use("/", private);
 app.use('/', auth);
+app.use('/', articles)
 
 
 
