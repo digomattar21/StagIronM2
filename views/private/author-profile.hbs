@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/assets/css/Header-Blue.css">
     <link rel="stylesheet" href="/assets/css/Footer-Dark.css">
     <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -19,7 +20,7 @@
     <link rel="stylesheet" href="/assets/css/styles.css">
     <link rel="stylesheet" href="/assets/css/index.css">
     <link rel="stylesheet" href="/assets/css/article-page.css">
-    <title>Document</title>
+    <title>Artigos</title>
 </head>
 
 <body>
@@ -27,23 +28,28 @@
     {{>memberNav}}
 
     <section style="height: auto; margin-top:80px">
-        <div class="row d-flex flex-column justify-content-center align-items-center">
-            <div class="col-8 col-xl-6 d-flex flex-row justify-content-center align-items-center">
-                <div class="d-flex flex-row justify-content-start align-items-center" style="width: auto;height: 40px;">
-                    <img style="height: 35px;width: 40px;border-radius: 50%;" src='https://picsum.photos/200' />
-                    <h4 style="margin-left: 5px;color: rgb(33, 37, 41);">{{user.username}}</h4>
-                    <ion-icon name="checkmark-circle-outline" style="color: #017bcd;margin-left: 5px;"></ion-icon>
-                </div>
-            </div>
-        </div>
+        {{!-- <div class="row d-flex flex-column justify-content-center align-items-center"> --}}
+            {{!-- <div class="col-8 col-xl-6 d-flex flex-row justify-content-center align-items-center"> --}}
+                {{!-- <div class="d-flex flex-row justify-content-start align-items-center"
+                    style="width: auto;height: 40px;"> --}}
+                    {{!-- <img style="height: 35px;width: 40px;border-radius: 50%;" src='https://picsum.photos/200' />
+                    --}}
+                    {{!-- <h4 style="margin-left: 5px;color: rgb(33, 37, 41);">{{user.username}}</h4> --}}
+                    {{!-- <ion-icon name="checkmark-circle-outline" style="color: #017bcd;margin-left: 5px;"></ion-icon>
+                    --}}
+                    {{!-- </div> --}}
+                {{!-- </div> --}}
+            {{!-- </div> --}}
         <div class="row d-flex justify-content-center">
             <div class="col-xl-3">
                 <div class="d-flex flex-row justify-content-center align-items-center"
                     style="height: 60px;width: auto;">
                     <nav style="width: auto;height: 40px;">
                         <ul class="pagination">
-                            <li class="page-item active border rounded-pill"><a class="page-link" href="#">Artigos</a></li>
-                            <li class="page-item border rounded-pill"><a class="page-link" href="/private/author/{{user._id}}/perfil">Perfil</a>
+                            <li class="page-item active border rounded-pill"><a class="page-link" href="#">Artigos</a>
+                            </li>
+                            <li class="page-item border rounded-pill"><a class="page-link"
+                                    href="/private/author/{{user._id}}/perfil">Perfil</a>
                             </li>
                         </ul>
                     </nav>
@@ -63,7 +69,7 @@
                             <div class="profile-description">
                                 <h5>{{this.title}}</h5>
                             </div>
-                            
+
                         </div>
                     </div>
                     {{/each}}

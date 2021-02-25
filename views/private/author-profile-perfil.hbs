@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/assets/css/Header-Blue.css">
     <link rel="stylesheet" href="/assets/css/Footer-Dark.css">
     <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -27,15 +28,18 @@
     {{>memberNav}}
 
     <section style="height: auto; margin-top:80px">
-        <div class="row d-flex flex-column justify-content-center align-items-center">
-            <div class="col-8 col-xl-6 d-flex flex-row justify-content-center align-items-center">
-                <div class="d-flex flex-row justify-content-start align-items-center" style="width: auto;height: 40px;">
-                    <img style="height: 35px;width: 40px;border-radius: 50%;" src='https://picsum.photos/200' />
-                    <h4 style="margin-left: 5px;color: rgb(33, 37, 41);">{{user.username}}</h4>
-                    <ion-icon name="checkmark-circle-outline" style="color: #017bcd;margin-left: 5px;"></ion-icon>
-                </div>
-            </div>
-        </div>
+        {{!-- <div class="row d-flex flex-column justify-content-center align-items-center"> --}}
+            {{!-- <div class="col-8 col-xl-6 d-flex flex-row justify-content-center align-items-center"> --}}
+                {{!-- <div class="d-flex flex-row justify-content-start align-items-center"
+                    style="width: auto;height: 40px;"> --}}
+                    {{!-- <img style="height: 35px;width: 40px;border-radius: 50%;" src='https://picsum.photos/200' />
+                    --}}
+                    {{!-- <h4 style="margin-left: 5px;color: rgb(33, 37, 41);">{{user.username}}</h4> --}}
+                    {{!-- <ion-icon name="checkmark-circle-outline" style="color: #017bcd;margin-left: 5px;"></ion-icon>
+                    --}}
+                    {{!-- </div> --}}
+                {{!-- </div> --}}
+            {{!-- </div> --}}
         <div class="row d-flex justify-content-center">
             <div class="col-xl-3">
                 <div class="d-flex flex-row justify-content-center align-items-center"
@@ -55,7 +59,7 @@
         {{!-- INSERIR CODIGO HTML DO PERFIL DO AUTOR --}}
 
 
-        <section style="width: 600px;height: 500px; background: linear-gradient(
+        <section style="margin-top: 30px; width: 600px;height: 500px; background: linear-gradient(
   to right bottom,
   rgba(255, 255, 255, 0.7),
   rgba(255, 255, 255, 0.3)
@@ -69,8 +73,8 @@
 ); border-radius: 2rem;">
                     <img src="https://cdn.pixabay.com/photo/2015/09/18/00/24/robin-944887_960_720.jpg"
                         style="width: 100px; height: 100px; border-radius: 50%;" />
-                    <h3 style="font-weight: 600;">{{this.author.username}}Jhongalt</h3>
-                    <p style="color: rgb(250, 248, 244);">{{this.author.description}}Trader</p>
+                    <h3 style="font-weight: 600;">{{user.username}}</h3>
+                    <p style="color: rgb(250, 248, 244);">{{user.description}}Trader</p>
                 </div>
                 <div class="col">
                     <div class="d-flex flex-column justify-content-center align-items-center"
