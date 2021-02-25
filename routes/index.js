@@ -153,7 +153,8 @@ router.post("/ticker-search", async (req, res) => {
 
     console.log(data);
 
-    var dailyChange = data.price.regularMarketChangePercent;
+    var dailyChange = data.price.regularMarketChangePercent * 100;
+    console.log(dailyChange);
 
     if (dailyChange < 0) {
       var negChange = dailyChange.toFixed(2);
@@ -195,14 +196,20 @@ router.post("/ticker-search", async (req, res) => {
       exchange = "B3";
     }
 
-    let twoHundredDayAverage =
+    if (data.summaryDetail.twoHundredDayAverage || data.summaryDetail.fiftyDayAverage){
+    var twoHundredDayAverage =
       data.summaryDetail.twoHundredDayAverage.toFixed(2) ||
       data.summaryDetail.fiftyDayAverage.toFixed(2);
-    let beta =
-      data.summaryDetail.beta.toFixed(2) ||
-      data.defaultKeyStatistics.beta.toFixed(2);
-    let fiftyTwoWeekHigh = data.summaryDetail.fiftyTwoWeekHigh.toFixed(2);
-    let fiftyTwoWeekLow = data.summaryDetail.fiftyTwoWeekLow.toFixed(2);
+    } 
+
+    if (data.summaryDetail.beta || data.defaultKeyStatistics.beta) {
+      var beta =
+        data.summaryDetail.beta.toFixed(2) ||
+        data.defaultKeyStatistics.beta.toFixed(2);
+    }
+    if (data.summaryDetail.fiftyTwoWeekHigh){
+    var fiftyTwoWeekHigh = data.summaryDetail.fiftyTwoWeekHigh.toFixed(2);
+    var fiftyTwoWeekLow = data.summaryDetail.fiftyTwoWeekLow.toFixed(2);}
 
     res.render("main/company-info.hbs", {
       sumDet: data.summaryDetails,
@@ -215,10 +222,10 @@ router.post("/ticker-search", async (req, res) => {
       logoUrl: logoUrl,
       foundedDate: fd,
       exchange: exchange,
-      twoHundredDayAverage,
-      beta,
-      fiftyTwoWeekLow,
-      fiftyTwoWeekHigh,
+      beta: beta,
+      twoHundredDayAverage: twoHundredDayAverage,
+      fiftyTwoWeekLow: fiftyTwoWeekLow,
+      fiftyTwoWeekHigh : fiftyTwoWeekHigh,
     });
   } catch (e) {
     console.log(e);
@@ -297,7 +304,7 @@ function getTodayDate() {
   var yyyy = today.getFullYear();
 
   today = yyyy + "-" + mm + "-" + dd;
-  return today
+  return today;
 }
 
 function getYesterdayDate() {
@@ -307,8 +314,7 @@ function getYesterdayDate() {
   var yyyy = yesterday.getFullYear();
 
   yesterday = yyyy + "-" + mm + "-" + dd;
-  return yesterday
+  return yesterday;
 }
-
 
 module.exports = router;
