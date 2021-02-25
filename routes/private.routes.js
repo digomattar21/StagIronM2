@@ -177,7 +177,6 @@ router.post("/private/ticker-search", async (req, res) => {
       }
     });
 
-    let date = new Date().toISOString().slice(0, 10);
 
     var dailyChange = data.price.regularMarketChangePercent * 100;
 
@@ -201,6 +200,16 @@ router.post("/private/ticker-search", async (req, res) => {
     data.price.averageDailyVolume3Month = toMillion(
       data.price.averageDailyVolume3Month
     );
+    data.financialData.totalRevenue = toMillion(data.financialData.totalRevenue);
+    data.financialData.ebitda = toMillion(data.financialData.ebitda);
+    data.financialData.grossProfits = toMillion(data.financialData.grossProfits);
+    data.financialData.freeCashflow = toMillion(data.financialData.freeCashflow);
+    data.financialData.operatingCashflow = toMillion(data.financialData.operatingCashflow);
+    data.financialData.totalDebt = toMillion(data.financialData.totalDebt);
+    data.financialData.returnOnAssets = (data.financialData.returnOnAssets*100).toFixed(2);
+    data.financialData.returnOnEquity = (data.financialData.returnOnEquity*100).toFixed(2);
+    data.financialData.operatingMargins = (data.financialData.operatingMargins*100).toFixed(2);
+    data.financialData.profitMargins = (data.financialData.profitMargins*100).toFixed(2);
 
     //fazer calculos p colocar no company info
 
@@ -237,6 +246,8 @@ router.post("/private/ticker-search", async (req, res) => {
       var fiftyTwoWeekHigh = data.summaryDetail.fiftyTwoWeekHigh.toFixed(2);
       var fiftyTwoWeekLow = data.summaryDetail.fiftyTwoWeekLow.toFixed(2);
     }
+
+    console.log(data)
 
     res.render("private/private-company-info.hbs", {
       sumDet: data.summaryDetails,

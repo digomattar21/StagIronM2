@@ -178,7 +178,6 @@ router.post("/ticker-search", async (req, res) => {
     console.log(data);
 
     var dailyChange = data.price.regularMarketChangePercent * 100;
-    console.log(dailyChange);
 
     if (dailyChange < 0) {
       var negChange = dailyChange.toFixed(2);
@@ -200,6 +199,16 @@ router.post("/ticker-search", async (req, res) => {
     data.price.averageDailyVolume3Month = toMillion(
       data.price.averageDailyVolume3Month
     );
+    data.financialData.totalRevenue = toMillion(data.financialData.totalRevenue);
+    data.financialData.ebitda = toMillion(data.financialData.ebitda);
+    data.financialData.grossProfits = toMillion(data.financialData.grossProfits);
+    data.financialData.freeCashflow = toMillion(data.financialData.freeCashflow);
+    data.financialData.operatingCashflow = toMillion(data.financialData.operatingCashflow);
+    data.financialData.totalDebt = toMillion(data.financialData.totalDebt);
+    data.financialData.returnOnAssets = (data.financialData.returnOnAssets*100).toFixed(2);
+    data.financialData.returnOnEquity = (data.financialData.returnOnEquity*100).toFixed(2);
+    data.financialData.operatingMargins = (data.financialData.operatingMargins*100).toFixed(2);
+    data.financialData.profitMargins = (data.financialData.profitMargins*100).toFixed(2);
 
     //fazer calculos p colocar no company info
 

@@ -9,12 +9,7 @@
     font-weight: 600;
 }
 
-.primeira-coluna{
-  background-color:#4e657f;
-  border: none;
-  border-radius: 5px;
-  color: lightgray
-}
+
 
 table{
   border: none;
@@ -22,18 +17,23 @@ table{
   margin-bottom:30px;
 }
 
-table>thead>tr>th{
-  background-color: rgba(201,236,168,0.7);
-  border-right: 1px solid lightgray;
-  color:rgb(248, 241, 241);
-}
-
 table>tbody>tr>td{
   text-align: center;
 }
 
-table>thead{
+table>thead>tr>th{
+  background-color: rgb(247, 205, 123);
+  border-right: 1px solid lightgray;
+  color:rgb(155, 107, 20);
+  text-align: center;
+}
 
+
+.primeira-coluna{
+  background-color:#4e657f;
+  border: none;
+  border-radius: 5px;
+  color: lightgray
 }
 
 .segunda-coluna-header,
@@ -43,6 +43,24 @@ table>thead{
 .sexta-coluna-header{
   background-color: rgba(201,236,168,0.7);
   border-right: 1px solid lightgray;
-  color:rgb(248, 241, 241);
+  color:darkgreen;
 }
+
+.setima-coluna-header,
+.oitava-coluna-header{
+  background-color: rgb(241, 170, 170);
+  border-right: 1px solid lightgray;
+  color: darkred;
+}
+
+.nona-coluna-header,
+.decima-coluna-header,
+.decimaprimeira-coluna-header,
+.decimasegunda-coluna-header{
+  background-color: lightblue;
+  border-right: 1px solid lightgray;
+  color: darkblue;
+}
+
+
 
