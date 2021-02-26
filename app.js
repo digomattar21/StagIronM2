@@ -56,7 +56,9 @@ hbs.registerHelper('getArticlesLength', function (articles) {
 });
 
 hbs.registerHelper('verifyEqual', function (arg1,arg2) {
-  return arg1===arg2;
+  console.log(arg1, arg2);
+  console.log(arg1==arg2)
+  return arg1==arg2;
 });
 
 hbs.registerHelper('verifyOn', function (arg1) {

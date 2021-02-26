@@ -120,6 +120,57 @@ margin-left: -15px'>
             {{/each}}
         </div>
     </section>
+    <section style="height: auto; margin-top:40px; margin-bottom:50px">
+        <div class='row justify-content-center'>
+            <div class=' col-4'>
+                <h5 style='color:#017bcd, font-weight: bold; text-align: center'>Noticias Relacionadas</h5>
+            </div>
+
+        </div>
+        <div class="row justify-content-center" style="height: 400px;margin-top: 20px;">
+            <div class="col-lg-3" style="height: auto;">
+
+                <div class="card-group">
+                    <a href="">
+                        <div class="card"><img class="card-img-top w-100 d-block" style='height:200px'
+                                src='{{newsRelated.0.urlToImage}}' />
+                            <div class="card-body">
+                                <h5 class="text-center text-dark card-title" style="font-weight: 600;">
+                                    {{newsRelated.0.title}}</h5>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+            <div class="col-lg-3">
+                <div class="card-group">
+                    <a href="">
+                        <div class="card"><img class="card-img-top w-100 d-block" style='height:200px'
+                                src='{{newsRelated.1.urlToImage}}' />
+                            <div class="card-body">
+                                <h5 class="text-center text-dark card-title" style="font-weight: 600;">
+                                    {{newsRelated.1.title}}</h5>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="card-group">
+                    <a href="">
+                        <div class="card"><img class="card-img-top w-100 d-block" style='height:200px'
+                                src='{{newsRelated.2.urlToImage}}' />
+                            <div class="card-body">
+                                <h5 class="text-center text-dark card-title" style="font-weight: 600;">
+                                    {{newsRelated.2.title}}</h5>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 
 
     <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
