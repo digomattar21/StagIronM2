@@ -52,11 +52,19 @@ hbs.registerHelper('biggerThanZero', function (value) {
 });
 
 hbs.registerHelper('getArticlesLength', function (articles) {
-  return articles.length
+  return articles.length;
 });
 
 hbs.registerHelper('verifyEqual', function (arg1,arg2) {
-  return arg1===arg2
+  return arg1===arg2;
+});
+
+hbs.registerHelper('verifyOn', function (arg1) {
+  return arg1==='on';
+});
+
+hbs.registerHelper('verifyEmpty', function (arg1) {
+  return arg1!='';
 });
 
 

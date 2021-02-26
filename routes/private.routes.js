@@ -7,7 +7,7 @@ const User = require("../models/User.model");
 const yf = require("yahoo-finance");
 const Carteira = require("../models/Carteira.model");
 const Comment = require("../models/Comment.model");
-
+const Settings = require("../models/Settings.model");
 
 router.get("/private/main", async (req, res) => {
   try {
@@ -22,10 +22,9 @@ router.get("/private/main", async (req, res) => {
     let dawta = [];
     let labelDataObj = {};
 
-
     let patrimonio = carteira.patrimonio;
-    if (!patrimonio){
-      carteira.patrimonio = 0
+    if (!patrimonio) {
+      carteira.patrimonio = 0;
     }
 
     for (let i = 0; i < carteira.tickers.length; i++) {
@@ -36,15 +35,14 @@ router.get("/private/main", async (req, res) => {
       });
       let changePct = data.price.regularMarketChangePercent * 100;
       dailyChanges[ticker.name] = changePct.toFixed(2);
-      ticker['pctOfWallet'] = ((ticker.position/patrimonio)*100).toFixed(2); 
+      ticker["pctOfWallet"] = ((ticker.position / patrimonio) * 100).toFixed(2);
       labels.push(ticker.name.toString());
-      dawta.push(((ticker.position/patrimonio)*100).toFixed(2));
+      dawta.push(((ticker.position / patrimonio) * 100).toFixed(2));
     }
 
-    labelDataObj['labels'] = labels;
-    labelDataObj['data'] = dawta;
+    labelDataObj["labels"] = labels;
+    labelDataObj["data"] = dawta;
     console.log(labelDataObj);
-
 
     if (carteira.tickers.length < 4) {
       num = carteira.tickers.length;
@@ -57,7 +55,7 @@ router.get("/private/main", async (req, res) => {
 
     let articles = user.articles;
 
-    carteira.markModified('tickers');
+    carteira.markModified("tickers");
     await carteira.save();
 
     res.render("private/main.hbs", {
@@ -66,7 +64,7 @@ router.get("/private/main", async (req, res) => {
       user: req.session.currentUser,
       maioresAltas: highest,
       maioresBaixas: lowest,
-      doughnutGraphData: labelDataObj
+      doughnutGraphData: labelDataObj,
     });
   } catch (err) {
     console.log(err);
@@ -103,7 +101,7 @@ router.get("/private/minha-carteira", async (req, res) => {
     let carteira = await Carteira.findById(user.carteira._id);
 
     //fazendo os calculos de porcetagem da posicao total e aumento do patrimonio
-    carteira.patrimonio =0;
+    carteira.patrimonio = 0;
 
     //Pegando os quotes dos tickers da carteira do usuario
     for (let i = 0; i < user.carteira.tickers.length; i++) {
@@ -126,10 +124,9 @@ router.get("/private/minha-carteira", async (req, res) => {
         mktCap: (data.price.marketCap / 1000000000).toFixed(2),
       };
       carteira.patrimonio += parseFloat(ticker.position);
-      
+
       tickerInfo.push(info);
     }
-
 
     carteira.markModified("patrimonio");
     await carteira.save();
@@ -177,7 +174,6 @@ router.post("/private/ticker-search", async (req, res) => {
       }
     });
 
-
     var dailyChange = data.price.regularMarketChangePercent * 100;
 
     if (dailyChange < 0) {
@@ -200,16 +196,32 @@ router.post("/private/ticker-search", async (req, res) => {
     data.price.averageDailyVolume3Month = toMillion(
       data.price.averageDailyVolume3Month
     );
-    data.financialData.totalRevenue = toMillion(data.financialData.totalRevenue);
+    data.financialData.totalRevenue = toMillion(
+      data.financialData.totalRevenue
+    );
     data.financialData.ebitda = toMillion(data.financialData.ebitda);
-    data.financialData.grossProfits = toMillion(data.financialData.grossProfits);
-    data.financialData.freeCashflow = toMillion(data.financialData.freeCashflow);
-    data.financialData.operatingCashflow = toMillion(data.financialData.operatingCashflow);
+    data.financialData.grossProfits = toMillion(
+      data.financialData.grossProfits
+    );
+    data.financialData.freeCashflow = toMillion(
+      data.financialData.freeCashflow
+    );
+    data.financialData.operatingCashflow = toMillion(
+      data.financialData.operatingCashflow
+    );
     data.financialData.totalDebt = toMillion(data.financialData.totalDebt);
-    data.financialData.returnOnAssets = (data.financialData.returnOnAssets*100).toFixed(2);
-    data.financialData.returnOnEquity = (data.financialData.returnOnEquity*100).toFixed(2);
-    data.financialData.operatingMargins = (data.financialData.operatingMargins*100).toFixed(2);
-    data.financialData.profitMargins = (data.financialData.profitMargins*100).toFixed(2);
+    data.financialData.returnOnAssets = (
+      data.financialData.returnOnAssets * 100
+    ).toFixed(2);
+    data.financialData.returnOnEquity = (
+      data.financialData.returnOnEquity * 100
+    ).toFixed(2);
+    data.financialData.operatingMargins = (
+      data.financialData.operatingMargins * 100
+    ).toFixed(2);
+    data.financialData.profitMargins = (
+      data.financialData.profitMargins * 100
+    ).toFixed(2);
 
     //fazer calculos p colocar no company info
 
@@ -247,7 +259,7 @@ router.post("/private/ticker-search", async (req, res) => {
       var fiftyTwoWeekLow = data.summaryDetail.fiftyTwoWeekLow.toFixed(2);
     }
 
-    console.log(data)
+    console.log(data);
 
     res.render("private/private-company-info.hbs", {
       sumDet: data.summaryDetails,
@@ -272,7 +284,6 @@ router.post("/private/ticker-search", async (req, res) => {
   }
 });
 
-
 router.post("/private/addticker", async (req, res) => {
   try {
     const { symbol } = req.body;
@@ -280,7 +291,6 @@ router.post("/private/addticker", async (req, res) => {
     let user = await User.findById(req.session.currentUser._id).populate(
       "articles carteira"
     );
-
 
     let yfData = await yf.quote({
       symbol: `${symbol}`,
@@ -298,15 +308,15 @@ router.post("/private/addticker", async (req, res) => {
       currentPrice: yfData.price.regularMarketPrice,
       dayChangePct: dayChangePct,
       mktCap: mktCap,
-      volume: volume, 
-      position:0
+      volume: volume,
+      position: 0,
     };
 
     let updatedCarteira = await Carteira.findByIdAndUpdate(user.carteira._id, {
       $push: { tickers: tickerInfo },
     });
 
-    res.redirect("/private/-carteira");
+    res.redirect("/private/minha-carteira");
   } catch (err) {
     console.log(err);
     setTimeout(() => {
@@ -314,9 +324,6 @@ router.post("/private/addticker", async (req, res) => {
     }, 1000);
   }
 });
-
-
-
 
 router.post("/private/:tickerName/updateTicker", async (req, res) => {
   try {
@@ -347,24 +354,20 @@ router.post("/private/:tickerName/updateTicker", async (req, res) => {
   }
 });
 
-router.get("/private/minha-carteira/ticker/delete", async (req, res) => {
+router.post("/private/minha-carteira/ticker/delete", async (req, res) => {
   try {
     const { tickerName } = req.body;
-    console.log(tickerName);
+
     let user = await User.findById(req.session.currentUser._id).populate(
       "carteira"
     );
-    let carteira = await Carteira.findById(user.carteira._id);
 
-    carteira.tickers.forEach((ticker, index) => {
-      if (ticker.name === tickerName) {
-        console.log(carteira);
-        carteira.tickers.slice(index, 1);
-      }
-    });
+    let carteira = await Carteira.findByIdAndUpdate(user.carteira._id, {$pull: {'tickers.name' : tickerName}})
+
 
     carteira.markModified("tickers");
     await carteira.save();
+
     res.redirect("/private/minha-carteira");
   } catch (err) {
     console.log(err);
@@ -421,6 +424,35 @@ router.post("/private/comment/like", async (req, res) => {
     res.redirect(`/private/main/${articleId}`);
   }
 });
+
+router.get("/private/user/settings", async  (req, res) =>{
+  try {
+    let user = await User.findById(req.session.currentUser._id).populate('settings');
+
+    res.render("private/settings.hbs", {
+      userInSession: req.session.currentUser,
+      user: user,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+
+router.post('/private/user/settings/update', async  (req, res) => {
+  const { biografia, sexo, fblink, twitterlink, instalink, walletpublic, destaquespublic} = req.body;
+  try{
+    
+    let user = await User.findById(req.session.currentUser._id);
+
+    let settings = await Settings.findByIdAndUpdate(user.settings._id, {biografia: biografia, sexo: sexo, fblink:fblink, twitterlink: twitterlink, instalink: instalink, walletpublic:walletpublic, destaquespublic: destaquespublic})
+    
+    res.redirect('/private/user/settings')
+
+  }catch(error){
+    console.log(error);
+  }
+})
 
 function pickHighest(obj, num) {
   const requiredObj = {};
