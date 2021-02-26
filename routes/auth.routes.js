@@ -8,6 +8,7 @@ var saltRounds = 12;
 const nodemailer = require("nodemailer");
 const Article = require("../models/Article.model");
 const Carteira = require("../models/Carteira.model");
+const Settings = require("../models/Settings.model")
 
 router.get("/auth/signup", (req, res) => {
   res.render("auth/sign-up.hbs");
@@ -102,9 +103,14 @@ router.post("/auth/confirm", async (req, res) => {
 
       let carteiraCreate = await Carteira.create({user: user._id, patrimonio:0});
 
+      let userSettings = await Settings.create({user: req.session.currentUser._id, biografia: '', sexo: 'nao', fblink: '', twitterlink: '', instalink: '', walletpublic: 'off', destaquespublic: 'off'})
+
       let updated = await User.findByIdAndUpdate(user._id, {
-        $push: { carteira: carteiraCreate._id },
+        $push: { carteira: carteiraCreate._id, settings: userSettings._id },
       });
+
+      console.log(userSettings);
+      console.log(updated);
 
       res.render("private/main.hbs", {
         user: req.session.currentUser,

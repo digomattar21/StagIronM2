@@ -218,10 +218,18 @@ router.get("/private/author/:authorId/perfil", async (req, res) => {
   }
 });
 
-router.post("/articles/filterByCategory", async (req, res) => {
+router.post("/private/articles/filterByCategory", async (req, res) => {
   const { category } = req.body;
   try {
-    res.redirect(`/articles/category/${category}`);
+
+    let articles = await Article.find({ category: category}).populate('author');
+
+
+    res.render(`private/feed.hbs`, {
+      layout: false,
+      articles: articles,
+      user: req.session.currentUser,
+    });
   } catch (error) {
     console.log(error);
   }
