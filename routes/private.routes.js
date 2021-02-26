@@ -112,6 +112,13 @@ router.get("/private/minha-carteira", async (req, res) => {
       });
 
       let dayChangePct = data.price.regularMarketChangePercent * 100;
+
+      if (ticker.buyPrice){
+        var bp = ticker.buyPrice;
+      }else{
+        var bp = null;
+      }
+
       let info = {
         name: ticker.name,
         dayChangePct: dayChangePct.toFixed(2),
@@ -122,8 +129,10 @@ router.get("/private/minha-carteira", async (req, res) => {
           .toString()
           .replace(/\B(?=(\d{3})+(?!\d))/g, ","),
         mktCap: (data.price.marketCap / 1000000000).toFixed(2),
+        buyPrice: bp
+      
       };
-      carteira.patrimonio += parseFloat(ticker.position);
+      carteira.patrimonio += parseFloat(ticker.position).toFixed(2);
 
       tickerInfo.push(info);
     }
@@ -340,6 +349,7 @@ router.post("/private/:tickerName/updateTicker", async (req, res) => {
       if (ticker.name === tickerName) {
         ticker["positionUn"] = positionUn;
         ticker["position"] = (positionUn * currentPrice).toFixed(2);
+        ticker['buyPrice'] = currentPrice;
         console.log(ticker);
       }
     });
@@ -421,7 +431,12 @@ router.post("/private/comment/like", async (req, res) => {
     res.redirect(`/private/main/${articleId}`);
   } catch (error) {
     console.log(error);
-    res.redirect(`/private/main/${articleId}`);
+    if (req.session.currentUser){
+      res.redirect(`/private/main/${articleId}`);
+    }else{
+      res.redirect(`/article/main/${articleId}`);
+    }
+    
   }
 });
 
