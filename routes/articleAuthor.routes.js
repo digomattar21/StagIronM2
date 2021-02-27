@@ -87,7 +87,7 @@ router.get("/private/main/:articleId", async (req, res) => {
 
 router.get("/article/main/:articleId", async (req, res) => {
   try {
-    await News.deleteMany()
+    await News.deleteMany({country:{$eq:"related"}})
     const { articleId } = req.params;
     let article = await Article.findById(articleId).populate("author comments");
 
