@@ -53,10 +53,11 @@ router.post("/private/createArticle", async (req, res, nxt) => {
 
 router.get("/private/main/:articleId", async (req, res) => {
   try {
-    await News.deleteMany()
+    await News.deleteMany({country:{$eq:"related"}});
     const { articleId } = req.params;
     let article = await Article.findById(articleId).populate("author comments");
-
+    let author = await User.findById(article.author._id).populate('settings');
+    console.log(author)
     let category = article.category;
 
     if (category === ' main' || category === 'comprar ou vender') {
@@ -75,7 +76,8 @@ router.get("/private/main/:articleId", async (req, res) => {
       userInSession: req.session.currentUser,
       layout: false,
       comments: comments,
-      newsRelated: news
+      newsRelated: news,
+      user:author
     });
   } catch (err) {
     console.log(`Error while getting the details about this article: ${err}`);
@@ -87,10 +89,11 @@ router.get("/private/main/:articleId", async (req, res) => {
 
 router.get("/article/main/:articleId", async (req, res) => {
   try {
-    await News.deleteMany({country:{$eq:"related"}})
+    await News.deleteMany({country:{$eq:"related"}});
     const { articleId } = req.params;
     let article = await Article.findById(articleId).populate("author comments");
-
+    let author = await User.findById(article.author._id).populate('settings');
+    console.log(author)
     let comments = await Comment.find({ article: article._id }).populate(
       "author likes"
     );
@@ -111,14 +114,16 @@ router.get("/article/main/:articleId", async (req, res) => {
         userInSession: req.session.currentUser,
         layout: false,
         comments: comments,
-        newsRelated: news
+        newsRelated: news,
+        user:author
       });
     } else {
       res.render("main/articleDetail.hbs", {
         article: article,
         userInSession: req.session.currentUser,
         comments: comments,
-        newsRelated: news
+        newsRelated: news,
+        user:article
       });
     }
   } catch (err) {
@@ -203,7 +208,7 @@ router.get("/private/author/:authorId/articles", async (req, res) => {
 router.get("/private/author/:authorId/perfil", async (req, res) => {
   try {
     const { authorId } = req.params;
-    let user = await User.findById(authorId).populate("articles carteira");
+    let user = await User.findById(authorId).populate("articles carteira settings");
 
     let carteira = await Carteira.findById(user.carteira._id);
     let patrimonio = carteira.patrimonio;
@@ -242,6 +247,8 @@ router.get("/private/author/:authorId/perfil", async (req, res) => {
     let lowest = pickLowest(dailyChanges, num);
 
     await carteira.save();
+    console.log(typeof user.settings.walletpublic);
+    console.log(typeof user.settings.destaquespublic)
 
     if (req.session.currentUser){
       res.render("private/author-profile-perfil.hbs", {

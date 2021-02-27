@@ -133,14 +133,12 @@ router.get("/private/minha-carteira", async (req, res) => {
       
       };
       carteira.patrimonio += parseFloat(ticker.position);
-      console.log(carteira.patrimonio)
 
       tickerInfo.push(info);
     }
 
     carteira.markModified("patrimonio");
     await carteira.save();
-    console.log(carteira.patrimonio)
 
     res.render("private/minha-carteira.hbs", {
       layout: false,
@@ -456,7 +454,7 @@ router.get("/private/user/settings", async  (req, res) =>{
 });
 
 
-router.post('/private/user/settings/update', async  (req, res) => {
+router.post('/private/user/settings/update',  async  (req, res) => {
   const { biografia, sexo, fblink, twitterlink, instalink, walletpublic, destaquespublic} = req.body;
   try{
     
