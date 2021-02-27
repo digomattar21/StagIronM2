@@ -2,13 +2,38 @@ require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const session = require("express-session");
-const User = require("../models/User.model");
 const bcrypt = require("bcryptjs");
-var saltRounds = 12;
 const nodemailer = require("nodemailer");
+const http = require("http");
+const redis = require("redis");
+const { RateLimiterRedis } = require('rate-limiter-flexible');
+
+const User = require("../models/User.model");
 const Article = require("../models/Article.model");
 const Carteira = require("../models/Carteira.model");
-const Settings = require("../models/Settings.model")
+const Settings = require("../models/Settings.model");
+
+const redisClient = redis.createClient({
+  enable_offline_queue: false,
+  port: 22799,
+  host:'redis://:pb1b4b4ae463667f3cf32847f94a11bcf86ed0b685ea8b6d7c21ec2fc9cc7bbba@ec2-52-23-21-53.compute-1.amazonaws.com'
+});
+
+redisClient.on("error", function (err) {
+  console.log("Error " + err);
+});
+const maxFails = 3;
+
+const failsByUsernameLimiter = new RateLimiterRedis({
+  redis: redisClient,
+  keyPrefix: 'login_fail_consecutive_username',
+  points: maxFails,
+  duration: 216000, //3hrs until reset
+  blockDuration: 900 // 15 min
+});
+
+var saltRounds = 12;
+
 
 router.get("/auth/signup", (req, res) => {
   res.render("auth/sign-up.hbs");
@@ -16,8 +41,10 @@ router.get("/auth/signup", (req, res) => {
 
 router.post("/auth/sign-up", async (req, res) => {
   try {
+
     var { username, email, password } = req.body;
     var salt = await bcrypt.genSalt(saltRounds);
+
 
     var alreadyExistsEmail = await User.findOne({ email: email });
     var passRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,20}$/;
@@ -60,28 +87,54 @@ router.post("/auth/login", async (req, res) => {
     //console.log("SESSION==>", req.session);
     const { username, password } = req.body;
 
+    const rlUser = failsByUsernameLimiter.get(username);
+
+
     if (username === "" || password === "") {
       throw new Error(`Por favor insira seu nome de usuário e senha `);
     }
 
-    let user =  await User.findOne({ username: username }).populate('articles');
+    let user = await User.findOne({ username: username }).populate('articles');
 
     if (user != null) {
       let validate = await bcrypt.compareSync(password, user.password);
 
-      if (validate) {
-        req.session.currentUser = user;
-
-        res.redirect('/private/main');
-    
+      if (rlUser != null && rlUser.consumedPoints > maxFails) {
+        const retry = Math.round(rlUser.msBeforeNext / 1000) || 1;
+        let r = 'Tente Novamente Apos' + (String(retry)+'s') || '15 minutos';;
+        throw new Error(r)
       } else {
-        throw new Error(`Senha Incorreta`);
+        if (validate) {
+          req.session.currentUser = user;
+          if (rlUser !==null && rlUser.consumedPoints>0){
+            await failsByUsernameLimiter.delete(username)
+          }
+          res.redirect('/private/main');
+
+        } else {
+          try{
+            await failsByUsernameLimiter.consume(username);
+            throw new Error(`Senha Incorreta`);
+          }catch(rejected){
+            if (rejected instanceof Error){
+              throw rejected;
+            }else{
+              let r = "Tente de novo apos " + (String(Math.round(rejected.msBeforeNext/1000))+'s') || '15 minutos'
+              throw new Error(r)
+            }
+
+          }
+
+        }
+
       }
+
+
     } else {
       throw new Error(`Nome de usuário nao encontrado`);
     }
   } catch (e) {
-    console.log(e);
+    console.log(e.message);
     res.render("auth/login.hbs", { msg: e });
   }
 });
@@ -101,9 +154,9 @@ router.post("/auth/confirm", async (req, res) => {
 
       req.session.currentUser = user;
 
-      let carteiraCreate = await Carteira.create({user: user._id, patrimonio:0});
+      let carteiraCreate = await Carteira.create({ user: user._id, patrimonio: 0 });
 
-      let userSettings = await Settings.create({user: req.session.currentUser._id, biografia: '', sexo: 'nao', fblink: '', twitterlink: '', instalink: '', walletpublic: 'off', destaquespublic: 'off'})
+      let userSettings = await Settings.create({ user: req.session.currentUser._id, biografia: '', sexo: 'nao', fblink: '', twitterlink: '', instalink: '', walletpublic: 'off', destaquespublic: 'off' })
 
       let updated = await User.findByIdAndUpdate(user._id, {
         $push: { carteira: carteiraCreate._id, settings: userSettings._id },
@@ -127,9 +180,9 @@ router.post("/auth/confirm", async (req, res) => {
     }
   } catch (err) {
     console.log(err);
-    setTimeout(() =>{
+    setTimeout(() => {
       res.redirect('index');
-    },1000);
+    }, 1000);
   }
 });
 
