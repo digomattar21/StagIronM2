@@ -15,8 +15,6 @@ const Settings = require("../models/Settings.model");
 
 const redisClient = redis.createClient({
   enable_offline_queue: false,
-  port: 22799,
-  host:'redis://:pb1b4b4ae463667f3cf32847f94a11bcf86ed0b685ea8b6d7c21ec2fc9cc7bbba@ec2-52-23-21-53.compute-1.amazonaws.com'
 });
 
 redisClient.on("error", function (err) {
@@ -101,25 +99,25 @@ router.post("/auth/login", async (req, res) => {
 
       if (rlUser != null && rlUser.consumedPoints > maxFails) {
         const retry = Math.round(rlUser.msBeforeNext / 1000) || 1;
-        let r = 'Tente Novamente Apos' + (String(retry)+'s') || '15 minutos';;
+        let r = 'Tente Novamente Apos' + (String(retry) + 's') || '15 minutos';;
         throw new Error(r)
       } else {
         if (validate) {
           req.session.currentUser = user;
-          if (rlUser !==null && rlUser.consumedPoints>0){
+          if (rlUser !== null && rlUser.consumedPoints > 0) {
             await failsByUsernameLimiter.delete(username)
           }
           res.redirect('/private/main');
 
         } else {
-          try{
+          try {
             await failsByUsernameLimiter.consume(username);
             throw new Error(`Senha Incorreta`);
-          }catch(rejected){
-            if (rejected instanceof Error){
+          } catch (rejected) {
+            if (rejected instanceof Error) {
               throw rejected;
-            }else{
-              let r = "Tente de novo apos " + (String(Math.round(rejected.msBeforeNext/1000))+'s') || '15 minutos'
+            } else {
+              let r = "Tente de novo apos " + (String(Math.round(rejected.msBeforeNext / 1000)) + 's') || '15 minutos'
               throw new Error(r)
             }
 
