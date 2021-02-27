@@ -169,11 +169,63 @@ router.post("/private/ticker-search", async (req, res) => {
       ],
     });
 
+    let dividendData = await yf.historical({
+      symbol:`${queryCap}`,
+      to: await getTodayDate(),
+      period:'v'
+    });
+    
+    let dividendDataArray = [];
+
+    dividendData.forEach((data,index) => {
+      let obj ={};
+      obj[`year`] = parseInt(data.date.toString().slice(11,15));
+      let month = data.date.toString().slice(4,7);
+      let monthToInt = getMonth(month);
+      obj[`month`] = monthToInt;
+      obj[`dividends`] = data.dividends;
+      obj['date'] = `${obj[`year`]}-${obj[`month`]}`
+      dividendDataArray.push(obj)
+    });
+
+    dividendDataArray.sort((a,b) =>{
+      if (a.year>b.year){
+        return 1
+      }
+      if(a.year<b.year){
+        return -1
+      }
+
+      if(a.year===b.year){
+        if(a.month>b.month){
+          return 1
+        }
+        if(a.month<b.month){
+          return -1
+        }
+        if(a.month===b.month){
+          return 0
+        }
+      }
+
+    });
+
+    let datesArray = [];
+    let dividendsArray = [];
+
+    dividendDataArray.forEach((data,index) =>{
+        datesArray.push(data.date);
+        dividendsArray.push(data.dividends)
+
+    })
+
+
     let hasTicker = false;
 
     let user = await User.findById(req.session.currentUser._id).populate(
       "carteira"
     );
+  
 
     let tickers = user.carteira.tickers;
 
@@ -268,7 +320,6 @@ router.post("/private/ticker-search", async (req, res) => {
       var fiftyTwoWeekLow = data.summaryDetail.fiftyTwoWeekLow.toFixed(2);
     }
 
-    console.log(data);
 
     res.render("private/private-company-info.hbs", {
       sumDet: data.summaryDetails,
@@ -286,6 +337,10 @@ router.post("/private/ticker-search", async (req, res) => {
       fiftyTwoWeekLow,
       fiftyTwoWeekHigh,
       hasTicker,
+      layout:false,
+      dates: datesArray,
+      dividends: dividendsArray,
+      userInSession: req.session.currentUser,
     });
   } catch (e) {
     console.log(e);
@@ -469,6 +524,16 @@ router.post('/private/user/settings/update',  async  (req, res) => {
   }
 })
 
+function getTodayDate() {
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, "0");
+  var mm = String(today.getMonth() + 1).padStart(2, "0");
+  var yyyy = today.getFullYear();
+
+  today = yyyy + "-" + mm + "-" + dd;
+  return today;
+}
+
 function pickHighest(obj, num) {
   const requiredObj = {};
   if (num > Object.keys(obj).length) {
@@ -501,6 +566,37 @@ function pickLowest(obj, num) {
 
 function toMillion(data) {
   return (data / 1000000).toFixed(1);
+}
+
+function getMonth(string){
+  switch(string){
+    case 'Jan':
+      return 1;
+    case 'Feb':
+      return 2;
+    case 'Mar':
+      return 3;
+    case 'Apr':
+      return 4;
+    case 'May':
+      return 5;
+    case 'Jun':
+      return 6;
+    case 'Jul':
+      return 7;
+    case 'Aug':
+      return 8;
+    case 'Sep':
+      return 9;
+    case 'Oct':
+      return 10;
+    case 'Nov':
+      return 11;
+    case 'Dec':
+      return 12;
+    default:
+      return 1;
+  }
 }
 
 module.exports = router;

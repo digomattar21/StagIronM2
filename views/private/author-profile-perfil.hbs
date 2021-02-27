@@ -59,9 +59,9 @@
         </div>
          {{#if (verifyEmpty user.settings.biografia)}}
         <div class="row justify-content-center" style='border:1px solid lightgray'>
-            <div class="col-8 col-sm-8 col-md-9 col-lg-6 col-xl-6"
-                <div class="d-flex flex-column justify-content-center align-items-start" style="height: 100px;">
-                    <h6 style="color: #017bcd;font-weight: 600;">Bio</h6>
+            <div class="col-8 col-sm-8 col-md-9 col-lg-6 col-xl-6">
+                <div class="d-flex flex-column justify-content-center align-items-center" style="height: auto; border:1px solid lightgray; padding:15px;border-radius:1rem">
+                    <h6 style="color: #017bcd;font-weight: 600;text-transform: uppercase;font-size:18px">Bio</h6>
                     <div style="height: 70%;width: 95%;" style='background-color:white'>
                         <p>{{user.settings.biografia}}</p>
                     </div>
