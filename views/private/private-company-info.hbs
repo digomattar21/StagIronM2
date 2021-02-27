@@ -4,19 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="/assets/css/Navigation-with-Search.css">
-    <link rel="stylesheet" href="/assets/css/Navigation-Clean.css">
-    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/assets/fonts/ionicons.css">
-    <link rel="stylesheet" href="/assets/ionicons.min.css">
-    <link rel="stylesheet" href="/assets/css/member-area.css">
-    <link rel="stylesheet" href="/assets/css/Header-Blue.css">
-    <link rel="stylesheet" href="/assets/css/company-info.css">
+  <link rel="stylesheet" href="/assets/css/Navigation-with-Search.css">
+  <link rel="stylesheet" href="/assets/css/Navigation-Clean.css">
+  <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+  
+  <link rel="stylesheet" href="/assets/fonts/ionicons.css">
+  <link rel="stylesheet" href="/assets/ionicons.min.css">
+  <link rel="stylesheet" href="/assets/css/member-area.css">
+  <link rel="stylesheet" href="/assets/css/Header-Blue.css">
+  <link rel="stylesheet" href="/assets/css/company-info.css">
+  <link rel="stylesheet" href="/assets/css/index.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 
 </head>
 
 <body>
 
+    {{>memberNav}}
 
     <section style="height: auto;margin-bottom: 20px;">
         <div class="row d-flex justify-content-center" style="margin-top: 80px;">
@@ -346,28 +350,67 @@
         </div>
     </section>
 
-    <section class='first-graph-section' style='width=100%; height:600px'>
+    <section class='first-graph-section' style='width=100%; height:auto; margin-top:80px; margin-bottom: 80px'>
 
-        {{!-- POSSIVELMENTE IMPLEMENTAR GRAFICO DO TICKER (PRECO DA ACAO OU DE DIVIDENDOS) --}}
-        <canvas id='myChart' sytle='width:450px; height: 300px'></canvas>
+        <div class='row d-flex flex-row justify-content-center' style='height:auto'>
+            <div class='col-lg-6 col-xl-6 col-md-8 col-sm-8'>
+                <canvas id='dividendsChart' ></canvas>
+            </div>
+        </div>        
 
     </section>
 
-    <section style="height: auto;">
+    <section style='display:none;'>
+        <p id='dividendsDate'>{{dates}}</p>
+        <p id='dividendsNumber'>{{dividends}}</p>   
+        
+    </section>
+
+    <section style="height: auto; margin-top:80px; margin-bottom: 50px">
         <div class="row justify-content-center">
-            <div class="col-lg-8 offset-lg-0">
-                <h6>DISCUSSÃO</h6>
+            <div class="col-lg-4 offset-lg-0">
+                <div class='d-flex flex-row justify-content-start'>
+                    <h6 style='font-weight: 600'>DISCUSSÃO</h6>
+                    <ion-icon style='margin-left:8px' name="chatbubble-ellipses-outline"></ion-icon>
+                </div>
             </div>
+        </div>
+        <div class="row d-flex flex-column justify-content-center align-items-center" style='margin-top:7px;'>
+            {{#if userInSession}}
+            <div class="col-lg-4 col-xl-4"
+                style='border-right: 1px solid lightgray; border-left: 1px solid lightgray; border-top: 1px solid lightgray'>
+                <div class="d-flex flex-column justify-content-center align-items-start"
+                    style="height: auto; margin-top:20px">
+                    <form action="" method="POST">
+                        <div class="d-flex flex-row justify-content-start align-items-center"
+                            style="width: 400px; min-width: 250px;height: 40px;"><img src="https://picsum.photos/140"
+                                style="width: 10%;height: 100%; border-radius:50%" />
+                            <h5 style='margin-left:3px'>{{userInSession.username}}</h5>
+                            <input type="text" name="articleId" style="display: none;" value="{{article._id}}">
+                        </div><textarea class='comment-input' name="content" placeholder='Digite seu comentario'
+                            minlength="10" maxlength="400" required></textarea>
+                        <button class="btn btn-primary" type="submit"
+                            style="margin-left: 5%;height: 25px;padding: 3px 3px;font-size: 14px;">Postar</button>
+                    </form>
+                </div>
+            </div>
+            {{else}}
+            <div class="row d-flex flex-column justify-content-center align-items-center"
+                style='hieght:auto;margin-top:7px;border-top:1px solid lightgray'></div>
+            {{/if}}
+            {{#each comments}}
+            {{>comment}}
+            {{/each}}
         </div>
     </section>
 
-
+    <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src='/assets/js/autocomplete.js'></script>
-    <script src='/assets/js/charts.js'></script>
+    <script src='/assets/js/tickerCharts.js'></script>
 
 
 </body>
