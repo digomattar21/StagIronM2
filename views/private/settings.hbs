@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações</title>
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/assets/css/Navigation-with-Search.css">
+    <link rel="stylesheet" href="/assets/fonts/ionicons.css">
+    <link rel="stylesheet" href="/assets/ionicons.min.css">
+    <link rel="stylesheet" href="/assets/css/Header-Blue.css">
+    <link rel="icon" href="/img/stag-talk-bulb-logo-white-bg.png">
+    <link rel="stylesheet" href="/assets/css/settings.css">
+
+
+</head>
+
+<body>
+
+    {{>memberNav}}
+
+    <section style="height: auto;">
+        <div class="row justify-content-center">
+            <div class="col-lg-4">
+                <section class="contact-clean" style="background: white;height: auto;">
+                    <form method="post" style="width: 300px;">
+                        <h5 class="text-center" style="margin-bottom: 20px;">Informações sensíveis</h5>
+                        <div class="form-group d-flex align-items-center"><input type="text" class="form-control"
+                                name="username" value="username" readonly
+                                style="width: 60%;border-right-style: none;" /><button class="btn btn-primary"
+                                type="button" style="width: 40%;margin-top: 0;padding: 14px 5px;">alterar</button></div>
+                        <div class="form-group d-flex align-items-center"><input type="text" class="form-control"
+                                name="email" value="email" readonly
+                                style="width: 60%;border-right-style: none;" /><button class="btn btn-primary"
+                                type="button" style="width: 40%;margin-top: 0;padding: 14px 5px;">alterar</button></div>
+                        <div class="form-group d-flex align-items-center"><input type="text" class="form-control"
+                                name="password" value="*******" readonly
+                                style="width: 60%;border-right-style: none;" /><button class="btn btn-primary"
+                                type="button" style="width: 40%;margin-top: 0;padding: 14px 5px;">alterar</button></div>
+                    </form>
+                </section>
+            </div>
+            <div class="col-lg-6">
+                <section class="contact-clean" style="background: white;">
+                    <form action='/private/user/settings/update' method="post">
+                        <h5 class="text-center">Meu Perfil</h5>
+                        <div class="form-group d-flex justify-content-center" style="margin-top: 10px;">
+                            <p class="text-dark" style="font-size: 15px;margin-top: 5px;margin-right: 8px;">Foto de
+                                Perfil:</p><input name='profilepic' type="file" class="form-control-file align-items-center"
+                                style="width: 50%;" accept="image/*" />
+                        </div>
+                        {{#if (verifyEmpty user.settings.biografia)}}
+                        <textarea class="form-control" name="biografia" rows="14" value='{{user.settings.biografia}}'
+                            style="margin-bottom: 16px;font-size: 14px;"></textarea>
+                        {{else}}
+                        <textarea class="form-control" name="biografia" rows="14" placeholder="Biografia"
+                            style="margin-bottom: 16px;font-size: 14px;"></textarea>
+                        {{/if}}
+                        {{#if user.settings.sexo}}
+                        <div class="form-group"><select name='sexo' class="form-control" style="font-size: 14px;">
+                                <option value="{{user.settings.sexo}}" selected>Sexo</option>
+                                <option value="masculino">Masculino</option>
+                                <option value="feminino">Feminino</option>
+                                <option value="nao">Prefiro não identificar</option>
+                            </select></div>
+                        {{else}}
+                        <div class="form-group"><select name='sexo' class="form-control" style="font-size: 14px;">
+                                <option value="nao" selected>Sexo</option>
+                                <option value="masculino">Masculino</option>
+                                <option value="feminino">Feminino</option>
+                                <option value="nao">Prefiro não identificar</option>
+                            </select></div>
+                        {{/if}}
+                        <div class="form-group d-flex align-items-center"><input type="text" class="form-control"
+                                value="Verficação de autoria" readonly
+                                style="width: 71%;border-right-style: none;font-size: 14px;" /><button
+                                class="btn btn-primary" type="button"
+                                style="width: 30%;margin-top: 0;padding: 15px 5px;font-size: 0.7rem;">solicitar</button>
+                        </div>
+                        {{#if (verifyEmpty user.settings.fblink)}}
+                        <div class="form-group d-flex align-items-center"><input name='fblink' type="text" class="form-control"
+                                 style="width: 71%;border-right-style: none;font-size: 14px;"
+                                value="{{user.settings.fblink}}" /><button
+                                class="btn btn-primary justify-content-center align-items-center" type="button"
+                                style="width: 12%;margin-top: 0;padding: 12px 5px;font-size: 0.7rem;">
+                                <ion-icon name="logo-facebook" style="font-size: 16px; color: white"></ion-icon>
+                            </button></div>
+                        {{else}}
+                        <div class="form-group d-flex align-items-center"><input name='fblink' type="text" class="form-control"
+                                 style="width: 71%;border-right-style: none;font-size: 14px;"
+                                placeholder="Facebook Link" /><button
+                                class="btn btn-primary justify-content-center align-items-center" type="button"
+                                style="width: 12%;margin-top: 0;padding: 12px 5px;font-size: 0.7rem;">
+                                <ion-icon name="logo-facebook" style="font-size: 16px; color: white"></ion-icon>
+                            </button></div>
+                        {{/if}}
+
+                        {{#if (verifyEmpty user.settings.twitterlink)}}
+                        <div class="form-group d-flex align-items-center"><input name='twitterlink' type="text" class="form-control"
+                                 style="width: 71%;border-right-style: none;font-size: 14px;"
+                                value="{{user.settings.twitterlink}}" /><button
+                                class="btn btn-primary justify-content-center align-items-center" type="button"
+                                style="width: 12%;margin-top: 0;padding: 13px 5px;font-size: 0.7rem;">
+                                <ion-icon name="logo-twitter" style="font-size: 16px; color: white"></ion-icon>
+                            </button></div>
+                        {{else}}
+                        <div class="form-group d-flex align-items-center"><input name='twitterlink' type="text" class="form-control"
+                                 style="width: 71%;border-right-style: none;font-size: 14px;"
+                                placeholder="Twitter Link" /><button
+                                class="btn btn-primary justify-content-center align-items-center" type="button"
+                                style="width: 12%;margin-top: 0;padding: 13px 5px;font-size: 0.7rem;">
+                                <ion-icon name="logo-twitter" style="font-size: 16px; color: white"></ion-icon>
+                            </button></div>
+                        {{/if}}
+
+                        {{#if (verifyEmpty user.settings.instalink)}}
+                        <div class="form-group d-flex align-items-center"><input name='instalink' type="text" class="form-control"
+                                 style="width: 71%;border-right-style: none;font-size: 14px;"
+                                value="{{user.settings.instalink}}" /><button
+                                class="btn btn-primary d-flex justify-content-center align-items-center" type="button"
+                                style="width: 12%;margin-top: 0;padding: 15px 5px;font-size: 0.7rem;height: 42px;">
+                                <ion-icon name="logo-instagram" style="font-size: 16px; color: white"></ion-icon>
+                            </button></div>
+                        {{else}}
+                        <div class="form-group d-flex align-items-center"><input name='instalink' type="text" class="form-control"
+                                 style="width: 71%;border-right-style: none;font-size: 14px;"
+                                 placeholder='Instagram Link'/><button
+                                class="btn btn-primary d-flex justify-content-center align-items-center" type="button"
+                                style="width: 12%;margin-top: 0;padding: 15px 5px;font-size: 0.7rem;height: 42px;">
+                                <ion-icon name="logo-instagram" style="font-size: 16px; color: white"></ion-icon>
+                            </button></div>
+                        {{/if}}
+
+                        <div class="form-group">
+                            {{#if (verifyOn user.settings.walletpublic)}}
+                            <div class="form-check text-left">
+                                <input type="checkbox" class="form-check-input"
+                                    id="formCheck-1" checked name="walletpublic" />
+                                    <label class="form-check-label"
+                                    for="formCheck-1">Mostrar gráfico da carteira</label>
+                                    </div>
+                            {{else}}
+                            <div class="form-check text-left">
+                                <input type="checkbox" class="form-check-input"
+                                    id="formCheck-1" name="walletpublic" />
+                                    <label class="form-check-label"
+                                    for="formCheck-1">Mostrar gráfico da carteira</label>
+                                    </div>
+                            {{/if}}
+                            {{#if (verifyOn user.settings.destaquespublic)}}
+                            <div class="form-check text-left">
+                                <input type="checkbox" class="form-check-input"
+                                    id="formCheck-1" checked name="destaquespublic" />
+                                    <label class="form-check-label"
+                                    for="formCheck-1">Mostar destaques da carteira</label></div>
+                            {{else}}
+                            <div class="form-check text-left">
+                                <input type="checkbox" class="form-check-input"
+                                    id="formCheck-1" name="destaquespublic" />
+                                    <label class="form-check-label"
+                                    for="formCheck-1">Mostrar gráfico da carteira</label>
+                                    </div>
+                            {{/if}}
+                        </div>
+                        <div class="form-group text-center"><button class="btn btn-primary" type="submit">salvar
+                                mudanças</button></div>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src='/assets/js/autocomplete.js'></script>
+</body>
+
+</html>

@@ -29,7 +29,7 @@
 }
 
 .em-alta-container {
-  width: 100px;
+  width: 150px;
   height: 10px;
   margin-left: 10px;
   display: flex;
@@ -181,15 +181,15 @@ a:hover {
 }
 
 .noticia-embaixo-carousel {
-  height: 40px;
+  height: 35px;
 }
-.noticia-embaixo-carousel > span {
-  font-size: 1rem;
+.noticia-embaixo-carousel >a> span {
+  font-size: 1.1rem;
   font-weight: bold;
   color: black;
 }
 
-.noticia-embaixo-carousel > span:hover {
+.noticia-embaixo-carousel >a> span:hover {
   color: #017bcd;
   cursor: pointer;
 }

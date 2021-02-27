@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/assets/css/Navigation-with-Search.css">
+    <link rel="stylesheet" href="/assets/fonts/ionicons.css">
+    <link rel="stylesheet" href="/assets/ionicons.min.css">
+    <link rel="stylesheet" href="/assets/css/Header-Blue.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,500;1,300;1,400&display=swap"
+        rel="stylesheet">
+    <link rel="icon" href="/img/stag-talk-bulb-logo-white-bg.png">
+    <link rel="stylesheet" href="/assets/css/Footer-Dark.css">
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="stylesheet" href="/assets/css/index.css">
+    <link rel="stylesheet" href="/assets/css/article-page.css">
+
+</head>
+
+<body>
+
+
+    <section style="width: 100%;height: auto;margin-top: 80px;">
+        <div class="row d-flex flex-row flex-wrap" style='margin-left: 15%; margin-right:15%'>
+            {{#each articles}}
+            <div class="profile-card-4 text-center">
+                <a href="/article/main/{{this._id}}"><img src="{{imgPath}}" class="img img-responsive"></a>
+                <div class="profile-content">
+                    <div class="profile-name">
+                    </div>
+                    <div class="profile-description">
+                        <h5>{{this.title}}</h5>
+                    </div>
+                    <div class="row d-flex" style='justify-content:space-evenly'>
+                        <div class="col-xs-5">
+                            <div class="profile-overview">
+                                <p>AUTHOR</p>
+                                <h6>{{this.author.username}}</h6>
+                            </div>
+                        </div>
+                        <div class="col-xs-5 d-flex">
+                            <div class="profile-overview">
+                                <p>ARTIGOS</p>
+                                <h6>{{this.author.articles.length}}</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{/each}}
+
+        </div>
+    </section>
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src='/assets/js/autocomplete.js'></script>
+</body>
+
+
+</html>

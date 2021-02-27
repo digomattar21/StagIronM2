@@ -3,7 +3,7 @@
     style='margin-top:20px;border-right: 1px solid lightgray; border-left: 1px solid lightgray;'>
     <div class="d-flex flex-column justify-content-center align-items-start" style="height: auto;">
         <div class="d-flex flex-row justify-content-start align-items-center" style="width: 450px;height: 40px;"><img
-                src='https://picsum.photos/200' style="width: 10%;height: 90%; border-radius:50%" />
+                src='https://picsum.photos/200' style="width: 10%;height: 100%; border-radius:50%" />
             <h5 style='margin-left:5px;'>{{this.author.username}}</h5>
         </div>
         <div
@@ -12,22 +12,24 @@
         </div>
         <form action="/private/comment/like" method='post'>
         <input type="text" style='display:none' value='{{article._id}}' name='articleId'>    
-            <input type="text" style='display:none' value='{{this._id}}' name='commentId'>    
+            <input type="text" style='display:none' value='{{this._id}}' name='commentId'>  
+            
             <button class="btn btn-primary" type="submit"
                 style="margin-top:5px;margin-left: 20px;height: 25px;padding: 3px 3px;font-size: 16px;display:flex; flex-direction: row; align-items: center; justify-content: space-evenly">
                 <ion-icon name="thumbs-up-outline"></ion-icon>
                 <div style='margin-left:3px; font-size:14px'><span>{{this.likes.length}}</span></div>
             </button>
+            
         </form>
 
         {{#if msg}}
         <p>{{msg}}</p>
         {{/if}}
 
-        {{#if (verifyEqual this.author.username userInSession.username)}}
+        {{!-- {{#if (verifyEqual this.author.username userInSession.username)}}
         <button class="btn btn-primary" type="button"
             style="margin-top:5px;margin-left: 5%;height: 25px;padding: 3px 3px;font-size: 14px;">Delete</button>
-        {{/if}}
+        {{/if}} --}}
 
 
     </div>

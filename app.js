@@ -52,11 +52,21 @@ hbs.registerHelper('biggerThanZero', function (value) {
 });
 
 hbs.registerHelper('getArticlesLength', function (articles) {
-  return articles.length
+  return articles.length;
 });
 
 hbs.registerHelper('verifyEqual', function (arg1,arg2) {
-  return arg1===arg2
+  console.log(arg1, arg2);
+  console.log(arg1==arg2)
+  return arg1==arg2;
+});
+
+hbs.registerHelper('verifyOn', function (arg1) {
+  return arg1==='on';
+});
+
+hbs.registerHelper('verifyEmpty', function (arg1) {
+  return arg1!='';
 });
 
 
@@ -71,12 +81,14 @@ require("./configs/db.config");
 const index = require("./routes/index");
 const private = require("./routes/private.routes");
 const auth = require("./routes/auth.routes");
+const articles = require("./routes/articleAuthor.routes")
 
 //app.use(helmet());
 
 app.use("/", index);
 app.use("/", private);
 app.use('/', auth);
+app.use('/', articles)
 
 
 

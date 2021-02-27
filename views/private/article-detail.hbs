@@ -78,13 +78,13 @@ margin-left: -15px'>
     <div class="row" style='margin-top: 40px;'>
         <div class="col d-flex flex-column justify-content-center align-items-center">
             <div style="width: 60%;height: auto;">
-                
+
             </div>
         </div>
     </div>
 
-    
-    <section style="height: auto; margin-top:80px">
+
+    <section style="height: auto; margin-top:80px; margin-bottom: 50px">
         <div class="row justify-content-center">
             <div class="col-lg-4 offset-lg-0">
                 <div class='d-flex flex-row justify-content-start'>
@@ -97,10 +97,11 @@ margin-left: -15px'>
             {{#if userInSession}}
             <div class="col-lg-4 col-xl-4"
                 style='border-right: 1px solid lightgray; border-left: 1px solid lightgray; border-top: 1px solid lightgray'>
-                <div class="d-flex flex-column justify-content-center align-items-start" style="height: auto; margin-top:20px">
+                <div class="d-flex flex-column justify-content-center align-items-start"
+                    style="height: auto; margin-top:20px">
                     <form action="/private/comment/post" method="POST">
                         <div class="d-flex flex-row justify-content-start align-items-center"
-                            style="width: 450px;height: 40px;"><img src="https://picsum.photos/140"
+                            style="width: 400px; min-width: 250px;height: 40px;"><img src="https://picsum.photos/140"
                                 style="width: 10%;height: 100%; border-radius:50%" />
                             <h5 style='margin-left:3px'>{{userInSession.username}}</h5>
                             <input type="text" name="articleId" style="display: none;" value="{{article._id}}">
@@ -112,11 +113,63 @@ margin-left: -15px'>
                 </div>
             </div>
             {{else}}
-            <div class="row d-flex flex-column justify-content-center align-items-center" style='hieght:auto;margin-top:7px;border-top:1px solid lightgray'></div>
+            <div class="row d-flex flex-column justify-content-center align-items-center"
+                style='hieght:auto;margin-top:7px;border-top:1px solid lightgray'></div>
             {{/if}}
             {{#each comments}}
             {{>comment}}
             {{/each}}
+        </div>
+    </section>
+    <section style="height: auto; margin-top:40px; margin-bottom:50px">
+        <div class='row justify-content-center'>
+            <div class=' col-4'>
+                <h5 style='color:#017bcd, font-weight: bold; text-align: center'>Noticias Relacionadas</h5>
+            </div>
+
+        </div>
+        <div class="row justify-content-center" style="height: 400px;margin-top: 20px;">
+            <div class="col-lg-3" style="height: auto;">
+
+                <div class="card-group">
+                    <a href="">
+                        <div class="card"><img class="card-img-top w-100 d-block" style='height:200px'
+                                src='{{newsRelated.0.urlToImage}}' />
+                            <div class="card-body">
+                                <h5 class="text-center text-dark card-title" style="font-weight: 600;">
+                                    {{newsRelated.0.title}}</h5>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+            <div class="col-lg-3">
+                <div class="card-group">
+                    <a href="">
+                        <div class="card"><img class="card-img-top w-100 d-block" style='height:200px'
+                                src='{{newsRelated.1.urlToImage}}' />
+                            <div class="card-body">
+                                <h5 class="text-center text-dark card-title" style="font-weight: 600;">
+                                    {{newsRelated.1.title}}</h5>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="card-group">
+                    <a href="">
+                        <div class="card"><img class="card-img-top w-100 d-block" style='height:200px'
+                                src='{{newsRelated.2.urlToImage}}' />
+                            <div class="card-body">
+                                <h5 class="text-center text-dark card-title" style="font-weight: 600;">
+                                    {{newsRelated.2.title}}</h5>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
         </div>
     </section>
 
