@@ -132,18 +132,20 @@ router.get("/private/minha-carteira", async (req, res) => {
         buyPrice: bp
       
       };
-      carteira.patrimonio += parseFloat(ticker.position).toFixed(2);
+      carteira.patrimonio += parseFloat(ticker.position);
+      console.log(carteira.patrimonio)
 
       tickerInfo.push(info);
     }
 
     carteira.markModified("patrimonio");
     await carteira.save();
+    console.log(carteira.patrimonio)
 
     res.render("private/minha-carteira.hbs", {
       layout: false,
       tickers: tickerInfo,
-      patrimonio: carteira.patrimonio,
+      patrimonio: carteira.patrimonio.toFixed(2),
     });
   } catch (err) {
     console.log(err);
