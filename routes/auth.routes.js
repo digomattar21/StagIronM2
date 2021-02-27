@@ -15,6 +15,9 @@ const Settings = require("../models/Settings.model");
 
 const redisClient = redis.createClient({
   enable_offline_queue: false,
+  host: process.env.REDIS_HOST,
+  port: process.env.REDIS_PORT,
+  password: process.env.REDIS_PASS
 });
 
 redisClient.on("error", function (err) {

@@ -62,11 +62,15 @@ hbs.registerHelper('verifyEqual', function (arg1,arg2) {
 });
 
 hbs.registerHelper('verifyOn', function (arg1) {
-  return arg1==='on';
+  return arg1==="on";
 });
 
 hbs.registerHelper('verifyEmpty', function (arg1) {
   return arg1!='';
+});
+
+hbs.registerHelper('checkOn', function (arg1) {
+  return arg1=='on';
 });
 
 

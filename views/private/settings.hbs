@@ -45,7 +45,7 @@
             </div>
             <div class="col-lg-6">
                 <section class="contact-clean" style="background: white;">
-                    <form action='/private/user/settings/update' method="post">
+                    <form action='/private/user/settings/update' method="post" type='multipart/form'>
                         <h5 class="text-center">Meu Perfil</h5>
                         <div class="form-group d-flex justify-content-center" style="margin-top: 10px;">
                             <p class="text-dark" style="font-size: 15px;margin-top: 5px;margin-right: 8px;">Foto de
@@ -53,8 +53,8 @@
                                 style="width: 50%;" accept="image/*" />
                         </div>
                         {{#if (verifyEmpty user.settings.biografia)}}
-                        <textarea class="form-control" name="biografia" rows="14" value='{{user.settings.biografia}}'
-                            style="margin-bottom: 16px;font-size: 14px;"></textarea>
+                        <textarea class="form-control" name="biografia" rows="14" 
+                            style="margin-bottom: 16px;font-size: 14px;">{{user.settings.biografia}}</textarea>
                         {{else}}
                         <textarea class="form-control" name="biografia" rows="14" placeholder="Biografia"
                             style="margin-bottom: 16px;font-size: 14px;"></textarea>

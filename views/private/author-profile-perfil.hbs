@@ -32,7 +32,6 @@
     {{>memberNav}}
 
 
-    {{!-- INSERIR CODIGO HTML DO PERFIL DO AUTOR --}}
     <section style="height: auto; margin-left: 20px; margin-top: 90px;">
         <div class="row d-flex flex-column justify-content-center align-items-center">
             <div class="col-8 col-xl-6 d-flex flex-row justify-content-center align-items-center">
@@ -58,7 +57,43 @@
                 </div>
             </div>
         </div>
+         {{#if (verifyEmpty user.settings.biografia)}}
+        <div class="row justify-content-center" style='border:1px solid lightgray'>
+            <div class="col-8 col-sm-8 col-md-9 col-lg-6 col-xl-6"
+                <div class="d-flex flex-column justify-content-center align-items-start" style="height: 100px;">
+                    <h6 style="color: #017bcd;font-weight: 600;">Bio</h6>
+                    <div style="height: 70%;width: 95%;" style='background-color:white'>
+                        <p>{{user.settings.biografia}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/if}}
+        
+        <div class="row justify-content-center">
+            <div class="col-10 col-sm-10 col-md-11 col-lg-7 col-xl-7">
+                <div class="d-flex flex-row justify-content-center align-items-center social-icons"
+                    style="height: 100px;padding: 0px;">
+                    {{#if user.settings.twitterlink}}
+                    <a href="{{user.settings.twitterlink}}">
+                        <ion-icon name='logo-twitter' style='color:darkgray; height:50px;width:50px'></ion-icon>
+                        </a>
+                    {{/if}}
+                    {{#if user.settings.fblink}}
+                    <a href="{{user.settings.fblink}}">
+                        <ion-icon name='logo-facebook' style='color:darkgray; height:50px;width:50px'></ion-icon>
+                    </a>
+                    {{/if}}
+                    {{#if user.settings.instalink}}
+                    <a href="{{user.settings.instalink}}">
+                        <ion-icon name='logo-instagram' style='color:darkgray; height:50px;width:50px'></ion-icon>
+                    </a>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
         <div class="row d-flex flex-row justify-content-center align-items-center" style='height:auto'>
+            {{#if (checkOn user.settings.walletpublic)}}
             <div class="col-lg-6 col-xl-6 col-6">
                 <div style="height: auto;">
                     <div class="row">
@@ -71,6 +106,8 @@
 
                 </div>
             </div>
+            {{/if}}
+            {{#if (checkOn user.settings.destaquespublic)}}
             <div class='col-lg-6 col-xl-6 col-6'>
                 <div class="row">
                     <div class="col">
@@ -134,65 +171,10 @@
             </div>
 
         </div>
+        {{/if}}
     </section>
 
-    {{!-- <section style="width: 600px;height: 500px; background: linear-gradient(
-  to right bottom,
-  rgba(255, 255, 255, 0.7),
-  rgba(255, 255, 255, 0.3)
-); border-radius: 2rem;">
 
-        <div class="row d-flex" style="height: auto;width: 100%;">
-            <div class="col-md-5 d-flex flex-column justify-content-start align-items-center" style="height: 500px;max-width: 200px; margin-left: 11px; background: linear-gradient(
-  to right bottom,
-  rgba(61, 59, 59, 0.7),
-  rgba(255, 255, 255, 0.3)
-); border-radius: 2rem;">
-                <img src="https://cdn.pixabay.com/photo/2015/09/18/00/24/robin-944887_960_720.jpg"
-                    style="width: 100px; height: 100px; border-radius: 50%;" />
-                <h3 style="font-weight: 600;">{{this.author.username}}Jhongalt</h3>
-                <p style="color: rgb(250, 248, 244);">{{this.author.description}}Trader</p>
-            </div>
-            <div class="col">
-                <div class="d-flex flex-column justify-content-center align-items-center"
-                    style="height: 300px;width: 100%;">
-                    <h2 style="font-size: 25px; font-weight: 600; text-transform: uppercase; spacing-letter: 1.5px;">
-                        sobre</h2>
-                    <hr>
-                    <div class="row">
-                        <div class="col">
-                            <div style="width: 100px;height: 150px;">
-                                <h4
-                                    style="font-size: 15px; font-weight: 600; text-transform: uppercase; spacing-letter: 1.5px;">
-                                    objetivos:</h4>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div style="width: 100px;height: 150px;">
-                                <h4 style="font-size: 15px; font-weight: 600; text-transform: uppercase;
-spacing-letter: 1.5px;">
-                                    preferências:</h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex flex-column justify-content-center align-items-center"
-                    style="height: 300px;width: 100%;">
-                    <h2 style="font-size: 25px; font-weight: 600; text-transform: uppercase; spacing-letter: 1.5px;">
-                        mais votados</h2>
-                    <hr>
-                    <div class="row">
-                        <div class="col">
-                            <div style="height: 150px;width: 100px;"></div>
-                        </div>
-                        <div class="col">
-                            <div style="width: 100px;height: 150px;"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> --}}
 
     <section style='display:none' id='graphDataContainer'>
         <p id='labels'>{{doughnutGraphData.labels}}</p>
