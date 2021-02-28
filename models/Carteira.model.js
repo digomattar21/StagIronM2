@@ -4,8 +4,8 @@ const { Schema, model } = mongoose;
 const carteiraSchema = new Schema(
   {
     user: {type: Schema.Types.ObjectId, ref: "User"},
-    tickers: [{type: Object}],
-    patrimonio: {type: Number}
+    tickers: [{type: Schema.Types.ObjectId, ref: "Ticker"}],
+    patrimonio: {type: Number},
   },
   {
     timestamps: true,

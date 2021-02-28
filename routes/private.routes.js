@@ -8,6 +8,7 @@ const yf = require("yahoo-finance");
 const Carteira = require("../models/Carteira.model");
 const Comment = require("../models/Comment.model");
 const Settings = require("../models/Settings.model");
+const Ticker = require("../models/Ticker.model")
 
 router.get("/private/main", async (req, res) => {
   try {
@@ -15,17 +16,31 @@ router.get("/private/main", async (req, res) => {
 
     let user = await User.findById(id).populate("articles carteira");
 
-    let carteira = await Carteira.findById(user.carteira._id);
+    let carteira = await Carteira.findById(user.carteira._id).populate('tickers');
 
     var dailyChanges = {};
     let labels = [];
     let dawta = [];
     let labelDataObj = {};
 
-    let patrimonio = carteira.patrimonio;
+    var patrimonio = carteira.patrimonio;
     if (!patrimonio) {
       carteira.patrimonio = 0;
+      var patrimonio = 0;
     }
+
+    // carteira.tickers.forEach(async(ticker,index) => {
+    //   let data = await yf.quote({
+    //     symbol: `${ticker.name}`,
+    //     modules: ["price"],
+    //   });
+    //   let changePct = data.price.regularMarketChangePercent * 100;
+    //   dailyChanges[ticker.name] = changePct.toFixed(2);
+    //   ticker['pctOfWallet'] = ((ticker.position / patrimonio) * 100).toFixed(2);
+    //   console.log(ticker.name)
+    //   labels.push(ticker.name.toString());
+    //   dawta.push(((ticker.position / patrimonio) * 100).toFixed(2));
+    // });
 
     for (let i = 0; i < carteira.tickers.length; i++) {
       let ticker = carteira.tickers[i];
@@ -57,6 +72,7 @@ router.get("/private/main", async (req, res) => {
 
     carteira.markModified("tickers");
     await carteira.save();
+    console.log(carteira.tickers)
 
     res.render("private/main.hbs", {
       layout: false,
@@ -98,13 +114,12 @@ router.get("/private/minha-carteira", async (req, res) => {
 
     let tickerInfo = [];
 
-    let carteira = await Carteira.findById(user.carteira._id);
-
+    let carteira = await Carteira.findById(user.carteira._id).populate('tickers');
+    console.log(carteira.tickers)
     //fazendo os calculos de porcetagem da posicao total e aumento do patrimonio
     carteira.patrimonio = 0;
 
-    //Pegando os quotes dos tickers da carteira do usuario
-    for (let i = 0; i < user.carteira.tickers.length; i++) {
+    for (let i = 0; i < carteira.tickers.length; i++) {
       let ticker = carteira.tickers[i];
       let data = await yf.quote({
         symbol: `${ticker.name}`,
@@ -113,36 +128,37 @@ router.get("/private/minha-carteira", async (req, res) => {
 
       let dayChangePct = data.price.regularMarketChangePercent * 100;
 
-      if (ticker.buyPrice){
+      if (ticker.buyPrice) {
         var bp = ticker.buyPrice;
-      }else{
+      } else {
         var bp = null;
       }
 
-      let info = {
-        name: ticker.name,
-        dayChangePct: dayChangePct.toFixed(2),
-        currentPrice: data.price.regularMarketPrice,
-        positionUn: ticker.positionUn,
-        position: ticker.position,
-        volume: data.price.regularMarketVolume
-          .toString()
-          .replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-        mktCap: (data.price.marketCap / 1000000000).toFixed(2),
-        buyPrice: bp
-      
-      };
+      ticker.dayChangePct = dayChangePct.toFixed(2);
+      ticker.currentPrice = data.price.regularMarketPrice;
+      ticker.positionUn = ticker.positionUn;
+      ticker.position = ticker.position
+      ticker.volume = data.price.regularMarketVolume
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      ticker.mktCap = (data.price.marketCap / 1000000000).toFixed(2);
+      ticker.buyPrice = bp;
+
+
       carteira.patrimonio += parseFloat(ticker.position);
 
-      tickerInfo.push(info);
     }
 
+    console.log(carteira.patrimonio)
+
+
     carteira.markModified("patrimonio");
+    carteira.markModified('tickers')
     await carteira.save();
 
     res.render("private/minha-carteira.hbs", {
       layout: false,
-      tickers: tickerInfo,
+      tickers: carteira.tickers,
       patrimonio: carteira.patrimonio.toFixed(2),
     });
   } catch (err) {
@@ -169,18 +185,20 @@ router.post("/private/ticker-search", async (req, res) => {
       ],
     });
 
+    console.log(data)
+
     let dividendData = await yf.historical({
-      symbol:`${queryCap}`,
+      symbol: `${queryCap}`,
       to: await getTodayDate(),
-      period:'v'
+      period: 'v'
     });
-    
+
     let dividendDataArray = [];
 
-    dividendData.forEach((data,index) => {
-      let obj ={};
-      obj[`year`] = parseInt(data.date.toString().slice(11,15));
-      let month = data.date.toString().slice(4,7);
+    dividendData.forEach((data, index) => {
+      let obj = {};
+      obj[`year`] = parseInt(data.date.toString().slice(11, 15));
+      let month = data.date.toString().slice(4, 7);
       let monthToInt = getMonth(month);
       obj[`month`] = monthToInt;
       obj[`dividends`] = data.dividends;
@@ -188,22 +206,22 @@ router.post("/private/ticker-search", async (req, res) => {
       dividendDataArray.push(obj)
     });
 
-    dividendDataArray.sort((a,b) =>{
-      if (a.year>b.year){
+    dividendDataArray.sort((a, b) => {
+      if (a.year > b.year) {
         return 1
       }
-      if(a.year<b.year){
+      if (a.year < b.year) {
         return -1
       }
 
-      if(a.year===b.year){
-        if(a.month>b.month){
+      if (a.year === b.year) {
+        if (a.month > b.month) {
           return 1
         }
-        if(a.month<b.month){
+        if (a.month < b.month) {
           return -1
         }
-        if(a.month===b.month){
+        if (a.month === b.month) {
           return 0
         }
       }
@@ -213,19 +231,17 @@ router.post("/private/ticker-search", async (req, res) => {
     let datesArray = [];
     let dividendsArray = [];
 
-    dividendDataArray.forEach((data,index) =>{
-        datesArray.push(data.date);
-        dividendsArray.push(data.dividends)
+    dividendDataArray.forEach((data, index) => {
+      datesArray.push(data.date);
+      dividendsArray.push(data.dividends)
 
     })
-
 
     let hasTicker = false;
 
     let user = await User.findById(req.session.currentUser._id).populate(
       "carteira"
     );
-  
 
     let tickers = user.carteira.tickers;
 
@@ -283,6 +299,9 @@ router.post("/private/ticker-search", async (req, res) => {
     data.financialData.profitMargins = (
       data.financialData.profitMargins * 100
     ).toFixed(2);
+    let dYield = data.summaryDetail.dividendYield = (data.summaryDetail.dividendYield*100).toFixed(2);
+    let payoutRatio = (data.summaryDetail.payoutRatio*100).toFixed(2);
+    let avgYieldFiveYear = data.summaryDetail.fiveYearAvgDividendYield;
 
     //fazer calculos p colocar no company info
 
@@ -337,10 +356,13 @@ router.post("/private/ticker-search", async (req, res) => {
       fiftyTwoWeekLow,
       fiftyTwoWeekHigh,
       hasTicker,
-      layout:false,
+      layout: false,
       dates: datesArray,
       dividends: dividendsArray,
       userInSession: req.session.currentUser,
+      dividendYield: dYield,
+      avgYield: avgYieldFiveYear,
+      payoutRatio: payoutRatio
     });
   } catch (e) {
     console.log(e);
@@ -367,17 +389,28 @@ router.post("/private/addticker", async (req, res) => {
     let volume = yfData.price.regularMarketVolume;
     let mktCap = yfData.price.marketCap / 1000000000;
 
-    let tickerInfo = {
+    // let tickerInfo = {
+    //   name: symbol,
+    //   currentPrice: yfData.price.regularMarketPrice,
+    //   dayChangePct: dayChangePct,
+    //   mktCap: mktCap,
+    //   volume: volume,
+    //   position: 0,
+    // };
+
+    let ticker = await Ticker.create({
+      carteira: user.carteira._id,
       name: symbol,
       currentPrice: yfData.price.regularMarketPrice,
       dayChangePct: dayChangePct,
       mktCap: mktCap,
       volume: volume,
       position: 0,
-    };
+      positionUn: 0
+    });
 
     let updatedCarteira = await Carteira.findByIdAndUpdate(user.carteira._id, {
-      $push: { tickers: tickerInfo },
+      $push: { tickers: ticker._id },
     });
 
     res.redirect("/private/minha-carteira");
@@ -389,29 +422,36 @@ router.post("/private/addticker", async (req, res) => {
   }
 });
 
-router.post("/private/:tickerName/updateTicker", async (req, res) => {
+router.post("/private/tickerName/updateTicker", async (req, res) => {
   try {
-    const { tickerName, positionUn, currentPrice } = req.body;
+    const { tickerId, tickerName, positionUn, currentPrice } = req.body;
 
     let user = await User.findById(req.session.currentUser._id).populate(
       "carteira"
     );
 
-    let carteira = await Carteira.findById(user.carteira._id);
+    console.log('positionUn', positionUn);
 
-    carteira.tickers.forEach((ticker, index) => {
-      let positionChange = positionUn - ticker.positionUn;
-      if (ticker.name === tickerName) {
-        ticker["positionUn"] = positionUn;
-        ticker["position"] = (positionUn * currentPrice).toFixed(2);
-        ticker['buyPrice'] = currentPrice;
-        console.log(ticker);
-      }
-    });
+    console.log('tickername', tickerName);
+    console.log('tickerid', tickerId)
 
-    carteira.markModified("tickers");
-    await carteira.save();
-    console.log(carteira);
+    let positionTicker = (positionUn * currentPrice).toFixed(2);
+    let ticker = await Ticker.findByIdAndUpdate(tickerId, { carteira: user.carteira._id, name: tickerName, positionUn: positionUn, position: positionTicker, buyPrice: currentPrice })
+    console.log(ticker)
+    // // let carteira = await Carteira.findById(user.carteira._id).populate('tickers');
+
+    // // carteira.tickers.forEach((ticker, index) => {
+    // //   let positionChange = positionUn - ticker.positionUn;
+    // //   if (ticker.name === tickerName) {
+    // //     ticker["positionUn"] = positionUn;
+    // //     ticker["position"] = (positionUn * currentPrice).toFixed(2);
+    // //     ticker['buyPrice'] = currentPrice;
+    // //     console.log(ticker);
+    // //   }
+    // // });
+
+
+    // console.log(carteira);
     res.redirect("/private/minha-carteira");
   } catch (err) {
     console.log(err);
@@ -421,17 +461,16 @@ router.post("/private/:tickerName/updateTicker", async (req, res) => {
 
 router.post("/private/minha-carteira/ticker/delete", async (req, res) => {
   try {
-    const { tickerName } = req.body;
+    const { tickerName, tickerId } = req.body;
 
     let user = await User.findById(req.session.currentUser._id).populate(
       "carteira"
     );
 
-    let carteira = await Carteira.findByIdAndUpdate(user.carteira._id, {$pull: {'tickers.name' : tickerName}})
+    let tickerToDelete = await Ticker.findByIdAndRemove(tickerId);
 
+    console.log(tickerToDelete);
 
-    carteira.markModified("tickers");
-    await carteira.save();
 
     res.redirect("/private/minha-carteira");
   } catch (err) {
@@ -486,16 +525,16 @@ router.post("/private/comment/like", async (req, res) => {
     res.redirect(`/private/main/${articleId}`);
   } catch (error) {
     console.log(error);
-    if (req.session.currentUser){
+    if (req.session.currentUser) {
       res.redirect(`/private/main/${articleId}`);
-    }else{
+    } else {
       res.redirect(`/article/main/${articleId}`);
     }
-    
+
   }
 });
 
-router.get("/private/user/settings", async  (req, res) =>{
+router.get("/private/user/settings", async (req, res) => {
   try {
     let user = await User.findById(req.session.currentUser._id).populate('settings');
 
@@ -509,17 +548,17 @@ router.get("/private/user/settings", async  (req, res) =>{
 });
 
 
-router.post('/private/user/settings/update',  async  (req, res) => {
-  const { biografia, sexo, fblink, twitterlink, instalink, walletpublic, destaquespublic} = req.body;
-  try{
-    
+router.post('/private/user/settings/update', async (req, res) => {
+  const { biografia, sexo, fblink, twitterlink, instalink, walletpublic, destaquespublic } = req.body;
+  try {
+
     let user = await User.findById(req.session.currentUser._id);
 
-    let settings = await Settings.findByIdAndUpdate(user.settings._id, {biografia: biografia, sexo: sexo, fblink:fblink, twitterlink: twitterlink, instalink: instalink, walletpublic:walletpublic, destaquespublic: destaquespublic})
-    
+    let settings = await Settings.findByIdAndUpdate(user.settings._id, { biografia: biografia, sexo: sexo, fblink: fblink, twitterlink: twitterlink, instalink: instalink, walletpublic: walletpublic, destaquespublic: destaquespublic })
+
     res.redirect('/private/user/settings')
 
-  }catch(error){
+  } catch (error) {
     console.log(error);
   }
 })
@@ -568,8 +607,8 @@ function toMillion(data) {
   return (data / 1000000).toFixed(1);
 }
 
-function getMonth(string){
-  switch(string){
+function getMonth(string) {
+  switch (string) {
     case 'Jan':
       return 1;
     case 'Feb':
