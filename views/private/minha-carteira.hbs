@@ -105,13 +105,15 @@
                 <td style='display:flex; justify-content: center;'>
 
                   <form action="/private/minha-carteira/ticker/delete" method='post'>
+                  <input type="text" style='display: none' value="{{this._id}}" name='tickerId'>
                     <input type="text" style='display: none' value="{{this.name}}" name='tickerName'>
                     <button type='submit' class='btn btn-primary'
                       style='background-color: transparent; border: 1px solid transparent; border-radius: 50%; width:20px; height:30px; display: flex; justify-content: center; align-items: center'><i
                         class='icon-close' style='color: red; height: 16px'></i></button>
                   </form>
 
-                  <form action="/private/{{this.name}}/updateticker" method='post'>
+                  <form action="/private/tickerName/updateTicker" method='post'>
+                  <input type="text" name="tickerId" style='display: none' value="{{this._id}}" >
                     <input type="text" style='display: none' value="{{this.name}}" name='tickerName'>
                     <input class='positionHiddenInput' type="number" style='display: none' value="{{this.positionUn}}"
                       name='positionUn'>
