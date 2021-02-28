@@ -1,0 +1,37 @@
+const mongoose = require("mongoose");
+const { Schema, model } = mongoose;
+
+const carteiraSchema = new Schema(
+  {
+    user: {type: Schema.Types.ObjectId, ref: "User"},
+    tickers: [{type: Schema.Types.ObjectId, ref: "Ticker"}],
+    patrimonio: {type: Number},
+    volume: {type: Number},
+    mktCap: {type: Number}
+  },
+  {
+    timestamps: true,
+  }
+);
+
+module.exports = model("Carteira", carteiraSchema);
+
+const mongoose = require("mongoose");
+const { Schema, model } = mongoose;
+
+const tickerSchema = new Schema(
+  {
+    carteira: {type: Schema.Types.ObjectId, ref: "Carteira"},
+    name: {type: String},
+    currentPrice: {type: String},
+    positionUn: {type: Number},
+    position: {type: Number},
+    dayChangePct: {type: Number}
+
+  },
+  {
+    timestamps: true,
+  }
+);
+
+module.exports = model("Ticker", tickerSchema);
