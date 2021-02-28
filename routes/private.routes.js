@@ -7,6 +7,7 @@ const User = require("../models/User.model");
 const yf = require("yahoo-finance");
 const Carteira = require("../models/Carteira.model");
 const Comment = require("../models/Comment.model");
+const Reply = require('../models/Reply.model');
 const Settings = require("../models/Settings.model");
 
 router.get("/private/main", async (req, res) => {
@@ -113,9 +114,9 @@ router.get("/private/minha-carteira", async (req, res) => {
 
       let dayChangePct = data.price.regularMarketChangePercent * 100;
 
-      if (ticker.buyPrice){
+      if (ticker.buyPrice) {
         var bp = ticker.buyPrice;
-      }else{
+      } else {
         var bp = null;
       }
 
@@ -130,7 +131,7 @@ router.get("/private/minha-carteira", async (req, res) => {
           .replace(/\B(?=(\d{3})+(?!\d))/g, ","),
         mktCap: (data.price.marketCap / 1000000000).toFixed(2),
         buyPrice: bp
-      
+
       };
       carteira.patrimonio += parseFloat(ticker.position);
 
@@ -170,17 +171,17 @@ router.post("/private/ticker-search", async (req, res) => {
     });
 
     let dividendData = await yf.historical({
-      symbol:`${queryCap}`,
+      symbol: `${queryCap}`,
       to: await getTodayDate(),
-      period:'v'
+      period: 'v'
     });
-    
+
     let dividendDataArray = [];
 
-    dividendData.forEach((data,index) => {
-      let obj ={};
-      obj[`year`] = parseInt(data.date.toString().slice(11,15));
-      let month = data.date.toString().slice(4,7);
+    dividendData.forEach((data, index) => {
+      let obj = {};
+      obj[`year`] = parseInt(data.date.toString().slice(11, 15));
+      let month = data.date.toString().slice(4, 7);
       let monthToInt = getMonth(month);
       obj[`month`] = monthToInt;
       obj[`dividends`] = data.dividends;
@@ -188,22 +189,22 @@ router.post("/private/ticker-search", async (req, res) => {
       dividendDataArray.push(obj)
     });
 
-    dividendDataArray.sort((a,b) =>{
-      if (a.year>b.year){
+    dividendDataArray.sort((a, b) => {
+      if (a.year > b.year) {
         return 1
       }
-      if(a.year<b.year){
+      if (a.year < b.year) {
         return -1
       }
 
-      if(a.year===b.year){
-        if(a.month>b.month){
+      if (a.year === b.year) {
+        if (a.month > b.month) {
           return 1
         }
-        if(a.month<b.month){
+        if (a.month < b.month) {
           return -1
         }
-        if(a.month===b.month){
+        if (a.month === b.month) {
           return 0
         }
       }
@@ -213,9 +214,9 @@ router.post("/private/ticker-search", async (req, res) => {
     let datesArray = [];
     let dividendsArray = [];
 
-    dividendDataArray.forEach((data,index) =>{
-        datesArray.push(data.date);
-        dividendsArray.push(data.dividends)
+    dividendDataArray.forEach((data, index) => {
+      datesArray.push(data.date);
+      dividendsArray.push(data.dividends)
 
     })
 
@@ -225,7 +226,7 @@ router.post("/private/ticker-search", async (req, res) => {
     let user = await User.findById(req.session.currentUser._id).populate(
       "carteira"
     );
-  
+
 
     let tickers = user.carteira.tickers;
 
@@ -337,7 +338,7 @@ router.post("/private/ticker-search", async (req, res) => {
       fiftyTwoWeekLow,
       fiftyTwoWeekHigh,
       hasTicker,
-      layout:false,
+      layout: false,
       dates: datesArray,
       dividends: dividendsArray,
       userInSession: req.session.currentUser,
@@ -427,7 +428,7 @@ router.post("/private/minha-carteira/ticker/delete", async (req, res) => {
       "carteira"
     );
 
-    let carteira = await Carteira.findByIdAndUpdate(user.carteira._id, {$pull: {'tickers.name' : tickerName}})
+    let carteira = await Carteira.findByIdAndUpdate(user.carteira._id, { $pull: { 'tickers.name': tickerName } })
 
 
     carteira.markModified("tickers");
@@ -486,16 +487,73 @@ router.post("/private/comment/like", async (req, res) => {
     res.redirect(`/private/main/${articleId}`);
   } catch (error) {
     console.log(error);
-    if (req.session.currentUser){
+    if (req.session.currentUser) {
       res.redirect(`/private/main/${articleId}`);
-    }else{
+    } else {
       res.redirect(`/article/main/${articleId}`);
     }
-    
+
   }
 });
 
-router.get("/private/user/settings", async  (req, res) =>{
+router.post("/private/reply/post", async (req, res) => {
+  try {
+    const { content, commentId } = req.body;
+
+    let comment = await Comment.findById(commentId).populate("replys article");
+    let articleId = comment.article._id;
+    let user = await User.findById(req.session.currentUser._id);
+
+    let reply = await Reply.create({
+      author: user._id,
+      content,
+      comment: commentId,
+    });
+    let updated = await Comment.findByIdAndUpdate(commentId, {
+      $push: { replys: reply._id },
+    });
+
+    res.redirect(`/private/main/${articleId}`);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.post("/private/reply/like", async (req, res) => {
+  const { replyId, articleId } = req.body;
+
+  try {
+    let reply = await Reply.findById(replyId).populate("likes comments");
+
+    let user = await User.findById(req.session.currentUser._id);
+
+    let likes = reply.likes;
+
+    likes.forEach((like, index) => {
+      if (like._id.toString() === user._id.toString()) {
+        throw new Error("Voce ja curtiu essa resposta");
+      }
+    });
+
+    if (user) {
+      let liked = await Reply.findByIdAndUpdate(replyId, {
+        $push: { likes: user._id },
+      });
+    }
+
+    res.redirect(`/private/main/${articleId}`);
+  } catch (error) {
+    console.log(error);
+    if (req.session.currentUser) {
+      res.redirect(`/private/main/${articleId}`);
+    } else {
+      res.redirect(`/article/main/${articleId}`);
+    }
+
+  }
+});
+
+router.get("/private/user/settings", async (req, res) => {
   try {
     let user = await User.findById(req.session.currentUser._id).populate('settings');
 
@@ -509,17 +567,17 @@ router.get("/private/user/settings", async  (req, res) =>{
 });
 
 
-router.post('/private/user/settings/update',  async  (req, res) => {
-  const { biografia, sexo, fblink, twitterlink, instalink, walletpublic, destaquespublic} = req.body;
-  try{
-    
+router.post('/private/user/settings/update', async (req, res) => {
+  const { biografia, sexo, fblink, twitterlink, instalink, walletpublic, destaquespublic } = req.body;
+  try {
+
     let user = await User.findById(req.session.currentUser._id);
 
-    let settings = await Settings.findByIdAndUpdate(user.settings._id, {biografia: biografia, sexo: sexo, fblink:fblink, twitterlink: twitterlink, instalink: instalink, walletpublic:walletpublic, destaquespublic: destaquespublic})
-    
+    let settings = await Settings.findByIdAndUpdate(user.settings._id, { biografia: biografia, sexo: sexo, fblink: fblink, twitterlink: twitterlink, instalink: instalink, walletpublic: walletpublic, destaquespublic: destaquespublic })
+
     res.redirect('/private/user/settings')
 
-  }catch(error){
+  } catch (error) {
     console.log(error);
   }
 })
@@ -568,8 +626,8 @@ function toMillion(data) {
   return (data / 1000000).toFixed(1);
 }
 
-function getMonth(string){
-  switch(string){
+function getMonth(string) {
+  switch (string) {
     case 'Jan':
       return 1;
     case 'Feb':
