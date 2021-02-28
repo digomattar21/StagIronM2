@@ -7,6 +7,7 @@ const User = require("../models/User.model");
 const yf = require("yahoo-finance");
 const Carteira = require("../models/Carteira.model");
 const Comment = require("../models/Comment.model");
+const Reply = require('../models/Reply.model');
 const Settings = require("../models/Settings.model");
 const Ticker = require("../models/Ticker.model")
 
@@ -144,13 +145,11 @@ router.get("/private/minha-carteira", async (req, res) => {
       ticker.mktCap = (data.price.marketCap / 1000000000).toFixed(2);
       ticker.buyPrice = bp;
 
-
       carteira.patrimonio += parseFloat(ticker.position);
 
     }
 
     console.log(carteira.patrimonio)
-
 
     carteira.markModified("patrimonio");
     carteira.markModified('tickers')
@@ -471,7 +470,6 @@ router.post("/private/minha-carteira/ticker/delete", async (req, res) => {
 
     console.log(tickerToDelete);
 
-
     res.redirect("/private/minha-carteira");
   } catch (err) {
     console.log(err);
@@ -518,6 +516,63 @@ router.post("/private/comment/like", async (req, res) => {
 
     if (user) {
       let liked = await Comment.findByIdAndUpdate(commentId, {
+        $push: { likes: user._id },
+      });
+    }
+
+    res.redirect(`/private/main/${articleId}`);
+  } catch (error) {
+    console.log(error);
+    if (req.session.currentUser) {
+      res.redirect(`/private/main/${articleId}`);
+    } else {
+      res.redirect(`/article/main/${articleId}`);
+    }
+
+  }
+});
+
+router.post("/private/reply/post", async (req, res) => {
+  try {
+    const { content, commentId } = req.body;
+
+    let comment = await Comment.findById(commentId).populate("replys article");
+    let articleId = comment.article._id;
+    let user = await User.findById(req.session.currentUser._id);
+
+    let reply = await Reply.create({
+      author: user._id,
+      content,
+      comment: commentId,
+    });
+    let updated = await Comment.findByIdAndUpdate(commentId, {
+      $push: { replys: reply._id },
+    });
+
+    res.redirect(`/private/main/${articleId}`);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.post("/private/reply/like", async (req, res) => {
+  const { replyId, articleId } = req.body;
+
+  try {
+    let reply = await Reply.findById(replyId).populate("likes comments");
+
+    let user = await User.findById(req.session.currentUser._id);
+
+    let likes = reply.likes;
+
+    likes.forEach((like, index) => {
+      if (like._id.toString() === user._id.toString()) {
+        throw new Error("Voce ja curtiu essa resposta");
+      }
+    });
+
+    if (user) {
+      let liked = await Reply.findByIdAndUpdate(replyId, {
         $push: { likes: user._id },
       });
     }
