@@ -14,12 +14,16 @@ var config = {
           "rgb(255, 67, 0)",
           "rgb(131, 0, 255)",
           "rgb(250, 255, 0)",
+          "rgb(0,255,0)",
+          "rgb(255,0,0)"
         ],
         borderColor: [
           "rgb(12, 146, 204)",
           "rgb(255, 67, 0)",
           "rgb(131, 0, 255)",
           "rgb(250, 255, 0)",
+          "rgb(0,255,0)",
+          "rgb(255,0,0)"
         ],
         data: data,
       },
@@ -29,9 +33,11 @@ var config = {
     responsive: true,
     legend: {
       position: "bottom",
+      align: "start",
+      fullwidth: "true",
       labels: {
         fontColor: "black",
-        boxWidth: 20,
+        boxWidth: 40,
         padding: 20,
       },
     },
