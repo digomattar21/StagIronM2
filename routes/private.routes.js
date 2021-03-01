@@ -17,6 +17,8 @@ router.get("/private/main", async (req, res) => {
 
     let user = await User.findById(id).populate("articles carteira");
 
+    req.session.currentUser = user;
+    
     let carteira = await Carteira.findById(user.carteira._id).populate('tickers');
 
     var dailyChanges = {};
@@ -73,7 +75,9 @@ router.get("/private/main", async (req, res) => {
 
     carteira.markModified("tickers");
     await carteira.save();
-    console.log(carteira.tickers)
+    console.log(carteira.tickers);
+
+    
 
     res.render("private/main.hbs", {
       layout: false,
