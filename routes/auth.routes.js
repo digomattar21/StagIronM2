@@ -187,6 +187,126 @@ router.post("/auth/confirm", async (req, res) => {
   }
 });
 
+router.get('/private/reset/confirm-email/:resetField', async (req, res) => {
+  const {resetField} = req.params;
+  try{
+    var user = await User.findById(req.session.currentUser._id)
+    await sendConfirmationMail(user.email);
+    res.render('auth/resetConfirmEmail', {layout: false, resetField: resetField})
+  }catch(err){
+    console.log(err)
+  }
+});
+
+router.post('/private/reset/confirm', async(req, res)=>{
+  const {resetField, code} = req.body;
+  try{
+    console.log(req.body)
+    if (code === crypt.toString()){
+      switch(resetField){
+        case 'username':
+          res.render('auth/resetUsername.hbs');
+          break;
+        case 'email':
+          res.render('auth/resetEmail.hbs');
+          break;
+        case 'password':
+          res.render('auth/resetPass.hbs');
+          break;
+        default:
+          break;
+      }
+    } else{
+      throw new Error (`Código incorreto`)
+    }
+
+  }catch(err){
+    console.log(err);
+    res.render('auth/resetConfirmEmail.hbs', {layout: false,msg: err.message})
+  }
+});
+
+router.post('/private/reset/username', async(req, res)=>{
+  const {username} = req.body;
+  try{
+    console.log('user', username)
+
+    let user = await User.findOne({username:username});
+    console.log(user)
+     
+    if(user){
+      throw new Error ('Nome de usuário já em uso')
+    }else{
+      let userInSesh = await User.findByIdAndUpdate(req.session.currentUser._id,{username: username});
+      res.redirect('/private/main')
+    }
+
+  }catch(err){
+    console.log(err);
+    res.render('auth/resetUsername.hbs', { msg: err.message})
+  }
+});
+
+router.post('/private/reset/password', async (req,res) => {
+  var {password} = req.body;
+  try{
+    var passRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,20}$/;
+    let salt = await bcrypt.genSalt(saltRounds);
+
+    if(!password || !password.match(passRegex)){
+      throw new Error (`Sua senha deve conter no mínimo: 8 caracteres, 1 letra maiúscula, 1 letra minúscula, 1 símbolo e 1 número`)
+    } else{
+      password = await bcrypt.hash(password,salt);
+      let user = await User.findByIdAndUpdate(req.session.currentUser._id,{password:password});
+      res.redirect('/private/main')
+    }
+
+
+  }catch(err){
+    console.log(err);
+    res.render('auth/resetPassword', {layout: false, msg: err.message})
+  }
+});
+
+router.post('/private/reset/email', async (req, res) => {
+  const {email} = req.body;
+  try{
+
+    let alreadyExistsEmail = await User.findOne({email: email });
+
+    if (!email || alreadyExistsEmail){
+        throw new Error(`Este email já existe ou você não preencheu o campo corretamente`)
+    }else{
+      await sendConfirmationMail(email);
+
+      res.render('auth/confirmNewMail.hbs', {layout: false, email: email})
+
+    }
+
+  }catch(err){
+    console.log(err);
+    res.render('auth/resetEmail.hbs', {layout: false, msg: err.message})
+  }
+});
+
+router.post('/private/reset/confirm-new-email', async (req, res) => {
+  const {email, code} = req.body;
+  try{
+    if (code === crypt.toString()){
+      let user = await User.findByIdAndUpdate(req.session.currentUser._id, {email: email});
+      res.redirect('/private/main')
+    }else{
+      throw new Error(`Código incorreto`);
+    }
+
+  }catch(err){
+    console.log(err);
+    res.render('auth/resetEmail.hbs', {layout: false, msg: err.message})
+  }
+})
+
+
+
 var crypt;
 function storeRandNum(randNum) {
   crypt = randNum;
