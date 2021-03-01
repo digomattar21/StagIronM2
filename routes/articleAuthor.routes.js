@@ -210,7 +210,7 @@ router.get("/private/author/:authorId/perfil", async (req, res) => {
     const { authorId } = req.params;
     let user = await User.findById(authorId).populate("articles carteira settings");
 
-    let carteira = await Carteira.findById(user.carteira._id);
+    let carteira = await Carteira.findById(user.carteira._id).populate('tickers');
     let patrimonio = carteira.patrimonio;
 
     if (!patrimonio) {
