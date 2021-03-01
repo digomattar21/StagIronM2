@@ -238,6 +238,7 @@ router.post('/private/reset/username', async(req, res)=>{
       throw new Error ('Nome de usuário já em uso')
     }else{
       let userInSesh = await User.findByIdAndUpdate(req.session.currentUser._id,{username: username});
+      req.session.curentUser=userInSesh;
       res.redirect('/private/main')
     }
 
@@ -258,6 +259,7 @@ router.post('/private/reset/password', async (req,res) => {
     } else{
       password = await bcrypt.hash(password,salt);
       let user = await User.findByIdAndUpdate(req.session.currentUser._id,{password:password});
+      req.session.currentUser = user;
       res.redirect('/private/main')
     }
 
@@ -294,6 +296,7 @@ router.post('/private/reset/confirm-new-email', async (req, res) => {
   try{
     if (code === crypt.toString()){
       let user = await User.findByIdAndUpdate(req.session.currentUser._id, {email: email});
+      req.session.currentUser = user;
       res.redirect('/private/main')
     }else{
       throw new Error(`Código incorreto`);
