@@ -56,7 +56,7 @@ router.get("/private/main/:articleId", async (req, res) => {
   try {
     //await News.deleteMany({country:{$eq:"related"}});
     const { articleId } = req.params;
-    let article = await Article.findById(articleId).populate("author comments");
+    let article = await Article.findById(articleId).populate("author likes comments");
     let author = await User.findById(article.author._id).populate('settings');
     console.log(author)
     let category = article.category;
@@ -92,7 +92,7 @@ router.get("/article/main/:articleId", async (req, res) => {
   try {
     //await News.deleteMany({country:{$eq:"related"}});
     const { articleId } = req.params;
-    let article = await Article.findById(articleId).populate("author comments");
+    let article = await Article.findById(articleId).populate("author likes comments");
     let author = await User.findById(article.author._id).populate('settings');
     console.log(author)
     let comments = await Comment.find({ article: article._id }).populate(
