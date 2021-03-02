@@ -29,6 +29,7 @@
     "nodemailer": "^6.4.17",
     "rate-limiter-flexible": "^2.2.1",
     "redis": "^3.0.2",
+    "redis-server": "^1.2.2",
     "serve-favicon": "^2.5.0",
     "yahoo-finance": "^0.3.6"
   },

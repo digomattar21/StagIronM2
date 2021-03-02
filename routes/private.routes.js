@@ -481,21 +481,19 @@ router.post("/private/minha-carteira/ticker/delete", async (req, res) => {
 });
 
 router.post('/private/article/like', async (req, res) => {
+  const { articleId } = req.body;
   try {
-    const { articleId } = req.body;
-
     let article = await Article.findById(articleId).populate('author likes');
     let user = await User.findById(req.session.currentUser._id);
-    let likes = user.likes
+    let likes = article.likes
 
     likes.forEach((like, index) => {
       if (like._id.toString() === user._id.toString()) {
         throw new Error("Você já curtiu esse artigo");
       }
     });
-
     if (user) {
-      let liked = await Article.findByIdAndUpdate(articleId, {
+      var liked = await Article.findByIdAndUpdate(articleId, {
         $push: { likes: user._id },
       });
     }
