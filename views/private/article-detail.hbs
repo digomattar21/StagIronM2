@@ -145,31 +145,44 @@ min-height:30px;border-style: none; background-color: #f1f2f3">
                             <input type="text" style='display:none' value='{{article._id}}' name='articleId'>
                             <input type="text" style='display:none' value='{{this._id}}' name='commentId'>
 
-                            <button class="btn btn-primary" type="submit" style="margin-top:5px;margin-left: 20px;height: 25px;padding: 3px 3px;font-size: 16px;display:flex; 
+                            <button class="btn btn-primary" type="submit" style="margin-top:5px;margin-left: 20px;height: 30px;padding: 3px 3px;font-size: 16px;display:flex; 
 flex-direction: row; align-items: center; justify-content: space-evenly">
                                 <ion-icon name="thumbs-up-outline"></ion-icon>
                                 <div style='margin-left:3px; font-size:14px'><span>{{this.likes.length}}</span>
                                 </div>
                             </button>
                         </form>
+                        
                         <button class="btn btn-primary reply-button" type="button" style="margin-top:5px;margin-left: 20px;height: 
-25px;padding:
+30px;padding:
 3px 3px;font-size: 16px;display:flex; 
 flex-direction: row; align-items: center; justify-content: center">
-                            <div style='font-size:14px'><span>Responder</span></div>
+                            <div style='font-size:12px;' class='repostas-div'>
+                                <span>Repostas({{this.replys.length}})</span>
+                            </div>
+                                
                         </button>
-                        <div class="container d-flex reply-input" style="visibility: hidden">
-                            <form action="/private/reply/post" method='post'>
-                                <input type="text" style='display:none' value='{{comment._id}}' name='commentId'>
-                                <textarea class='comment-input' name="content" minlength="10" maxlength="400"
-                                    required></textarea>
-                            </form>
-                        </div>
+                        
+
                     </div>
                 </div>
-                {{#each replys}}
-                {{>reply}}
-                {{/each}}
+               
+                <div class="container reply-input-hidden" style='margin-left:10%'>
+                    <form action="/private/reply/post" method='post'>
+                        <input type="text" style='display:none' value='{{this._id}}' name='commentId'>
+                        <textarea class='comment-input' name="content" minlength="10" maxlength="400"
+                            required></textarea>
+                        <button class='btn btn-primary' type='submit' style='margin-left: 10px'>
+                            Responder
+                        </button>
+                    </form>
+                </div>
+                
+                <div class='row reply-div-hidden' style='height:auto; width:100%'>
+                    {{#each this.replys}}
+                    {{>reply}}
+                    {{/each}}
+                </div>
 
                 {{#if msg}}
                 <p>{{msg}}</p>
