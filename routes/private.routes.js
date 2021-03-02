@@ -18,7 +18,7 @@ router.get("/private/main", async (req, res) => {
     let user = await User.findById(id).populate("articles carteira");
 
     req.session.currentUser = user;
-    
+
     let carteira = await Carteira.findById(user.carteira._id).populate('tickers');
 
     var dailyChanges = {};
@@ -77,7 +77,7 @@ router.get("/private/main", async (req, res) => {
     await carteira.save();
     console.log(carteira.tickers);
 
-    
+
 
     res.render("private/main.hbs", {
       layout: false,
@@ -302,8 +302,8 @@ router.post("/private/ticker-search", async (req, res) => {
     data.financialData.profitMargins = (
       data.financialData.profitMargins * 100
     ).toFixed(2);
-    let dYield = data.summaryDetail.dividendYield = (data.summaryDetail.dividendYield*100).toFixed(2);
-    let payoutRatio = (data.summaryDetail.payoutRatio*100).toFixed(2);
+    let dYield = data.summaryDetail.dividendYield = (data.summaryDetail.dividendYield * 100).toFixed(2);
+    let payoutRatio = (data.summaryDetail.payoutRatio * 100).toFixed(2);
     let avgYieldFiveYear = data.summaryDetail.fiveYearAvgDividendYield;
 
     //fazer calculos p colocar no company info
@@ -480,6 +480,37 @@ router.post("/private/minha-carteira/ticker/delete", async (req, res) => {
   }
 });
 
+router.post('/private/article/like', async (req, res) => {
+  try {
+    const { articleId } = req.body;
+
+    let article = await Article.findById(articleId).populate('author likes');
+    let user = await User.findById(req.session.currentUser._id);
+    let likes = user.likes
+
+    likes.forEach((like, index) => {
+      if (like._id.toString() === user._id.toString()) {
+        throw new Error("Você já curtiu esse artigo");
+      }
+    });
+
+    if (user) {
+      let liked = await Article.findByIdAndUpdate(articleId, {
+        $push: { likes: user._id },
+      });
+    }
+    res.redirect(`/private/main/${articleId}`);
+
+  } catch (error) {
+    console.log(error)
+    if (req.session.currentUser) {
+      res.redirect(`/private/main/${articleId}`);
+    } else {
+      res.redirect(`/article/main/${articleId}`);
+    }
+  }
+})
+
 router.post("/private/comment/post", async (req, res) => {
   try {
     const { content, articleId } = req.body;
@@ -514,7 +545,7 @@ router.post("/private/comment/like", async (req, res) => {
 
     likes.forEach((like, index) => {
       if (like._id.toString() === user._id.toString()) {
-        throw new Error("Voce ja curtiu esse comentario");
+        throw new Error("Você já curtiu esse comentário");
       }
     });
 
@@ -532,7 +563,6 @@ router.post("/private/comment/like", async (req, res) => {
     } else {
       res.redirect(`/article/main/${articleId}`);
     }
-
   }
 });
 

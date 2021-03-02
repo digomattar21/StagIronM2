@@ -7,6 +7,7 @@ const articleSchema = new Schema(
     author: { type: Schema.Types.ObjectId, ref: "User" },
     imgPath: String,
     content: { type: String },
+    likes: [{ type: Schema.Types.ObjectId, ref: "User", unique: true }],
     category: { type: String, required: true, enum: ['Geral', 'Fundos Imobiliários', 'Ações BR', 'Ações EUA', 'Criptomoedas', 'Política', 'Mercado de Trabalho', 'Renda Fixa', 'main', 'comprar ou vender'] },
     comments: { type: Schema.Types.ObjectId, ref: 'Comment' },
   },

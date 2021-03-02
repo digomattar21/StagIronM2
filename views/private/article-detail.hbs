@@ -68,7 +68,18 @@ margin-left: -15px'>
     </div>
 
     <div class="row" style='margin-top: 40px;'>
-        <div class="col d-flex flex-column justify-content-center align-items-center">
+        <div class="col d-flex flex-row justify-content-center align-items-center">
+            <div class="container" style="max-width: 50px;">
+                <form action="/private/article/like" method='post'>
+                    <input type="text" style='display:none' value='{{article._id}}' name='articleId'>
+                    <button class="btn btn-primary" type="submit" style="margin-top:5px;margin-left: 20px;height
+25px;padding: 3px 3px;font-size: 16px;display:flex; 
+flex-direction: row; align-items: center; justify-content: space-evenly">
+                        <ion-icon name="thumbs-up-outline"></ion-icon>
+                        <div style='margin-left:3px; font-size:14px'><span>{{this.likes.length}}</span></div>
+                    </button>
+                </form>
+            </div>
             <div style="width: 60%;height: auto;">
                 <p style="text-align: center; font-size: 13px;">Atualizado: {{article.updatedAt}}</p>
             </div>
@@ -137,7 +148,8 @@ min-height:30px;border-style: none; background-color: #f1f2f3">
                             <button class="btn btn-primary" type="submit" style="margin-top:5px;margin-left: 20px;height: 25px;padding: 3px 3px;font-size: 16px;display:flex; 
 flex-direction: row; align-items: center; justify-content: space-evenly">
                                 <ion-icon name="thumbs-up-outline"></ion-icon>
-                                <div style='margin-left:3px; font-size:14px'><span>{{this.likes.length}}</span></div>
+                                <div style='margin-left:3px; font-size:14px'><span>{{this.likes.length}}</span>
+                                </div>
                             </button>
                         </form>
                         <button class="btn btn-primary reply-button" type="button" style="margin-top:5px;margin-left: 20px;height: 
