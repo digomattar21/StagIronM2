@@ -148,3 +148,28 @@ body {
 .comment-input::-webkit-input-placeholder{
     color:#6c757d;opacity:1;
 }
+
+.reply-div-hidden{
+    display: none;
+}
+
+.reply-div{
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid lightblue;
+    border-radius:10px;
+}
+
+.reply-input-hidden{
+    display: none;
+}
+
+.reply-input{
+    display: flex;
+}
+
+
+

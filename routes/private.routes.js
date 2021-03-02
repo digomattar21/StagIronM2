@@ -568,15 +568,17 @@ router.post("/private/reply/post", async (req, res) => {
   try {
     const { content, commentId } = req.body;
 
-    let comment = await Comment.findById(commentId).populate("replys article");
+    let comment = await Comment.findById(commentId).populate("replys article author");
     let articleId = comment.article._id;
     let user = await User.findById(req.session.currentUser._id);
 
     let reply = await Reply.create({
       author: user._id,
-      content,
+      content: content,
       comment: commentId,
+      authorUsername: user.username
     });
+
     let updated = await Comment.findByIdAndUpdate(commentId, {
       $push: { replys: reply._id },
     });

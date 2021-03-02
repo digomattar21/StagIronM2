@@ -5,9 +5,9 @@ const commentSchema = new Schema(
     {
         author: { type: Schema.Types.ObjectId, ref: "User" },
         content: { type: String, max: 400, min: 10 },
-        likes: [{ type: Schema.Types.ObjectId, ref: "User", unique: true }],
+        likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
         article: { type: Schema.Types.ObjectId, ref: 'Article' },
-        replys: [{ type: Schema.Types.ObjectId, ref: 'Reply' }],
+        replys: [{ type: Schema.Types.ObjectId, ref: 'Reply' , unique: false}],
     },
     {
         timestamps: true,
