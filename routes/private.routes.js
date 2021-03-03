@@ -188,8 +188,6 @@ router.post("/private/ticker-search", async (req, res) => {
       ],
     });
 
-    console.log(data)
-
     let dividendData = await yf.historical({
       symbol: `${queryCap}`,
       to: await getTodayDate(),
@@ -240,13 +238,15 @@ router.post("/private/ticker-search", async (req, res) => {
 
     })
 
-    let hasTicker = false;
+    var hasTicker = false;
 
     let user = await User.findById(req.session.currentUser._id).populate(
       "carteira"
     );
 
-    let tickers = user.carteira.tickers;
+    let carteira = await Carteira.findById(user.carteira._id).populate('tickers');
+
+    let tickers = carteira.tickers;
 
     tickers.forEach((ticker, index) => {
       if (ticker.name === queryCap) {
@@ -472,8 +472,6 @@ router.post("/private/minha-carteira/ticker/delete", async (req, res) => {
 
     let tickerToDelete = await Ticker.findByIdAndRemove(tickerId);
 
-    console.log(tickerToDelete);
-
     res.redirect("/private/minha-carteira");
   } catch (err) {
     console.log(err);
@@ -563,6 +561,19 @@ router.post("/private/comment/like", async (req, res) => {
     }
   }
 });
+
+router.post('/private/comment/delete', async (req, res) => {
+  try {
+    const { commentId } = req.body;
+    let commentToFind = await Comment.findById(commentId).populate('article');
+    let articleId = commentToFind.article._id;
+    let commentToDelete = await Comment.findByIdAndRemove(commentId);
+
+    res.redirect(`/private/main/${articleId}`);
+  } catch (error) {
+    console.log(error)
+  }
+})
 
 router.post("/private/reply/post", async (req, res) => {
   try {

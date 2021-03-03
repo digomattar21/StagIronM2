@@ -161,6 +161,7 @@ body {
     justify-content: center;
     border: 1px solid lightblue;
     border-radius:10px;
+    margin-left: 3px;
 }
 
 .reply-input-hidden{
@@ -170,6 +171,5 @@ body {
 .reply-input{
     display: flex;
 }
-
 
 
