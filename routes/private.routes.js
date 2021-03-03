@@ -32,19 +32,6 @@ router.get("/private/main", async (req, res) => {
       var patrimonio = 0;
     }
 
-    // carteira.tickers.forEach(async(ticker,index) => {
-    //   let data = await yf.quote({
-    //     symbol: `${ticker.name}`,
-    //     modules: ["price"],
-    //   });
-    //   let changePct = data.price.regularMarketChangePercent * 100;
-    //   dailyChanges[ticker.name] = changePct.toFixed(2);
-    //   ticker['pctOfWallet'] = ((ticker.position / patrimonio) * 100).toFixed(2);
-    //   console.log(ticker.name)
-    //   labels.push(ticker.name.toString());
-    //   dawta.push(((ticker.position / patrimonio) * 100).toFixed(2));
-    // });
-
     for (let i = 0; i < carteira.tickers.length; i++) {
       let ticker = carteira.tickers[i];
       let data = await yf.quote({
@@ -392,15 +379,6 @@ router.post("/private/addticker", async (req, res) => {
     let volume = yfData.price.regularMarketVolume;
     let mktCap = yfData.price.marketCap / 1000000000;
 
-    // let tickerInfo = {
-    //   name: symbol,
-    //   currentPrice: yfData.price.regularMarketPrice,
-    //   dayChangePct: dayChangePct,
-    //   mktCap: mktCap,
-    //   volume: volume,
-    //   position: 0,
-    // };
-
     let ticker = await Ticker.create({
       carteira: user.carteira._id,
       name: symbol,
@@ -441,20 +419,7 @@ router.post("/private/tickerName/updateTicker", async (req, res) => {
     let positionTicker = (positionUn * currentPrice).toFixed(2);
     let ticker = await Ticker.findByIdAndUpdate(tickerId, { carteira: user.carteira._id, name: tickerName, positionUn: positionUn, position: positionTicker, buyPrice: currentPrice })
     console.log(ticker)
-    // // let carteira = await Carteira.findById(user.carteira._id).populate('tickers');
-
-    // // carteira.tickers.forEach((ticker, index) => {
-    // //   let positionChange = positionUn - ticker.positionUn;
-    // //   if (ticker.name === tickerName) {
-    // //     ticker["positionUn"] = positionUn;
-    // //     ticker["position"] = (positionUn * currentPrice).toFixed(2);
-    // //     ticker['buyPrice'] = currentPrice;
-    // //     console.log(ticker);
-    // //   }
-    // // });
-
-
-    // console.log(carteira);
+    
     res.redirect("/private/minha-carteira");
   } catch (err) {
     console.log(err);
