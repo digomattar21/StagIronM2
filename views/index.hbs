@@ -38,7 +38,7 @@
         <div class="row" style='display: flex; flex-direction: row; justify-content:center;'>
             <div class="col-lg-3">
                 <div class='em-alta-container' style='width: 150px'>
-                    <h3 class='headline top-headline' >Últimas Notícias</h3>
+                    <h3 class='headline top-headline'>Últimas Notícias</h3>
                 </div>
                 <ul class="lista-noticias list">
                     {{#each newsBR}}
@@ -48,14 +48,14 @@
                     {{/each}}
                 </ul>
             </div>
-            <div class="col-lg-5">
+            <div class="col-lg-4">
                 <div style="height:auto; width:100%;">
                     <div class="carousel slide" data-ride="carousel" id="carousel-1">
                         <div class="carousel-inner">
                             <div class="carousel-item active">
                                 <a href="/article/main/{{mainArticles.0._id}}">
                                     <img id='car3-img' class="w-100 d-block" src="{{mainArticles.0.imgPath}}"
-                                    alt="Slide Image">
+                                        alt="Slide Image">
                                 </a>
                                 <div class="carousel-caption d-none d-md-block" id='car1-text-container'>
                                     <h1 class='carousel-text' style='font-weight: bold'>{{mainArticles.0.title}}</h1>
@@ -64,7 +64,7 @@
                             <div class="carousel-item">
                                 <a href="/article/main/{{mainArticles.1._id}}">
                                     <img id='car3-img' class="w-100 d-block" src="{{mainArticles.1.imgPath}}"
-                                    alt="Slide Image">
+                                        alt="Slide Image">
                                 </a>
                                 <div class="carousel-caption d-none d-md-block" id='car2-text-container'>
                                     <h1 class='carousel-text' style='font-weight: bold'>{{mainArticles.1.title}}</h1>
@@ -73,7 +73,7 @@
                             <div class="carousel-item">
                                 <a href="/article/main/{{mainArticles.2._id}}">
                                     <img id='car3-img' class="w-100 d-block" src="{{mainArticles.2.imgPath}}"
-                                    alt="Slide Image">
+                                        alt="Slide Image">
                                 </a>
                                 <div class="carousel-caption d-none d-md-block" id='car3-text-container'>
                                     <h1 class='carousel-text' style='font-weight: bold'>{{mainArticles.2.title}}</h1>
@@ -100,7 +100,8 @@
                                 <path fill="none" stroke="#017bcd" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="48" d="M268 112l144 144-144 144M392 256H100" />
                             </svg>
-                            <a style='color: black; text-decoration:none; font-size:1rem' href="/article/main/{{mainArticles.3._id}}"><span>{{mainArticles.3.title}}</span></a>   
+                            <a style='color: black; text-decoration:none; font-size:1rem'
+                                href="/article/main/{{mainArticles.3._id}}"><span>{{mainArticles.3.title}}</span></a>
                         </li>
                         <li class="list-group-item noticia-embaixo-carousel" style='border: none;'>
                             <svg width='15' height='15' xmlns="http://www.w3.org/2000/svg" class="ionicon"
@@ -109,7 +110,8 @@
                                 <path fill="none" stroke="#017bcd" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="48" d="M268 112l144 144-144 144M392 256H100" />
                             </svg>
-                            <a style='color: black; text-decoration:none; font-size:1rem' href="/article/main/{{mainArticles.4._id}}"><span>{{mainArticles.4.title}}</span></a>   
+                            <a style='color: black; text-decoration:none; font-size:1rem'
+                                href="/article/main/{{mainArticles.4._id}}"><span>{{mainArticles.4.title}}</span></a>
                         </li>
                         <li class="list-group-item noticia-embaixo-carousel" style='border: none;'>
                             <svg width='15' height='15' xmlns="http://www.w3.org/2000/svg" class="ionicon"
@@ -118,17 +120,18 @@
                                 <path fill="none" stroke="#017bcd" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="48" d="M268 112l144 144-144 144M392 256H100" />
                             </svg>
-                            <a style='color: black; text-decoration:none; font-size:1rem' href="/article/main/{{mainArticles.5._id}}"><span>{{mainArticles.5.title}}</span></a>   
+                            <a style='color: black; text-decoration:none; font-size:1rem'
+                                href="/article/main/{{mainArticles.5._id}}"><span>{{mainArticles.5.title}}</span></a>
                         </li>
                     </ul>
                 </div>
             </div>
             <div class='vl'></div>
-            <div class="col-lg-3">
+            <div class="col-lg-3 col-md-12">
                 <div class='trading-view-market-container'>
                     <div class="tradingview-widget-container">
                         <div class="tradingview-widget-container__widget"></div>
-                        
+
                         <script type="text/javascript"
                             src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
                                 {
@@ -254,9 +257,65 @@
                 {{/each}}
             </ul>
         </div>
-        <div class='vl2'></div>
-        <div class="col-12 col-lg-6">
+        <div style="height: auto;width: 45%; margin-top:30px; justify-content: center">
+            <h5 style='margin-left: 43%;font-size:1.1rem; color: #017bcd'>Outras Notícias</h5>
+            <div class="container">
+                <div class="row justify-content-center" style='margin-top: 15px'>
+                    <div class="col-md-4">
+                        <a href="/noticias/pagina-noticia/{{dunnoNews.0._id}}">
+                            <div class="card-group">
+                                <div class="card"><img class="card-img-top w-100 d-block" style='max-height:250px;'
+                                        src='{{dunnoNews.0.urlToImage}}' />
+                                    <div class="card-body">
+                                        <h4 style='font-size: 1rem; color: black' class="card-title">{{dunnoNews.0.title}}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="/noticias/pagina-noticia/{{dunnoNews.1._id}}">
+                            <div class="card-group">
+                                <div class="card"><img class="card-img-top w-100 d-block" style='max-height:250px;'
+                                        src='{{dunnoNews.1.urlToImage}}' />
+                                    <div class="card-body">
+                                        <h4 style='font-size: 1rem; color: black' class="card-title">{{dunnoNews.1.title}}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="row justify-content-center" style='margin-top:10px;'>
+                    <div class="col-md-4">
+                        <a href="/noticias/pagina-noticia/{{dunnoNews.2._id}}">
+                            <div class="card-group">
+                                <div class="card"><img class="card-img-top w-100 d-block" style='height:150px;'
+                                        src='{{dunnoNews.2.urlToImage}}' />
+                                    <div class="card-body">
+                                        <h4 style='font-size: 1rem; color: black' class="card-title">{{dunnoNews.2.title}}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="/noticias/pagina-noticia/{{dunnoNews.3._id}}">
+                            <div class="card-group">
+                                <div class="card"><img class="card-img-top w-100 d-block" style='height:125px;'
+                                        src='{{dunnoNews.3.urlToImage}}' />
+                                    <div class="card-body">
+                                        <h4 style='font-size: 1rem; color: black' class="card-title">{{dunnoNews.3.title}}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
+
+
     </div>
     <div></div>
 </section>
@@ -273,8 +332,8 @@
                     <div class="col-md-4">
                         <a href="/article/main/{{cpvArticles.0._id}}">
                             <div class="card-img"
-                            style="background-image: url('{{cpvArticles.0.imgPath}}');background-size: cover;height: 100px; width:auto;background-repeat: no-repeat;background-position: center;">
-                        </div>
+                                style="background-image: url('{{cpvArticles.0.imgPath}}');background-size: cover;height: 100px; width:auto;background-repeat: no-repeat;background-position: center;">
+                            </div>
                         </a>
                     </div>
                     <div class="col-md-8">
@@ -293,9 +352,9 @@
                 <div class="row no-gutters">
                     <div class="col-md-4">
                         <a href="/article/main/{{cpvArticles.1._id}}">
-                        <div class="card-img"
-                            style="background-image: url('{{cpvArticles.1.imgPath}}');background-size: cover;height: 100px; width:auto;background-repeat: no-repeat;background-position: center;">
-                        </div>
+                            <div class="card-img"
+                                style="background-image: url('{{cpvArticles.1.imgPath}}');background-size: cover;height: 100px; width:auto;background-repeat: no-repeat;background-position: center;">
+                            </div>
                         </a>
                     </div>
                     <div class="col-md-8">
@@ -316,9 +375,9 @@
                 <div class="row no-gutters">
                     <div class="col-md-4">
                         <a href="/article/main/{{cpvArticles.2._id}}">
-                        <div class="card-img"
-                            style="background-image: url('{{cpvArticles.2.imgPath}}');background-size: cover;height: 100px; width:auto;background-repeat: no-repeat;background-position: center;">
-                        </div>
+                            <div class="card-img"
+                                style="background-image: url('{{cpvArticles.2.imgPath}}');background-size: cover;height: 100px; width:auto;background-repeat: no-repeat;background-position: center;">
+                            </div>
                         </a>
                     </div>
                     <div class="col-md-8">
@@ -337,15 +396,15 @@
                 <div class="row no-gutters">
                     <div class="col-md-4">
                         <a href="/article/main/{{cpvArticles.3._id}}">
-                        <div class="card-img"
-                            style="background-image: url('{{cpvArticles.3.imgPath}}');background-size: cover;height: 100px; width:auto;background-repeat: no-repeat;background-position: center;">
-                        </div>
+                            <div class="card-img"
+                                style="background-image: url('{{cpvArticles.3.imgPath}}');background-size: cover;height: 100px; width:auto;background-repeat: no-repeat;background-position: center;">
+                            </div>
                         </a>
                     </div>
                     <div class="col-md-8">
                         <div class="card-body">
                             <a href="/article/main/{{cpvArticles.3._id}}">
-                            <span style='color: rgb(172, 167, 167); text-decoration: underline'>Recomendação
+                                <span style='color: rgb(172, 167, 167); text-decoration: underline'>Recomendação
                                     de carteira</span></a>
                             <h5 style='margin-top: 5px'>{{cpvArticles.3.title}}</h5>
                         </div>
@@ -365,33 +424,35 @@
         </div>
     </div>
     <div class="row d-flex flex-row justify-content-center align-items-center" style='margin-top:10px'>
-        
+
         <div class="col-lg-5">
             {{#each stockNewsBr}}
             <a style='text-decoration:none; color: black;' class='link noticia' href="/noticias/pagina-noticia/{{_id}}">
-            <div class="d-flex flex-column justify-content-start align-items-start" style="width: 100%;height: auto">
-                <div class="d-flex flex-row" style="width: 80%;height:45px;">
-                    <h5 class="text-break" style="font-size: 15px; font-family: Calibre-Semibold; font-weight:bold;width: 100%;border-bottom: 1px solid lightgray ;">{{this.title}}</h5>
+                <div class="d-flex flex-column justify-content-start align-items-start"
+                    style="width: 100%;height: auto">
+                    <div class="d-flex flex-row" style="width: 80%;height:45px;">
+                        <h5 class="text-break"
+                            style="font-size: 15px; font-family: Calibre-Semibold; font-weight:bold;width: 100%;border-bottom: 1px solid lightgray ;">
+                            {{this.title}}</h5>
+                    </div>
                 </div>
-            </div>
             </a>
             {{/each}}
         </div>
-        
 
         <div class="col-lg-5">
             {{#each stockNewsBr2}}
             <a style='text-decoration:none; color: black;' class='link noticia' href="/noticias/pagina-noticia/{{_id}}">
-            <div class="d-flex flex-column justify-content-start align-items-start" style="width: 100%;height: auto">
-                <div class="d-flex flex-row" style="width: 80%;height:45px;">
-                    <h5 class="text-break" style="font-size: 15px; font-family: Calibre-Semibold; font-weight:bold;width: 100%;border-bottom: 1px solid lightgray ;">{{this.title}}</h5>
+                <div class="d-flex flex-column justify-content-start align-items-start"
+                    style="width: 100%;height: auto">
+                    <div class="d-flex flex-row" style="width: 80%;height:45px;">
+                        <h5 class="text-break"
+                            style="font-size: 15px; font-family: Calibre-Semibold; font-weight:bold;width: 100%;border-bottom: 1px solid lightgray ;">
+                            {{this.title}}</h5>
+                    </div>
                 </div>
-            </div>
             </a>
             {{/each}}
         </div>
-      
-        
     </div>
 </section>
-
