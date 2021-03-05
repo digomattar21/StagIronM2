@@ -17,118 +17,116 @@ const newsapi = new NewsAPI(`${news_api_key}`);
 router.get("/", async (req, res, next) => {
   try {
     var ip = req.headers["x-forwarded-for"];
-
     if (ip != undefined && ip != null && ip != "::1") {
       let ipsList = await IpInfo.find();
-      //console.log('length:', ipsList.length)
       await IpInfo.deleteMany();
       await getIpInfo(ip);
     }
 
-    let yesterday = getYesterdayDate();
-    let today = getTodayDate();
+    // let yesterday = getYesterdayDate();
+    // let today = getTodayDate();
 
-    var requestNewsBr = await axios.get(
-      `https://newsapi.org/v2/everything?from=${yesterday}&to=${today}&language=pt&q=ibovespa OR ibov OR (bolsa AND (mercado OR ibovespa OR bancos OR valores)) OR (bolsa AND valores) OR fintech OR fintechs&apiKey=${news_api_key}`
-    );
-    var requestStockNewsBr = await axios.get(
-      `https://newsapi.org/v2/everything?from=${yesterday}&to=${today}&language=pt&q=bradesco OR fintech OR fintechs OR itau OR magalu OR (magazine AND luiza) OR taesa OR cteep OR petrobas OR (rumo AND b3) OR vale OR (iguatemi AND mercado) OR iochpe OR (dias AND branco) OR renner OR ambev OR santander OR (banco AND do AND brasil) OR weg OR eletrobras&apiKey=${news_api_key}`
-    );
+    // var requestNewsBr = await axios.get(
+    //   `https://newsapi.org/v2/everything?from=${yesterday}&to=${today}&language=pt&q=ibovespa OR ibov OR (bolsa AND (mercado OR ibovespa OR bancos OR valores)) OR (bolsa AND valores) OR fintech OR fintechs&apiKey=${news_api_key}`
+    // );
+    // var requestStockNewsBr = await axios.get(
+    //   `https://newsapi.org/v2/everything?from=${yesterday}&to=${today}&language=pt&q=bradesco OR fintech OR fintechs OR itau OR magalu OR (magazine AND luiza) OR taesa OR cteep OR petrobas OR (rumo AND b3) OR vale OR (iguatemi AND mercado) OR iochpe OR (dias AND branco) OR renner OR ambev OR santander OR (banco AND do AND brasil) OR weg OR eletrobras&apiKey=${news_api_key}`
+    // );
 
-    var requestStockNewsBr2 = await axios.get(
-      `https://newsapi.org/v2/everything?from=${yesterday}&to=${today}&language=pt&q=(fundos AND (imobiliários OR imobiliarios)) OR IRBR OR IRBR3 OR (fundo AND (imobiliário OR imoboliario)) OR dividendos OR criptomoeda OR criptomoedas OR bitcoin OR ethereum OR litecoin OR Bitcoin OR (renda AND (fixa OR Fixa)) OR (Renda AND (fixa or Fixa))&apiKey=${news_api_key}`
-    );
+    // var requestStockNewsBr2 = await axios.get(
+    //   `https://newsapi.org/v2/everything?from=${yesterday}&to=${today}&language=pt&q=(fundos AND (imobiliários OR imobiliarios)) OR IRBR OR IRBR3 OR (fundo AND (imobiliário OR imoboliario)) OR dividendos OR criptomoeda OR criptomoedas OR bitcoin OR ethereum OR litecoin OR Bitcoin OR (renda AND (fixa OR Fixa)) OR (Renda AND (fixa or Fixa))&apiKey=${news_api_key}`
+    // );
 
-    var requestDunnoNews = await axios.get(
-             `https://newsapi.org/v2/everything?from=${yesterday}&to=${today}&language=pt&q=dynamo OR melius OR meliuz OR bionexo OR Bionexo OR XP OR Insper OR insper OR (jorge AND lemman) OR (bolsonaro AND economia) OR dolar OR Dolar OR (cambio AND real)&apiKey=${news_api_key}`
+    // var requestDunnoNews = await axios.get(
+    //          `https://newsapi.org/v2/everything?from=${yesterday}&to=${today}&language=pt&q=dynamo OR melius OR meliuz OR bionexo OR Bionexo OR XP OR Insper OR insper OR (jorge AND lemman) OR (bolsonaro AND economia) OR dolar OR Dolar OR (cambio AND real)&apiKey=${news_api_key}`
 
-    )
+    // )
 
 
-    var newsBR = requestNewsBr.data.articles;
-    var stockNewsBr = requestStockNewsBr.data.articles;
-    var stockNewsBr2 = requestStockNewsBr2.data.articles;
-    var dunnoNews = requestDunnoNews.data.articles;
+    // var newsBR = requestNewsBr.data.articles;
+    // var stockNewsBr = requestStockNewsBr.data.articles;
+    // var stockNewsBr2 = requestStockNewsBr2.data.articles;
+    // var dunnoNews = requestDunnoNews.data.articles;
 
-    if (newsBR.length > 6) {
-      newsBR.splice(6, newsBR.length - 6);
-    }
+    // if (newsBR.length > 6) {
+    //   newsBR.splice(6, newsBR.length - 6);
+    // }
 
-    if (stockNewsBr.length > 10) {
-      stockNewsBr.splice(6, stockNewsBr.length - 10);
-    }
+    // if (stockNewsBr.length > 10) {
+    //   stockNewsBr.splice(6, stockNewsBr.length - 10);
+    // }
 
-    if (stockNewsBr2.length > 10) {
-      stockNewsBr2.splice(6, stockNewsBr2.length - 10);
-    }
+    // if (stockNewsBr2.length > 10) {
+    //   stockNewsBr2.splice(6, stockNewsBr2.length - 10);
+    // }
 
-    if (dunnoNews.length>4){
-      dunnoNews.splice(0, dunnoNews.length-4)
-    }
+    // if (dunnoNews.length>4){
+    //   dunnoNews.splice(0, dunnoNews.length-4)
+    // }
 
-    newsBR.forEach((noticia, index) => {
-      if (noticia.title.includes("-")) {
-        var indice = noticia.title.indexOf("-");
-        if (indice > 30) {
-          noticia.title = noticia.title.slice(0, indice);
-        }
-      }
-      noticia.country = "br";
-    });
+    // newsBR.forEach((noticia, index) => {
+    //   if (noticia.title.includes("-")) {
+    //     var indice = noticia.title.indexOf("-");
+    //     if (indice > 30) {
+    //       noticia.title = noticia.title.slice(0, indice);
+    //     }
+    //   }
+    //   noticia.country = "br";
+    // });
 
-    stockNewsBr.forEach((noticia, index) => {
-      if (noticia.title.includes("-")) {
-        var indice = noticia.title.indexOf("-");
-        if (indice > 30) {
-          noticia.title = noticia.title.slice(0, indice);
-        }
-      }
-      noticia.country = "stockBr";
-    });
+    // stockNewsBr.forEach((noticia, index) => {
+    //   if (noticia.title.includes("-")) {
+    //     var indice = noticia.title.indexOf("-");
+    //     if (indice > 30) {
+    //       noticia.title = noticia.title.slice(0, indice);
+    //     }
+    //   }
+    //   noticia.country = "stockBr";
+    // });
 
-    stockNewsBr2.forEach((noticia, index) => {
-      if (noticia.title.includes("-")) {
-        var indice = noticia.title.indexOf("-");
-        if (indice > 30) {
-          noticia.title = noticia.title.slice(0, indice);
-        }
-      }
-      noticia.country = "stockBr2";
-    });
+    // stockNewsBr2.forEach((noticia, index) => {
+    //   if (noticia.title.includes("-")) {
+    //     var indice = noticia.title.indexOf("-");
+    //     if (indice > 30) {
+    //       noticia.title = noticia.title.slice(0, indice);
+    //     }
+    //   }
+    //   noticia.country = "stockBr2";
+    // });
 
-     dunnoNews.forEach((noticia, index) => {
-      if (noticia.title.includes("-")) {
-        var indice = noticia.title.indexOf("-");
-        if (indice > 30) {
-          noticia.title = noticia.title.slice(0, indice);
-        }
-      }
-      noticia.country = "dunno";
-    });
+    //  dunnoNews.forEach((noticia, index) => {
+    //   if (noticia.title.includes("-")) {
+    //     var indice = noticia.title.indexOf("-");
+    //     if (indice > 30) {
+    //       noticia.title = noticia.title.slice(0, indice);
+    //     }
+    //   }
+    //   noticia.country = "dunno";
+    // });
 
-    let responseUSA = await newsapi.v2.topHeadlines({
-      q: "",
-      category: "business",
-      language: "en",
-      country: "us",
-    });
+    // let responseUSA = await newsapi.v2.topHeadlines({
+    //   q: "",
+    //   category: "business",
+    //   language: "en",
+    //   country: "us",
+    // });
 
-    var newsUSA = responseUSA.articles;
-    newsUSA.country = "us";
+    // var newsUSA = responseUSA.articles;
+    // newsUSA.country = "us";
 
-    if (newsUSA.length > 7) {
-      newsUSA.splice(7, newsUSA.length - 7);
-    }
+    // if (newsUSA.length > 7) {
+    //   newsUSA.splice(7, newsUSA.length - 7);
+    // }
 
-    newsUSA.forEach((noticia, index) => {
-      if (noticia.title.includes("-")) {
-        var indice = noticia.title.indexOf("-");
-        if (indice > 30) {
-          noticia.title = noticia.title.slice(0, indice);
-        }
-      }
-      noticia.country = "us";
-    });
+    // newsUSA.forEach((noticia, index) => {
+    //   if (noticia.title.includes("-")) {
+    //     var indice = noticia.title.indexOf("-");
+    //     if (indice > 30) {
+    //       noticia.title = noticia.title.slice(0, indice);
+    //     }
+    //   }
+    //   noticia.country = "us";
+    // });
 
     //importing articles from DB
     let mainArticlesFromDB = await Article.find({ category: { $eq: "main" } })
@@ -140,19 +138,12 @@ router.get("/", async (req, res, next) => {
       .sort({ _id: -1 })
       .limit(4);
 
-    await News.deleteMany();
-    console.log(`Sucessfully Cleared DB`);
-
-    await News.create(newsUSA);
-    console.log(`SucessFully added newsUSA to DB`);
-
-    await News.create(stockNewsBr);
-    await News.create(stockNewsBr2);
-
-    await News.create(dunnoNews);
-
-    await News.create(newsBR);
-    console.log(`Sucessfully added NewsBR to DB`);
+    // await News.deleteMany();
+    // await News.create(newsUSA);
+    // await News.create(stockNewsBr);
+    // await News.create(stockNewsBr2);
+    // await News.create(dunnoNews);
+    // await News.create(newsBR);
 
     allNewsUSA = await News.find({ country: { $eq: "us" } });
 
@@ -196,12 +187,6 @@ router.post("/ticker-search", async (req, res) => {
       ],
     });
 
-    //console.log(data);
-
-    let date = new Date().toISOString().slice(0, 10);
-
-    console.log(data);
-
     var dailyChange = data.price.regularMarketChangePercent * 100;
 
     if (dailyChange < 0) {
@@ -209,8 +194,6 @@ router.post("/ticker-search", async (req, res) => {
     } else {
       var posChange = dailyChange.toFixed(2);
     }
-
-    var outros = {};
 
     data.defaultKeyStatistics.sharesOutstanding = toMillion(
       data.defaultKeyStatistics.sharesOutstanding
@@ -307,7 +290,6 @@ router.get("/noticias/pagina-noticia/:noticiaId", (req, res) => {
 
   News.findById(noticiaId)
     .then((noticia) => {
-      //console.log(noticia);
       res.render("main/pagina-noticia.hbs", noticia);
     })
     .catch((err) => {
@@ -320,10 +302,8 @@ router.get("/noticias/pagina-noticia/:noticiaId", (req, res) => {
 
 function getIpInfo(ip) {
   if (ip.includes("::ffff:")) {
-    //console.log(ip.indexOf(ip.includes("::ffff:")));
     ip = ip.slice(7, ip.length);
     ip = geoip.pretty(ip);
-    //console.log(ip);
   }
 
   if (
@@ -335,10 +315,8 @@ function getIpInfo(ip) {
     axios
       .get(url)
       .then((response) => {
-        //console.log(response.data);
         IpInfo.create({ info: response.data })
           .then((done) => {
-            console.log("Created IpInfo sucessfully");
             var infoIp = response.data;
           })
           .catch((err) => console.log(err));
