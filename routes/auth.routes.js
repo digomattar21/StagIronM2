@@ -9,7 +9,6 @@ const redis = require("redis");
 const { RateLimiterRedis } = require('rate-limiter-flexible');
 
 const User = require("../models/User.model");
-const Article = require("../models/Article.model");
 const Carteira = require("../models/Carteira.model");
 const Settings = require("../models/Settings.model");
 
@@ -64,12 +63,19 @@ router.post("/auth/sign-up", async (req, res) => {
         `Sua senha deve conter no mínimo: 8 caracteres, 1 letra maiúscula, 1 letra minúscula, 1 símbolo e 1 número (Levamos sua segurança a sério)`
       );
     } else {
-      await sendConfirmationMail(email);
+     
+      var token = Math.floor(100000 + Math.random() * 900000).toString();
 
-      startTimer()
+      await sendConfirmationMail(email,token);
 
       password = await bcrypt.hash(password, salt);
-      let createUser = await User.create({ username, email, password });
+
+      let createUser = await User.create({
+        username,
+        email,
+        password,
+        confirmationCode: token
+       });
 
       res.render("auth/confirmEmail.hbs", { email: email, username: username });
     }
@@ -149,9 +155,10 @@ router.post("/auth/confirm", async (req, res) => {
   try {
     var { inputNum, email, username } = req.body;
 
-    if (inputNum === crypt.toString()) {
+    var user = await User.findOne({ email: email }).populate('articles');
+    console.log(user.confirmationCode, inputNum)
 
-      let user = await User.findOne({ email: email }).populate('articles');
+    if (inputNum === user.confirmationCode) {
 
       req.session.currentUser = user;
 
@@ -188,22 +195,26 @@ router.post("/auth/confirm", async (req, res) => {
 });
 
 router.get('/private/reset/confirm-email/:resetField', async (req, res) => {
-  const {resetField} = req.params;
-  try{
-    var user = await User.findById(req.session.currentUser._id)
-    await sendConfirmationMail(user.email);
-    res.render('auth/resetConfirmEmail', {layout: false, resetField: resetField})
-  }catch(err){
+  const { resetField } = req.params;
+  try {
+    var token = Math.floor(100000 + Math.random() * 900000).toString();
+
+    var user = await User.findByIdAndUpdate(req.session.currentUser._id,{confirmationCode:token})
+
+    await sendConfirmationMail(user.email,token);
+    res.render('auth/resetConfirmEmail', { layout: false, resetField: resetField })
+  } catch (err) {
     console.log(err)
   }
 });
 
-router.post('/private/reset/confirm', async(req, res)=>{
-  const {resetField, code} = req.body;
-  try{
-    console.log(req.body)
-    if (code === crypt.toString()){
-      switch(resetField){
+router.post('/private/reset/confirm', async (req, res) => {
+  const { resetField, code } = req.body;
+  try {
+    var user = await User.findById(req.session.currentUser._id)
+    
+    if (code === user.confirmationCode) {
+      switch (resetField) {
         case 'username':
           res.render('auth/resetUsername.hbs');
           break;
@@ -216,123 +227,109 @@ router.post('/private/reset/confirm', async(req, res)=>{
         default:
           break;
       }
-    } else{
-      throw new Error (`Código incorreto`)
+    } else {
+      throw new Error(`Código incorreto`)
     }
 
-  }catch(err){
+  } catch (err) {
     console.log(err);
-    res.render('auth/resetConfirmEmail.hbs', {layout: false,msg: err.message})
+    res.render('auth/resetConfirmEmail.hbs', { layout: false, msg: err.message })
   }
 });
 
-router.post('/private/reset/username', async(req, res)=>{
-  const {username} = req.body;
-  try{
+router.post('/private/reset/username', async (req, res) => {
+  const { username } = req.body;
+  try {
     console.log('user', username)
 
-    let user = await User.findOne({username:username});
+    let user = await User.findOne({ username: username });
     console.log(user)
-     
-    if(user){
-      throw new Error ('Nome de usuário já em uso')
-    }else{
-      let userInSesh = await User.findByIdAndUpdate(req.session.currentUser._id,{username: username});
-      req.session.curentUser=userInSesh;
+
+    if (user) {
+      throw new Error('Nome de usuário já em uso')
+    } else {
+      let userInSesh = await User.findByIdAndUpdate(req.session.currentUser._id, { username: username });
+      req.session.curentUser = userInSesh;
       res.redirect('/private/main')
     }
 
-  }catch(err){
+  } catch (err) {
     console.log(err);
-    res.render('auth/resetUsername.hbs', { msg: err.message})
+    res.render('auth/resetUsername.hbs', { msg: err.message })
   }
 });
 
-router.post('/private/reset/password', async (req,res) => {
-  var {password} = req.body;
-  try{
+router.post('/private/reset/password', async (req, res) => {
+  var { password } = req.body;
+  try {
     var passRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,20}$/;
     let salt = await bcrypt.genSalt(saltRounds);
 
-    if(!password || !password.match(passRegex)){
-      throw new Error (`Sua senha deve conter no mínimo: 8 caracteres, 1 letra maiúscula, 1 letra minúscula, 1 símbolo e 1 número`)
-    } else{
-      password = await bcrypt.hash(password,salt);
-      let user = await User.findByIdAndUpdate(req.session.currentUser._id,{password:password});
+    if (!password || !password.match(passRegex)) {
+      throw new Error(`Sua senha deve conter no mínimo: 8 caracteres, 1 letra maiúscula, 1 letra minúscula, 1 símbolo e 1 número`)
+    } else {
+      password = await bcrypt.hash(password, salt);
+      let user = await User.findByIdAndUpdate(req.session.currentUser._id, { password: password });
       req.session.currentUser = user;
       res.redirect('/private/main')
     }
 
 
-  }catch(err){
+  } catch (err) {
     console.log(err);
-    res.render('auth/resetPassword', {layout: false, msg: err.message})
+    res.render('auth/resetPassword', { layout: false, msg: err.message })
   }
 });
 
 router.post('/private/reset/email', async (req, res) => {
-  const {email} = req.body;
-  try{
+  const { email } = req.body;
+  try {
+    console.log(email)
+    let alreadyExistsEmail = await User.findOne({ email: email });
 
-    let alreadyExistsEmail = await User.findOne({email: email });
+    if (!email || alreadyExistsEmail) {
+      throw new Error(`Este email já existe ou você não preencheu o campo corretamente`)
+    } else {
+      var token = Math.floor(100000 + Math.random() * 900000).toString();
+      let userUpdateToken = await User.findByIdAndUpdate(req.session.currentUser._id, {confirmationCode:token})
+      await sendConfirmationMail(email, token);
 
-    if (!email || alreadyExistsEmail){
-        throw new Error(`Este email já existe ou você não preencheu o campo corretamente`)
-    }else{
-      await sendConfirmationMail(email);
-
-      res.render('auth/confirmNewMail.hbs', {layout: false, email: email})
+      res.render('auth/confirmNewMail.hbs', { layout: false, email: email })
 
     }
 
-  }catch(err){
+  } catch (err) {
     console.log(err);
-    res.render('auth/resetEmail.hbs', {layout: false, msg: err.message})
+    res.render('auth/resetEmail.hbs', { layout: false, msg: err.message })
   }
 });
 
 router.post('/private/reset/confirm-new-email', async (req, res) => {
-  const {email, code} = req.body;
-  try{
-    if (code === crypt.toString()){
-      let user = await User.findByIdAndUpdate(req.session.currentUser._id, {email: email});
+  const { email, code } = req.body;
+  try {
+    console.log(email)
+    var beforeUser = await User.findById(req.session.currentUser._id);
+    console.log(code,beforeUser.confirmationCode)
+    if (code === beforeUser.confirmationCode) {
+      let user = await User.findByIdAndUpdate(req.session.currentUser._id, { email: email }, {new:true});
       req.session.currentUser = user;
       res.redirect('/private/main')
-    }else{
+    } else {
       throw new Error(`Código incorreto`);
     }
 
-  }catch(err){
+  } catch (err) {
     console.log(err);
-    res.render('auth/resetEmail.hbs', {layout: false, msg: err.message})
+    res.render('auth/resetEmail.hbs', { layout: false, msg: err.message })
   }
 })
 
 
 
-var crypt;
-function storeRandNum(randNum) {
-  crypt = randNum;
-}
+async function sendConfirmationMail(email,token) {
+  try {
 
-var timer;
-
-function resetTimer() {
-  timer = 0;
-}
-
-
-function startTimer() {
-  setInterval(() => timer++, 1000)
-}
-
-
-
-function sendConfirmationMail(email) {
-  var randNum = Math.floor(100000 + Math.random() * 900000);
-  storeRandNum(randNum);
-
-  var mailToHtml = `
+    var mailToHtml = `
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -341,34 +338,37 @@ function sendConfirmationMail(email) {
     </head>
     <body>
       <div style='width: 100%; height: 100%; background-color: #fff'>
-          <h4>Seu código: <span>${randNum}</h4></span>
+          <h4>Seu código: <span>${token}</h4></span>
         </div>      
     </body>
     </html>
     `;
 
-  let transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: "stag.talk.mailer@gmail.com",
-      pass: `${process.env.ARTICLE_MAILER_PASS}`,
-    },
-  });
+    let transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "stag.talk.mailer@gmail.com",
+        pass: `${process.env.ARTICLE_MAILER_PASS}`,
+      },
+    });
 
-  const mail = {
-    from: "Stag Article Mailer",
-    to: `${email}`,
-    subject: "Confirme Sua Conta",
-    html: `${mailToHtml}`,
-  };
+    const mail = {
+      from: "Stag Article Mailer",
+      to: `${email}`,
+      subject: "Confirme Sua Conta",
+      html: `${mailToHtml}`,
+    };
 
-  transporter.sendMail(mail, function (err, info) {
-    if (err) {
-      console.log(err);
-    } else {
-      return info;
-    }
-  });
+    transporter.sendMail(mail, function (err, info) {
+      if (err) {
+        console.log(err);
+      } else {
+        return info;
+      }
+    });
+  } catch (err) {
+    console.log(err)
+  }
 }
 
 module.exports = router;
