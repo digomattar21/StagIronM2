@@ -420,7 +420,7 @@ router.post("/private/tickerName/updateTicker", async (req, res) => {
     let positionTicker = (positionUn * currentPrice).toFixed(2);
     let ticker = await Ticker.findByIdAndUpdate(tickerId, { carteira: user.carteira._id, name: tickerName, positionUn: positionUn, position: positionTicker, buyPrice: currentPrice })
     console.log(ticker)
-    
+
     res.redirect("/private/minha-carteira");
   } catch (err) {
     console.log(err);
@@ -551,6 +551,7 @@ router.post("/private/reply/post", async (req, res) => {
     let user = await User.findById(req.session.currentUser._id).populate('settings');
 
     let reply = await Reply.create({
+      article: articleId,
       author: user._id,
       content: content,
       comment: commentId,
@@ -569,14 +570,16 @@ router.post("/private/reply/post", async (req, res) => {
 });
 
 router.post("/private/reply/like", async (req, res) => {
-  const { replyId, articleId } = req.body;
+  const { replyId } = req.body;
 
   try {
-    let reply = await Reply.findById(replyId).populate("likes comments");
+    let reply = await Reply.findById(replyId).populate("likes comment article");
 
     let user = await User.findById(req.session.currentUser._id).populate('settings');
 
     let likes = reply.likes;
+
+    let article = reply.article;
 
     likes.forEach((like, index) => {
       if (like._id.toString() === user._id.toString()) {
@@ -590,17 +593,31 @@ router.post("/private/reply/like", async (req, res) => {
       });
     }
 
-    res.redirect(`/private/main/${articleId}`);
+    res.redirect(`/private/main/${article}`);
   } catch (error) {
     console.log(error);
     if (req.session.currentUser) {
-      res.redirect(`/private/main/${articleId}`);
+      res.redirect(`/private/main/${article}`);
     } else {
-      res.redirect(`/article/main/${articleId}`);
+      res.redirect(`/article/main/${article}`);
     }
 
   }
 });
+
+router.post('/private/reply/delete', async (req, res) => {
+  try {
+    const { replyId } = req.body;
+    let replyToFind = await Reply.findById(replyId).populate('comment');
+    let articleId = replyToFind.article;
+    console.log(articleId)
+    let replyToDelete = await Reply.findByIdAndRemove(replyId);
+
+    res.redirect(`/private/main/${articleId}`);
+  } catch (error) {
+    console.log(error)
+  }
+})
 
 router.get("/private/user/settings", async (req, res) => {
   try {
