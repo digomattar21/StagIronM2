@@ -60,6 +60,7 @@ router.get("/private/main/:articleId", async (req, res) => {
     let author = await User.findById(article.author._id).populate('settings');
     console.log(author)
     let category = article.category;
+    let user = await User.findById(req.session.currentUser._id).populate('settings');
 
     if (category === 'main' || category === 'comprar ou vender') {
       await getGeneralNews()
@@ -78,7 +79,8 @@ router.get("/private/main/:articleId", async (req, res) => {
       layout: false,
       comments: comments,
       newsRelated: news,
-      user: author
+      user: author,
+      userInSesh: user
     });
   } catch (err) {
     console.log(`Error while getting the details about this article: ${err}`);
@@ -192,7 +194,7 @@ router.get("/private/article-detail", (req, res) => {
 router.get("/private/author/:authorId/articles", async (req, res) => {
   try {
     const { authorId } = req.params;
-    let user = await User.findById(authorId).populate("articles");
+    let user = await User.findById(authorId).populate("articles settings");
 
     if (req.session.currentUser) {
       res.render("private/author-profile", { user: user, layout: false });

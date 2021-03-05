@@ -6,7 +6,8 @@ const replySchema = new Schema(
         author: { type: Schema.Types.ObjectId, ref: "User", unique: false},
         content: { type: String, max: 400, min: 10, unique: false },
         comment: { type: Schema.Types.ObjectId, ref: 'Comment', unique: false },
-        authorUsername: {type: String}
+        authorUsername: {type: String},
+        profileImgUrl: {type: String}
     },
     {
         timestamps: true,
