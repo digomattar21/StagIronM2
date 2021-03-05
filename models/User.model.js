@@ -21,7 +21,13 @@ const userSchema = new Schema(
     password: { type: String, required: [true, `Insira uma Senha`] },
     articles: [{ type: Schema.Types.ObjectId, ref: "Article" }],
     carteira: { type: Schema.Types.ObjectId, ref: "Carteira" },
-    settings : {type: Schema.Types.ObjectId, ref: "Settings"}
+    settings : {type: Schema.Types.ObjectId, ref: "Settings"},
+    confirmationCode: {type: String, unique:true},
+    status: {
+      type:String,
+      enum:['Pending', 'Active'],
+      default:'Pending' 
+    }
   },
   {
     timestamps: true,
