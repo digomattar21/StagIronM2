@@ -8,7 +8,8 @@ const replySchema = new Schema(
         article: { type: Schema.Types.ObjectId, ref: 'Article' },
         comment: { type: Schema.Types.ObjectId, ref: 'Comment', unique: false },
         likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
-        authorUsername: { type: String }
+        authorUsername: {type: String},
+        profileImgUrl: {type: String}
     },
     {
         timestamps: true,

@@ -11,6 +11,7 @@ const settingsSchema = new Schema(
         instalink: {type: String},
         walletpublic: {type: String},
         destaquespublic: {type: String},
+        profileImgUrl: {type: String}
     },
     {
         timestamps: true,

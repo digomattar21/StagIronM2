@@ -8,6 +8,7 @@ const commentSchema = new Schema(
         likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
         article: { type: Schema.Types.ObjectId, ref: 'Article' },
         replys: [{ type: Schema.Types.ObjectId, ref: 'Reply' , unique: false}],
+        profileImgUrl: {type: String}
     },
     {
         timestamps: true,

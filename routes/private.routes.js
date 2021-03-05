@@ -9,13 +9,14 @@ const Carteira = require("../models/Carteira.model");
 const Comment = require("../models/Comment.model");
 const Reply = require('../models/Reply.model');
 const Settings = require("../models/Settings.model");
-const Ticker = require("../models/Ticker.model")
+const Ticker = require("../models/Ticker.model");
+const fileUploader = require('../configs/cloudinary.config');
 
 router.get("/private/main", async (req, res) => {
   try {
     let id = req.session.currentUser._id;
 
-    let user = await User.findById(id).populate("articles carteira");
+    let user = await User.findById(id).populate("articles carteira settings");
 
     req.session.currentUser = user;
 
@@ -477,17 +478,18 @@ router.post("/private/comment/post", async (req, res) => {
     const { content, articleId } = req.body;
 
     let article = await Article.findById(articleId).populate("comments");
-    let user = await User.findById(req.session.currentUser._id);
+    let user = await User.findById(req.session.currentUser._id).populate('settings');
 
     let comment = await Comment.create({
       author: user._id,
       content,
       article: articleId,
+      profileImgUrl: user.settings.profileImgUrl
     });
     let updated = await Article.findByIdAndUpdate(articleId, {
       $push: { comments: comment._id },
     });
-
+    console.log(comment)
     res.redirect(`/private/main/${articleId}`);
   } catch (error) {
     console.log(error);
@@ -500,7 +502,7 @@ router.post("/private/comment/like", async (req, res) => {
   try {
     let comment = await Comment.findById(commentId).populate("likes article");
 
-    let user = await User.findById(req.session.currentUser._id);
+    let user = await User.findById(req.session.currentUser._id).populate('settings');
 
     let likes = comment.likes;
 
@@ -546,14 +548,15 @@ router.post("/private/reply/post", async (req, res) => {
 
     let comment = await Comment.findById(commentId).populate("replys article author");
     let articleId = comment.article._id;
-    let user = await User.findById(req.session.currentUser._id);
+    let user = await User.findById(req.session.currentUser._id).populate('settings');
 
     let reply = await Reply.create({
       article: articleId,
       author: user._id,
       content: content,
       comment: commentId,
-      authorUsername: user.username
+      authorUsername: user.username,
+      profileImgUrl: user.settings.profileImgUrl
     });
 
     let updated = await Comment.findByIdAndUpdate(commentId, {
@@ -572,7 +575,7 @@ router.post("/private/reply/like", async (req, res) => {
   try {
     let reply = await Reply.findById(replyId).populate("likes comment article");
 
-    let user = await User.findById(req.session.currentUser._id);
+    let user = await User.findById(req.session.currentUser._id).populate('settings');
 
     let likes = reply.likes;
 
@@ -630,13 +633,21 @@ router.get("/private/user/settings", async (req, res) => {
 });
 
 
-router.post('/private/user/settings/update', async (req, res) => {
+router.post('/private/user/settings/update',fileUploader.single('profilepic'), async (req, res) => {
   const { biografia, sexo, fblink, twitterlink, instalink, walletpublic, destaquespublic } = req.body;
   try {
+    var imageUrl;
+    if (req.file){
+      console.log(req.file)
+      imageUrl = req.file.path;
+    }else{
+      imageUrl = req.body.existingImage
+      console.log(imageUrl)
+    }
 
     let user = await User.findById(req.session.currentUser._id);
 
-    let settings = await Settings.findByIdAndUpdate(user.settings._id, { biografia: biografia, sexo: sexo, fblink: fblink, twitterlink: twitterlink, instalink: instalink, walletpublic: walletpublic, destaquespublic: destaquespublic })
+    let settings = await Settings.findByIdAndUpdate(user.settings._id, { profileImgUrl: imageUrl, biografia: biografia, sexo: sexo, fblink: fblink, twitterlink: twitterlink, instalink: instalink, walletpublic: walletpublic, destaquespublic: destaquespublic },{new:true})
 
     res.redirect('/private/user/settings')
 
