@@ -40,8 +40,8 @@
       <div class="col-lg-6 col-xl-5">
         <div style="height: auto;">
           <div class="row">
-            <div class='col-7 d-flex flex-column'
-              style='justify-content: flex-start; align-content: flex-start; align-items: flex-start'>
+            <div class='col-7 d-flex flex-column '
+              style='justify-content: flex-start; align-content: flex-start; align-items: flex-start; border: 1px solid lightgray; border-radius: 5px;padding:10px 10px; box-shadow: 0 6px 4px -4px black'>
               <h5 style='color: #017bcd'>Resumo Da Carteira</h5>
               <canvas id='walletPieChart' style='margin-top:20px'></canvas>
             </div>
@@ -52,7 +52,7 @@
             </div>
           </div>
 
-          <div class="row" style='margin-top: 10px; margin-bottom: 50px;'>
+          <div class="row" style='margin-top: 10px; margin-bottom: 50px;border: 1px solid lightgray; border-radius: 5px;padding:10px 10px; box-shadow: 0 6px 4px -4px black'>
 
             {{#each maioresAltas}}
             {{#if (biggerThanZero this)}}
@@ -105,13 +105,12 @@
         </div>
       </div>
       <div class="col">
-        <div></div>
         <div class="row">
           <div class="col">
             <h5 class="text-center" style='color: #017bcd'>Meus Artigos</h5>
           </div>
         </div>
-        <div class="row d-flex flex-row flex-wrap articles-container" style="height: 450px; margin-right: 20px; overflow-y: auto; overflow-x: hidden;">
+        <div class="row d-flex flex-row flex-wrap articles-container" style="height: 440px; margin-right: 20px; overflow-y: auto; overflow-x: hidden;border: 1px solid lightgray; border-radius: 5px;padding:10px 10px; box-shadow: 0 6px 4px -4px black">
           {{#if articles}}
           {{#each articles}}
           <div class="col-sm-12 col-md-6 col-lg-6">
