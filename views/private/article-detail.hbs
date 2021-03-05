@@ -80,6 +80,28 @@ flex-direction: row; align-items: center; justify-content: space-evenly">
                     </button>
                 </form>
             </div>
+            <div class="row justify-content-center">
+                <div class="col-10 col-sm-10 col-md-11 col-lg-7 col-xl-7">
+                    <div class="d-flex flex-row justify-content-center align-items-center social-icons"
+                        style="height: 100px;padding: 0px;">
+                        {{#if user.settings.twitterlink}}
+                        <a href="{{user.settings.twitterlink}}">
+                            <ion-icon name='logo-twitter' style='color:darkgray; height:50px;width:50px'></ion-icon>
+                        </a>
+                        {{/if}}
+                        {{#if user.settings.fblink}}
+                        <a href="{{user.settings.fblink}}">
+                            <ion-icon name='logo-facebook' style='color:darkgray; height:50px;width:50px'></ion-icon>
+                        </a>
+                        {{/if}}
+                        {{#if user.settings.instalink}}
+                        <a href="{{user.settings.instalink}}">
+                            <ion-icon name='logo-instagram' style='color:darkgray; height:50px;width:50px'></ion-icon>
+                        </a>
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
             <div style="width: 60%;height: auto;">
                 <p style="text-align: center; font-size: 13px;">Atualizado: {{article.updatedAt}}</p>
             </div>
@@ -200,7 +222,7 @@ flex-direction: row; align-items: center; justify-content: center">
         </div>
         </div>
     </section>
-    <section style="height: auto; margin-top:40px; margin-bottom:50px">
+    <section style="height: auto; margin-top:150px; margin-bottom:50px">
         <div class='row justify-content-center'>
             <div class=' col-4'>
                 <h5 style='color:#017bcd, font-weight: bold; text-align: center'>Noticias Relacionadas</h5>
