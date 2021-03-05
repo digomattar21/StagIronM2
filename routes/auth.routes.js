@@ -91,7 +91,6 @@ router.get("/auth/login", (req, res) => {
 
 router.post("/auth/login", async (req, res) => {
   try {
-    //console.log("SESSION==>", req.session);
     const { username, password } = req.body;
 
     const rlUser = failsByUsernameLimiter.get(username);
@@ -156,7 +155,6 @@ router.post("/auth/confirm", async (req, res) => {
     var { inputNum, email, username } = req.body;
 
     var user = await User.findOne({ email: email }).populate('articles');
-    console.log(user.confirmationCode, inputNum)
 
     if (inputNum === user.confirmationCode) {
 
@@ -169,9 +167,6 @@ router.post("/auth/confirm", async (req, res) => {
       let updated = await User.findByIdAndUpdate(user._id, {
         $push: { carteira: carteiraCreate._id, settings: userSettings._id },
       });
-
-      console.log(userSettings);
-      console.log(updated);
 
       res.render("private/main.hbs", {
         user: req.session.currentUser,
@@ -240,10 +235,8 @@ router.post('/private/reset/confirm', async (req, res) => {
 router.post('/private/reset/username', async (req, res) => {
   const { username } = req.body;
   try {
-    console.log('user', username)
 
     let user = await User.findOne({ username: username });
-    console.log(user)
 
     if (user) {
       throw new Error('Nome de usuário já em uso')
@@ -284,7 +277,6 @@ router.post('/private/reset/password', async (req, res) => {
 router.post('/private/reset/email', async (req, res) => {
   const { email } = req.body;
   try {
-    console.log(email)
     let alreadyExistsEmail = await User.findOne({ email: email });
 
     if (!email || alreadyExistsEmail) {
@@ -307,9 +299,7 @@ router.post('/private/reset/email', async (req, res) => {
 router.post('/private/reset/confirm-new-email', async (req, res) => {
   const { email, code } = req.body;
   try {
-    console.log(email)
     var beforeUser = await User.findById(req.session.currentUser._id);
-    console.log(code,beforeUser.confirmationCode)
     if (code === beforeUser.confirmationCode) {
       let user = await User.findByIdAndUpdate(req.session.currentUser._id, { email: email }, {new:true});
       req.session.currentUser = user;
