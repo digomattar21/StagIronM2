@@ -420,7 +420,7 @@ router.post("/private/tickerName/updateTicker", async (req, res) => {
     let positionTicker = (positionUn * currentPrice).toFixed(2);
     let ticker = await Ticker.findByIdAndUpdate(tickerId, { carteira: user.carteira._id, name: tickerName, positionUn: positionUn, position: positionTicker, buyPrice: currentPrice })
     console.log(ticker)
-
+    
     res.redirect("/private/minha-carteira");
   } catch (err) {
     console.log(err);
@@ -549,14 +549,14 @@ router.post("/private/reply/post", async (req, res) => {
     let comment = await Comment.findById(commentId).populate("replys article author");
     let articleId = comment.article._id;
     let user = await User.findById(req.session.currentUser._id).populate('settings');
+    let url = user.settings.profileImgUrl;
 
     let reply = await Reply.create({
-      article: articleId,
       author: user._id,
       content: content,
       comment: commentId,
       authorUsername: user.username,
-      profileImgUrl: user.settings.profileImgUrl
+      profileImgUrl: url
     });
 
     let updated = await Comment.findByIdAndUpdate(commentId, {
@@ -570,16 +570,14 @@ router.post("/private/reply/post", async (req, res) => {
 });
 
 router.post("/private/reply/like", async (req, res) => {
-  const { replyId } = req.body;
+  const { replyId, articleId } = req.body;
 
   try {
-    let reply = await Reply.findById(replyId).populate("likes comment article");
+    let reply = await Reply.findById(replyId).populate("likes comments");
 
     let user = await User.findById(req.session.currentUser._id).populate('settings');
 
     let likes = reply.likes;
-
-    let article = reply.article._id;
 
     likes.forEach((like, index) => {
       if (like._id.toString() === user._id.toString()) {
@@ -593,31 +591,17 @@ router.post("/private/reply/like", async (req, res) => {
       });
     }
 
-    res.redirect(`/private/main/${article}`);
+    res.redirect(`/private/main/${articleId}`);
   } catch (error) {
     console.log(error);
     if (req.session.currentUser) {
-      res.redirect(`/private/main/${article}`);
+      res.redirect(`/private/main/${articleId}`);
     } else {
-      res.redirect(`/article/main/${article}`);
+      res.redirect(`/article/main/${articleId}`);
     }
 
   }
 });
-
-router.post('/private/reply/delete', async (req, res) => {
-  try {
-    const { replyId } = req.body;
-    let replyToFind = await Reply.findById(replyId).populate('comment');
-    let articleId = replyToFind.article;
-    console.log(articleId)
-    let replyToDelete = await Reply.findByIdAndRemove(replyId);
-
-    res.redirect(`/private/main/${articleId}`);
-  } catch (error) {
-    console.log(error)
-  }
-})
 
 router.get("/private/user/settings", async (req, res) => {
   try {
@@ -633,26 +617,35 @@ router.get("/private/user/settings", async (req, res) => {
 });
 
 
-router.post('/private/user/settings/update', fileUploader.single('profilepic'), async (req, res) => {
+router.post('/private/user/settings/update',fileUploader.single('profilepic'), async (req, res) => {
   const { biografia, sexo, fblink, twitterlink, instalink, walletpublic, destaquespublic } = req.body;
   try {
     var imageUrl;
-    if (req.file) {
+    if (req.file){
       console.log(req.file)
       imageUrl = req.file.path;
-    } else {
+    }else{
       imageUrl = req.body.existingImage
       console.log(imageUrl)
     }
 
     let user = await User.findById(req.session.currentUser._id);
 
-    let settings = await Settings.findByIdAndUpdate(user.settings._id, { profileImgUrl: imageUrl, biografia: biografia, sexo: sexo, fblink: fblink, twitterlink: twitterlink, instalink: instalink, walletpublic: walletpublic, destaquespublic: destaquespublic }, { new: true })
+    let settings = await Settings.findByIdAndUpdate(user.settings._id, { profileImgUrl: imageUrl, biografia: biografia, sexo: sexo, fblink: fblink, twitterlink: twitterlink, instalink: instalink, walletpublic: walletpublic, destaquespublic: destaquespublic },{new:true})
 
     res.redirect('/private/user/settings')
 
   } catch (error) {
     console.log(error);
+  }
+});
+
+router.get('/private/calculadoraDCF', async (req, res) => {
+  try{
+    res.render('private/calculadoraDCF.hbs', {layout:false})
+  }catch(err){
+    console.log(err);
+    res.redirect('index')
   }
 })
 
