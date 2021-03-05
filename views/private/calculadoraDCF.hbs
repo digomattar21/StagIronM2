@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/assets/css/Navigation-with-Search.css">
+    <link rel="stylesheet" href="/assets/fonts/ionicons.css">
+    <link rel="stylesheet" href="/assets/ionicons.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,500;1,300;1,400&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/Header-Blue.css">
+    <link rel="icon" href="/img/stag-talk-bulb-logo-white-bg.png">
+    <link rel="stylesheet" href="/assets/css/Footer-Dark.css">
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="stylesheet" href="/assets/css/index.css">
+</head>
+
+<body>
+
+    {{>memberNav}}
+
+    <section style="height: auto; margin-top:80px; margin-bottom:60px;">
+        <div class="row justify-content-center">
+            <div class="col-lg-6"
+                style="box-shadow: 2px 2px rgb(186,187,188);border-radius: 5px;border: 1px solid rgb(177,172,172) ;">
+                <div style="height: auto;">
+                    <h5 class="text-center" style="color: #017bcd; margin-top:20px">Aprenda a Fazer o valuation (modelo DCF) </h5>
+                    <form action="/private/calculadoraDCF" method='post'>
+                        <div class="form-group d-flex flex-column justify-content-center align-items-start"
+                            style="height: auto;">
+                            <label style="margin-top:5px;font-size: 12px;">Qual foi o EBIT da empresa? (em milhões) (lucro antes de juros e impostos)</label>
+                            <input type="text" name='ebit' id='ebit-input' style="width: 20%;height: 25px;" />
+                        </div>
+                        <div class="form-group d-flex flex-column justify-content-center align-items-start"
+                            style="height: auto;">
+                            <label style="font-size: 12px;">Qual a incidência de imposto de renda paga pela empresa? (%)
+                                (%)</label>
+                            <input type="text" name='incidencia-ir' id='incidencia-ir-input'
+                                style="width: 20%;height: 25px;" />
+                        </div>
+                        <div class="form-group d-flex flex-column justify-content-center align-items-start"
+                            style="height: auto;">
+                            <label style="font-size: 12px;">Aqui chegamos no NOPAT (Net Operating Profit After
+                                Tax)</label>
+                            <input type="text" name='nopat' id='nopat' style="width: 20%;height: 25px;" readonly />
+                        </div>
+                        <div class="form-group d-flex flex-column justify-content-center align-items-start"
+                            style="height: auto;">
+                            <label style="font-size: 12px;">Quanto a empresa gastou em depreciação e amortização?</label>
+                            <input type="text" name='depamort' id='depamort-input' style="width: 20%;height: 25px;" />
+                        </div>
+                        <div class="form-group d-flex flex-column justify-content-center align-items-start"
+                            style="height: auto;">
+                            <label style="font-size: 12px;">Chegamos no EBITDA com a correção do imposto</label>
+                            <input type="text" name='ebitda' id='ebitda' style="width: 20%;height: 25px;" readonly />
+                        </div>
+                        <div class="form-group d-flex flex-column justify-content-center align-items-start"
+                            style="height: auto;">
+                            <label style="font-size: 12px;">Quanto a empresa gastou em CAPEX? (Capital
+                                Expenditures)</label>
+                            <input type="text" name='capex' id='capex-input' style="width: 20%;height: 25px;" />
+                        </div>
+                        <div class="form-group d-flex flex-column justify-content-center align-items-start"
+                            style="height: 70px;"><label class="text-break" style="font-size: 12px;">Qual foi a variação em NCG (Necessidade de capital de giro)? </label>
+                            <input type="text" name='ncg' id='ncg-input' style="width: 20%;height: 25px;" />
+                            <sub style="color: #017bcd;height: 15px;margin-top: 5px;font-size: 9px;">(NCG=Contas a
+                                Receber+Estoques-Fornecedores)</sub>
+                        </div>
+                        <div style="width: 100%;height: auto;margin-bottom: 5px;">
+                            <input type="text" name='fcff' id='fcff' readonly style="width: 20%;height: 25px;" />
+                            <p style="font-size: 12px;">Aqui chegamos no Fluxo de Caxa Livre da firma no ano.</p>
+                            <p style="font-size: 12px;">A soma desses fluxos de caixa ano a ano, até a perpetuidade e trazidos a valor presente, representa o valor intrínseco da empresa. Ao dividir isso pela quantidade de ações no mercado, chegamos ao preço por ação</p>
+                            <p style="font-size: 12px;">Agora, como exemplo, coloque uma taxa de crescimento anual para esse fluxo de caixa, que voce projeta que a empresa irá gerar.</p>
+                        </div>
+                        <div class="form-group d-flex flex-column justify-content-center align-items-start"
+                            style="height: auto;">
+                            <input type="text" name='tx-cresc' id='tx-cresc-input' style="width: 20%;height: 25px;" />
+                            <sub style="font-size: 9px;color: #017bcd;margin-top: 5px;">Dica: isso eh uma premissa.
+                                Pesquise
+                                sobre a empresa pe busque analises para encontrar um valor adequado. </sub>
+                        </div>
+                        <div class="form-group d-flex flex-column justify-content-center align-items-start"
+                            style="height: auto;"><label style="font-size: 12px;">Agora, coloque uma taxa de desconto
+                                anual,
+                                representando o valor de seu dinheiro ao longo do tempo</label>
+                            <input type="text" name='tx-desc' id='tx-desc-input' style="width: 20%;height: 25px;" />
+                        </div>
+                        <div class="form-group d-flex flex-column justify-content-center align-items-start"
+                            style="height: auto;">
+                            <label style="font-size: 12px;">Quantidade de ações da empresa no mercado</label>
+                            <input type="text" name='shares-outs' id='shares-outs-input'
+                                style="width: 20%;height: 25px;" />
+                        </div>
+                        <div class="form-group d-flex flex-column justify-content-center align-items-start"
+                            style="height: auto;">
+                            <label style="font-size: 12px;">O valor justo dessa ação segundo suas premissas é de:</label>
+                            <input type="text" id='ppa' style="width: 20%;height: 25px;" readonly />
+                        </div>
+                        <p style="font-size: 12px;">Isso é um modelo de valuation simplificado, para que você entenda a interação entre as partes de uma demonstração financeira e a parte prática de como precificar um ativo. A qualidade de seu modelo, entretanto, depende de quão boas são suas premissas, e se estas serão condizentes com a situação da empresa no prazo estipulado. Para isso, é recomendado estudar cada detalhe da empresa em questão, pois somente assim suas projeções serão precisas e te darão confiança para alocar seu dinheiro.  </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src='/assets/js/autocomplete.js'></script>
+    <script src='/assets/js/calculadoraDCF.js'></script>
+
+</body>
+
+</html>
