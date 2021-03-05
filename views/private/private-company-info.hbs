@@ -35,7 +35,9 @@
 
                             </div>
                             <div>
-                                <span style='color: black; font-weight: bold; font-size:1.7rem'>${{price.regularMarketPrice}} </span>
+                                <span
+                                    style='color: black; font-weight: bold; font-size:1.7rem'>${{price.regularMarketPrice}}
+                                </span>
                             </div>
                             <div>
 
@@ -365,17 +367,21 @@
                 <div class="col-xl-6">
                     <div class="card-group" style="border-right-style: none;">
                         <div class="card">
-                            <div class="card-body d-flex flex-column justify-content-center align-items-center" style="border-style: none;border-right: 1px solid lightgray ;">
-                                <sub style='color: black; margin-bottom: 10px;'><span style=' color: darkgray; font-weight:bold;'>Payout Ratio: </span></sub>
+                            <div class="card-body d-flex flex-column justify-content-center align-items-center"
+                                style="border-style: none;border-right: 1px solid lightgray ;">
+                                <sub style='color: black; margin-bottom: 10px;'><span
+                                        style=' color: darkgray; font-weight:bold;'>Payout Ratio: </span></sub>
                                 {{#if (biggerThanZero payoutRatio)}}
                                 <h4 class="card-title" style='color:#017bcd; font-weight: 600'>{{payoutRatio}}%</h4>
                                 {{/if}}
-                                
+
                             </div>
                         </div>
                         <div class="card">
-                            <div class="card-body d-flex flex-column justify-content-center align-items-center" style="border-style: none;border-right: 1px solid lightgray ;">
-                                <sub style='color: black; margin-bottom: 10px;'><span style=' color: darkgray; font-weight:bold;'>Yield Medio: </span></sub>
+                            <div class="card-body d-flex flex-column justify-content-center align-items-center"
+                                style="border-style: none;border-right: 1px solid lightgray ;">
+                                <sub style='color: black; margin-bottom: 10px;'><span
+                                        style=' color: darkgray; font-weight:bold;'>Yield Medio: </span></sub>
                                 {{#if (biggerThanZero avgYield)}}
                                 <h4 class="card-title" style='color:#017bcd; font-weight: 600'>{{avgYield}}%</h4>
                                 {{/if}}
@@ -383,12 +389,15 @@
                             </div>
                         </div>
                         <div class="card">
-                            <div class="card-body d-flex flex-column justify-content-center align-items-center" style="border-style: none;border-right: 1px solid lightgray ;">
-                                <sub style='color: black; margin-bottom: 10px;'><span style=' color: darkgray; font-weight:bold;'>Dividend Yield: </span></sub>
+                            <div class="card-body d-flex flex-column justify-content-center align-items-center"
+                                style="border-style: none;border-right: 1px solid lightgray ;">
+                                <sub style='color: black; margin-bottom: 10px;'><span
+                                        style=' color: darkgray; font-weight:bold;'>Dividend Yield: </span></sub>
                                 {{#if (biggerThanZero dividendYield)}}
                                 <h4 class="card-title" style='color:#017bcd; font-weight: 600'>{{dividendYield}}%</h4>
                                 {{/if}}
-                                <sub><span style=' color: darkgray; font-weight:bold;'>LTM (ultimos 12 meses</span>)</sub>
+                                <sub><span style=' color: darkgray; font-weight:bold;'>LTM (ultimos 12
+                                        meses</span>)</sub>
                             </div>
                         </div>
                     </div>
@@ -405,45 +414,6 @@
     <section style='display:none;'>
         <p id='dividendsDate'>{{dates}}</p>
         <p id='dividendsNumber'>{{dividends}}</p>
-
-    </section>
-
-    <section style="height: auto; margin-top:80px; margin-bottom: 50px">
-        <div class="row justify-content-center">
-            <div class="col-lg-4 offset-lg-0">
-                <div class='d-flex flex-row justify-content-start'>
-                    <h6 style='font-weight: 600'>DISCUSSÃO</h6>
-                    <ion-icon style='margin-left:8px' name="chatbubble-ellipses-outline"></ion-icon>
-                </div>
-            </div>
-        </div>
-        <div class="row d-flex flex-column justify-content-center align-items-center" style='margin-top:7px;'>
-            {{#if userInSession}}
-            <div class="col-lg-4 col-xl-4"
-                style='border-right: 1px solid lightgray; border-left: 1px solid lightgray; border-top: 1px solid lightgray'>
-                <div class="d-flex flex-column justify-content-center align-items-start"
-                    style="height: auto; margin-top:20px">
-                    <form action="" method="POST">
-                        <div class="d-flex flex-row justify-content-start align-items-center"
-                            style="width: 400px; min-width: 250px;height: 40px;"><img src="https://picsum.photos/140"
-                                style="width: 10%;height: 100%; border-radius:50%" />
-                            <h5 style='margin-left:3px'>{{userInSession.username}}</h5>
-                            <input type="text" name="articleId" style="display: none;" value="{{article._id}}">
-                        </div><textarea class='comment-input' name="content" placeholder='Digite seu comentario'
-                            minlength="10" maxlength="400" required></textarea>
-                        <button class="btn btn-primary" type="submit"
-                            style="margin-left: 5%;height: 25px;padding: 3px 3px;font-size: 14px;">Postar</button>
-                    </form>
-                </div>
-            </div>
-            {{else}}
-            <div class="row d-flex flex-column justify-content-center align-items-center"
-                style='hieght:auto;margin-top:7px;border-top:1px solid lightgray'></div>
-            {{/if}}
-            {{#each comments}}
-            {{>comment}}
-            {{/each}}
-        </div>
     </section>
 
     <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>

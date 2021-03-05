@@ -579,7 +579,7 @@ router.post("/private/reply/like", async (req, res) => {
 
     let likes = reply.likes;
 
-    let article = reply.article;
+    let article = reply.article._id;
 
     likes.forEach((like, index) => {
       if (like._id.toString() === user._id.toString()) {
@@ -633,21 +633,21 @@ router.get("/private/user/settings", async (req, res) => {
 });
 
 
-router.post('/private/user/settings/update',fileUploader.single('profilepic'), async (req, res) => {
+router.post('/private/user/settings/update', fileUploader.single('profilepic'), async (req, res) => {
   const { biografia, sexo, fblink, twitterlink, instalink, walletpublic, destaquespublic } = req.body;
   try {
     var imageUrl;
-    if (req.file){
+    if (req.file) {
       console.log(req.file)
       imageUrl = req.file.path;
-    }else{
+    } else {
       imageUrl = req.body.existingImage
       console.log(imageUrl)
     }
 
     let user = await User.findById(req.session.currentUser._id);
 
-    let settings = await Settings.findByIdAndUpdate(user.settings._id, { profileImgUrl: imageUrl, biografia: biografia, sexo: sexo, fblink: fblink, twitterlink: twitterlink, instalink: instalink, walletpublic: walletpublic, destaquespublic: destaquespublic },{new:true})
+    let settings = await Settings.findByIdAndUpdate(user.settings._id, { profileImgUrl: imageUrl, biografia: biografia, sexo: sexo, fblink: fblink, twitterlink: twitterlink, instalink: instalink, walletpublic: walletpublic, destaquespublic: destaquespublic }, { new: true })
 
     res.redirect('/private/user/settings')
 
