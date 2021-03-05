@@ -1,5 +1,4 @@
 let replyButtons = document.getElementsByClassName("reply-button");
-//let magicInput = document.getElementsByClassName('reply-input')[0];
 
 function showButton() {
   const magicDiv = document.getElementsByClassName("reply");

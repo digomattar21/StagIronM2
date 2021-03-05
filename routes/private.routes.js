@@ -48,7 +48,6 @@ router.get("/private/main", async (req, res) => {
 
     labelDataObj["labels"] = labels;
     labelDataObj["data"] = dawta;
-    console.log(labelDataObj);
 
     if (carteira.tickers.length < 4) {
       num = carteira.tickers.length;
@@ -63,9 +62,6 @@ router.get("/private/main", async (req, res) => {
 
     carteira.markModified("tickers");
     await carteira.save();
-    console.log(carteira.tickers);
-
-
 
     res.render("private/main.hbs", {
       layout: false,
@@ -108,7 +104,6 @@ router.get("/private/minha-carteira", async (req, res) => {
     let tickerInfo = [];
 
     let carteira = await Carteira.findById(user.carteira._id).populate('tickers');
-    console.log(carteira.tickers)
     //fazendo os calculos de porcetagem da posicao total e aumento do patrimonio
     carteira.patrimonio = 0;
 
@@ -141,7 +136,6 @@ router.get("/private/minha-carteira", async (req, res) => {
 
     }
 
-    console.log(carteira.patrimonio)
 
     carteira.markModified("patrimonio");
     carteira.markModified('tickers')
@@ -412,14 +406,8 @@ router.post("/private/tickerName/updateTicker", async (req, res) => {
       "carteira"
     );
 
-    console.log('positionUn', positionUn);
-
-    console.log('tickername', tickerName);
-    console.log('tickerid', tickerId)
-
     let positionTicker = (positionUn * currentPrice).toFixed(2);
-    let ticker = await Ticker.findByIdAndUpdate(tickerId, { carteira: user.carteira._id, name: tickerName, positionUn: positionUn, position: positionTicker, buyPrice: currentPrice })
-    console.log(ticker)
+    let ticker = await Ticker.findByIdAndUpdate(tickerId, { carteira: user.carteira._id, name: tickerName, positionUn: positionUn, position: positionTicker, buyPrice: currentPrice });
     
     res.redirect("/private/minha-carteira");
   } catch (err) {
@@ -489,7 +477,6 @@ router.post("/private/comment/post", async (req, res) => {
     let updated = await Article.findByIdAndUpdate(articleId, {
       $push: { comments: comment._id },
     });
-    console.log(comment)
     res.redirect(`/private/main/${articleId}`);
   } catch (error) {
     console.log(error);
@@ -622,11 +609,9 @@ router.post('/private/user/settings/update',fileUploader.single('profilepic'), a
   try {
     var imageUrl;
     if (req.file){
-      console.log(req.file)
       imageUrl = req.file.path;
     }else{
       imageUrl = req.body.existingImage
-      console.log(imageUrl)
     }
 
     let user = await User.findById(req.session.currentUser._id);
