@@ -112,7 +112,7 @@ flex-direction: row; align-items: center; justify-content: space-evenly">
                     style="height: auto; margin-top:20px">
                     <form action="/private/comment/post" method="POST">
                         <div class="d-flex flex-row justify-content-start align-items-center"
-                            style="width: 400px; min-width: 250px;height: 40px;"><img src="https://picsum.photos/140"
+                            style="width: 400px; min-width: 250px;height: 40px;"><img src="{{userInSesh.settings.profileImgUrl}}"
                                 style="width: 10%;height: 100%; border-radius:50%" />
                             <h5 style='margin-left:3px'>{{userInSession.username}}</h5>
                             <input type="text" name="articleId" style="display: none;" value="{{article._id}}">
@@ -132,7 +132,7 @@ flex-direction: row; align-items: center; justify-content: space-evenly">
                 style='margin-top:20px;border-right: 1px solid lightgray; border-left: 1px solid lightgray;'>
                 <div class="d-flex flex-column justify-content-center align-items-start" style="height: auto;">
                     <div class="d-flex flex-row justify-content-start align-items-center"
-                        style="width: 450px;height: 40px;"><img src='https://picsum.photos/200'
+                        style="width: 450px;height: 40px;"><img src='{{this.profileImgUrl}}'
                             style="width: 10%;height: 100%; border-radius:50%" />
                         <h5 style='margin-left:5px;'>{{this.author.username}}</h5>
                     </div>
