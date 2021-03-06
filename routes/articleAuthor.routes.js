@@ -54,18 +54,18 @@ router.post("/private/createArticle", async (req, res, nxt) => {
 
 router.get("/private/main/:articleId", async (req, res) => {
   try {
-    //await News.deleteMany({country:{$eq:"related"}});
+    await News.deleteMany({country:{$eq:"related"}});
     const { articleId } = req.params;
     let article = await Article.findById(articleId).populate("author likes comments");
     let author = await User.findById(article.author._id).populate('settings');
     let category = article.category;
     let user = await User.findById(req.session.currentUser._id).populate('settings');
 
-    // if (category === 'main' || category === 'comprar ou vender') {
-    //   await getGeneralNews()
-    // } else {
-    //   await getSpecificNews(category)
-    // }
+    if (category === 'main' || category === 'comprar ou vender') {
+      await getGeneralNews()
+    } else {
+      await getSpecificNews(category)
+    }
 
     let news = await News.find({ country: { $eq: 'related' } })
     let comments = await Comment.find({ article: article._id }).populate(
@@ -92,7 +92,7 @@ router.get("/private/main/:articleId", async (req, res) => {
 router.get("/article/main/:articleId", async (req, res) => {
   const { articleId } = req.params;
   try {
-    //await News.deleteMany({country:{$eq:"related"}});
+    await News.deleteMany({country:{$eq:"related"}});
     let article = await Article.findById(articleId).populate("author likes comments");
     console.log(article)
     let author = await User.findById(article.author._id).populate('settings');
@@ -101,11 +101,11 @@ router.get("/article/main/:articleId", async (req, res) => {
     );
     let category = article.category;
 
-    // if (category === 'main' || category === 'comprar ou vender') {
-    //   await getGeneralNews()
-    // } else {
-    //   await getSpecificNews(category)
-    // }
+    if (category === 'main' || category === 'comprar ou vender') {
+      await getGeneralNews()
+    } else {
+      await getSpecificNews(category)
+    }
 
     let news = await News.find({ country: { $eq: "related" } });
 
