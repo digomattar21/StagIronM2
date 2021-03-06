@@ -1,4 +1,5 @@
-# STAGTALK
+# ![Black on WhiteStagLogo](https://user-images.githubusercontent.com/49764647/110209356-dcbdee00-7e6a-11eb-9caa-efed8b714134.png)
+STAGTALK
 
 Segundo Projeto do bootcamp IronHack!
 
