@@ -4,6 +4,7 @@
 
 ---
 Segundo Projeto do bootcamp IronHack!
+---
 
 ## Autores: Rodrigo Mattar & Thiarhes Gonçalves
 
