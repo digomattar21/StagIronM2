@@ -1,5 +1,4 @@
 ![Original on TransparentStagLogo](https://user-images.githubusercontent.com/49764647/110209369-f19a8180-7e6a-11eb-9ecd-2d809050ba8b.png)
-STAGTALK
 
 Segundo Projeto do bootcamp IronHack!
 
