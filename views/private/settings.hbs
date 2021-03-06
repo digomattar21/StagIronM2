@@ -31,7 +31,8 @@
                         <form action="/private/reset/confirm-email/username" method='get'>
                             <input type="text" class="form-control" name="username" value="{{user.username}}" readonly
                                 style="width: 60%;border-right-style: none;" /><button class="btn btn-primary"
-                                type="submit" style="width: 40%;margin-top: 5px; margin-left: 20%;padding: 14px 5px;">alterar</button>
+                                type="submit"
+                                style="width: 40%;margin-top: 5px; margin-left: 20%;padding: 14px 5px;">alterar</button>
                         </form>
                     </div>
 
@@ -39,14 +40,16 @@
                         <form action="/private/reset/confirm-email/email" method='get'><input type="text"
                                 class="form-control" name="email" value="{{user.email}}" readonly
                                 style="width: 60%;border-right-style: none;" /><button class="btn btn-primary"
-                                type="submit" style="width: 40%;margin-top: 5px; margin-left: 20%;padding: 14px 5px;">alterar</button>
+                                type="submit"
+                                style="width: 40%;margin-top: 5px; margin-left: 20%;padding: 14px 5px;">alterar</button>
                         </form>
                     </div>
                     <div class="form-group d-flex align-items-center">
                         <form action="/private/reset/confirm-email/password" method='get'>
                             <input type="text" class="form-control" name="password" value="*******" readonly
                                 style="width: 60%;border-right-style: none;" /><button class="btn btn-primary"
-                                type="submit" style="width: 40%;margin-top: 5px; margin-left: 20%;padding: 14px 5px;">alterar</button>
+                                type="submit"
+                                style="width: 40%;margin-top: 5px; margin-left: 20%;padding: 14px 5px;">alterar</button>
 
                         </form>
                     </div>
@@ -60,7 +63,7 @@
                             <p class="text-dark" style="font-size: 15px;margin-top: 5px;margin-right: 8px;">Foto de
                                 Perfil:</p><input name='profilepic' type="file"
                                 class="form-control-file align-items-center" style="width: 50%;" accept="image/*" />
-                                <input type="text" name='existingImage' hidden id='' value="https://picsum.photos/200">
+                            <input type="text" name='existingImage' hidden id='' value="https://picsum.photos/200">
                         </div>
                         {{#if (verifyEmpty user.settings.biografia)}}
                         <textarea class="form-control" name="biografia" rows="14"
@@ -167,7 +170,7 @@
                             <div class="form-check text-left">
                                 <input type="checkbox" class="form-check-input" id="formCheck-1"
                                     name="destaquespublic" />
-                                <label class="form-check-label" for="formCheck-1">Mostrar gráfico da carteira</label>
+                                <label class="form-check-label" for="formCheck-1">Mostar destaques da carteira</label>
                             </div>
                             {{/if}}
                         </div>
